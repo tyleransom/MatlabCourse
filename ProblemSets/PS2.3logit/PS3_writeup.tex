@@ -1,0 +1,263 @@
+%% LyX 2.0.0 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{babel}
+\usepackage{amstext}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
+ {hyperref}
+\usepackage{breakurl}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{}
+
+\@ifundefined{showcaptionsetup}{}{%
+ \PassOptionsToPackage{caption=false}{subfig}}
+\usepackage{subfig}
+\makeatother
+
+\begin{document}
+
+\title{Problem Set 3 Solutions}
+
+
+\author{Tyler Ransom}
+
+\maketitle
+Directions: Answer all questions. Clearly label all answers. Show
+all of your code. Compute standard errors for all parameter estimates.
+Turn in the following to me via your dropbox (in a folder labeled
+'MatlabPS2.3') in Sakai by 11:59 p.m. on Thursday, August 9, 2012: 
+\begin{itemize}
+\item m-file(s)
+\item .sh shell script file that executes your m-file(s)%
+\footnote{Name your job something other than {}``matsub,'' and have it send
+you an email upon completion.%
+}
+\item a log file (from off the cluster)
+\item shell\_name.oXXXXX file
+\item pdf version of your writeup with its \LaTeX source code
+\end{itemize}
+Put the names of all group members at the top of your writeup (each
+student must turn in his/her own materials). As usual, set the seed
+for \texttt{rand} and \texttt{randn} to 1234.
+\begin{enumerate}
+\item Simulation of a definite integral with no closed form. In this question,
+compute the integral of $f\left(x\right)$ from $-10$ to $1$, where
+$f\left(x\right)=\exp\left(-x^{2}\right)$. This integral has no closed
+form solution, so we will approximate its value by two methods:
+
+\begin{enumerate}
+\item With quadrature, the integral computes to 1.6331
+\item See my m-code and Table 1 for complete solution. To get close to the
+quadrature solution, I had to do 2 million draws. The quadrature time
+was .046 seconds. The simulation time with 20 million draws was 2.737
+seconds. Surprisingly, the results with 2 million draws performed
+better than with 20 million.
+\end{enumerate}
+\item Bootstrapping, using the dataset \texttt{nlsw88.mat}.
+
+\begin{enumerate}
+\item The bootstrapped sample mean of \texttt{ttl\_exp} is 12.5374 with
+standard error of .0968. The mean taken from the data is 12.5350 with
+standard error of .0973. In this case, the bootstrapping slightly
+overestimates the mean, and slightly underestimates the standard error.
+\item The boostramped sample median of ln(wage) is 1.8384 with standard
+error of .0150. The population analogs are 1.8361 and .0152. Again,
+the bootstrapping slightly overstaded the median and slightly understated
+the dispersion.
+\item See Table 2 for the comparison between bootstrap and regular OLS.
+The results are exactly the same for the coefficients, but that's
+because this wasn't a full bootstrap (since I followed the example
+in \texttt{bootstrp}, which only bootstrapped the standard errors
+and not the coefficients). The standard errors are no more than .0006
+different, which makes sense. We shouldn't expect any difference,
+because the OLS standard errors are the true standard errors. In most
+applications of the bootstrap, there's something about the estimation
+method that prevents recovery of the correct standard errors, so bootstrapping
+is used as a way of recovering them.
+\item See Table 3 for the comparison between bootstrap and regular OLS.
+The standard errors are exactly the same, regardless of which bootstrap
+method was employed. The coefficients were off by as much as .026,
+but the differences are proportional to the standard errors of the
+estimates, which makes sense.
+\end{enumerate}
+\item Examining heterogeneity methods in a binomial probit model. 
+
+\begin{enumerate}
+\item See Table 4 for a comparison of (a), (b), and (c)
+\item See Table 4 for full details. $\hat{\pi}=.7334.$ This is interpreted
+as the proportion of people with $\alpha_{i}=1$. This can also be
+estimated as a type-specific intercept, where the coefficient on the
+intercept is constrained to $1$. 
+\item See Table 4 for full details. I used a step size of .03 for my grid.
+Comparing the three estimation results, the slope parameters are much
+more similar between the random effects specifications than the no-heterogeneity
+specification. Across the board, controlling for unobserved heterogeneity
+amplifies the estimates for each of the slope parameters. The finite
+mixture specification has a higher log likelihood than the continuous
+random effects specification. However, it is unclear which random
+effects specification should be preferred.
+\end{enumerate}
+\end{enumerate}
+\pagebreak{}
+
+\begin{table}
+\caption{Simulated Integral Results}
+
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{cccc}
+\hline 
+Draws & Time & Estimate & Bias\tabularnewline
+\hline 
+20 & 0.001 & 1.6500 & 0.0169\tabularnewline
+200 & 0.000 & 1.4850 & -0.1481\tabularnewline
+2,000 & 0.000 & 1.6665 & 0.0334\tabularnewline
+20,000 & 0.005 & 1.6258 & -0.0073\tabularnewline
+200,000 & 0.045 & 1.6250 & -0.0080\tabularnewline
+2,000,000 & 0.448 & 1.6331 & 0.0000\tabularnewline
+20,000,000 & 2.737 & 1.6317 & -0.0013\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+
+\begin{table}
+\caption{Bootstrap Comparison: \texttt{bootstrp} function}
+
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{cccccc}
+\hline 
+Draws & OLS & OLS SE &  & Bootstrap & Bootstrap SE\tabularnewline
+\hline 
+constant & 0.6292 & 1.6618 &  & 0.6292 & 1.6622\tabularnewline
+age & 0.0003 & 0.0845 &  & 0.0003 & 0.0845\tabularnewline
+black & -0.1077 & 0.0238 &  & -0.1077 & 0.0239\tabularnewline
+other race & 0.0310 & 0.0834 &  & 0.0310 & 0.0829\tabularnewline
+college grad & 0.0445 & 0.0372 &  & 0.0445 & 0.0366\tabularnewline
+education & 0.0647 & 0.0064 &  & 0.0647 & 0.0064\tabularnewline
+married & -0.0350 & 0.0231 &  & -0.0350 & 0.0228\tabularnewline
+south & -0.1352 & 0.0203 &  & -0.1352 & 0.0204\tabularnewline
+central city & 0.0853 & 0.0217 &  & 0.0853 & 0.0216\tabularnewline
+union & 0.1229 & 0.0225 &  & 0.1229 & 0.0226\tabularnewline
+experience & 0.0333 & 0.0026 &  & 0.0333 & 0.0026\tabularnewline
+tenure & 0.0089 & 0.0021 &  & 0.0089 & 0.0020\tabularnewline
+$\textrm{age}^{2}$ & -0.0001 & 0.0011 &  & -0.0001 & 0.0011\tabularnewline
+hours & 0.0030 & 0.0010 &  & 0.0030 & 0.0010\tabularnewline
+never married & -0.1070 & 0.0347 &  & -0.1070 & 0.0348\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+
+\begin{table}
+\caption{Bootstrap Comparison: by hand}
+
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{cccccc}
+\hline 
+Draws & OLS & OLS SE &  & Bootstrap & Bootstrap SE\tabularnewline
+\hline 
+constant & 0.6292 & 1.6618 &  & 0.6548 & 1.6622\tabularnewline
+age & 0.0003 & 0.0845 &  & -0.0010 & 0.0845\tabularnewline
+black & -0.1077 & 0.0238 &  & -0.1076 & 0.0239\tabularnewline
+other race & 0.0310 & 0.0834 &  & 0.0309 & 0.0829\tabularnewline
+college grad & 0.0445 & 0.0372 &  & 0.0444 & 0.0366\tabularnewline
+education & 0.0647 & 0.0064 &  & 0.0647 & 0.0064\tabularnewline
+married & -0.0350 & 0.0231 &  & -0.0354 & 0.0228\tabularnewline
+south & -0.1352 & 0.0203 &  & -0.1351 & 0.0204\tabularnewline
+central city & 0.0853 & 0.0217 &  & 0.0852 & 0.0216\tabularnewline
+union & 0.1229 & 0.0225 &  & 0.1230 & 0.0226\tabularnewline
+experience & 0.0333 & 0.0026 &  & 0.0333 & 0.0026\tabularnewline
+tenure & 0.0089 & 0.0021 &  & 0.0089 & 0.0020\tabularnewline
+$\textrm{age}^{2}$ & -0.0001 & 0.0011 &  & -0.0001 & 0.0011\tabularnewline
+hours & 0.0030 & 0.0010 &  & 0.0030 & 0.0010\tabularnewline
+never married & -0.1070 & 0.0347 &  & -0.1072 & 0.0348\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+
+\begin{table}
+\caption{Heterogeneity Methods with Binomial Probit}
+
+
+\begin{centering}
+\subfloat[Point Estimates]{
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{cccc}
+\hline 
+ & (No Heterogeneity) & (Finite Mixture) & (Continuous RE)\tabularnewline
+\hline 
+constant & -0.2339 & -0.7765 & 0.0611\tabularnewline
+male & 0.1270 & 0.1495 & 0.1629\tabularnewline
+AFQT & -0.1170 & -0.1349 & -0.1464\tabularnewline
+mother educ & -0.0089 & -0.0112 & -0.0129\tabularnewline
+education & -0.1041 & -0.1297 & -0.1408\tabularnewline
+experience & 0.5769 & 0.6292 & 0.6422\tabularnewline
+grad HS & 0.5763 & 0.6480 & 0.6953\tabularnewline
+grad 2yr college & 0.4479 & 0.5349 & 0.5997\tabularnewline
+grad 4yr college & 1.3609 & 1.5903 & 1.7309\tabularnewline
+log likelihood & --- & -12,715.81 & -12,732.96\tabularnewline
+$\hat{\pi}$ & --- & 0.7334 & ---\tabularnewline
+$\hat{\sigma}_{\alpha}$ & --- & --- & 0.5841\tabularnewline
+\end{tabular}}
+\par\end{centering}
+
+\vfill{}
+
+
+\centering{}\subfloat[Standard Errors]{
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{cccc}
+\hline 
+ & (No Heterogeneity) & (Finite Mixture) & (Continuous RE)\tabularnewline
+\hline 
+constant & 0.0926 & 0.1113 & 0.1215\tabularnewline
+male & 0.0177 & 0.0221 & 0.0248\tabularnewline
+AFQT & 0.0108 & 0.0134 & 0.0151\tabularnewline
+mother educ & 0.0034 & 0.0043 & 0.0048\tabularnewline
+education & 0.0071 & 0.0084 & 0.0094\tabularnewline
+experience & 0.0066 & 0.0075 & 0.0086\tabularnewline
+grad HS & 0.0295 & 0.0359 & 0.0407\tabularnewline
+grad 2yr college & 0.0405 & 0.0499 & 0.0535\tabularnewline
+grad 4yr college & 0.0344 & 0.0428 & 0.0467\tabularnewline
+$\hat{\pi}$ & --- & 0.0181 & ---\tabularnewline
+$\hat{\sigma}_{\alpha}$ & --- & --- & 0.0181\tabularnewline
+\hline 
+\end{tabular}}
+\end{table}
+
+\end{document}

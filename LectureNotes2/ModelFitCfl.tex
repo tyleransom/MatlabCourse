@@ -1,0 +1,196 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{verbatim}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTE: With Ilmenau style, to get the bullets %
+% looking right, do one section and one sub-   %
+% section for each set of bullets              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{frame}
+\title{Model Fit \& Counterfactual Simulations}
+
+
+\author{Tyler Ransom}
+
+
+\institute{Duke University}
+
+\titlepage
+
+\end{frame}
+
+
+\begin{frame}{Model Fit}
+
+Model fit is an important dimension by which researchers gauge the
+quality of their work
+\begin{itemize}
+\item Particularly in structural work, where the model can at times do more
+of the talking than the data, assessing model fit is a requirement
+\item At the end of the day a researcher needs to demonstrate that her model
+reasonably approximates the real world
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Model Fit}
+In a linear model, assessing model fit is quite simple:
+\begin{itemize}
+\item Generate $\hat{y}=X\hat{\beta}$, then compare $y$ and $\hat{y}$
+\item $R^{2}$ a goodness-of-fit measure (but shouldn't be used to compare
+competing models---i.e. don't maximize $R^{2}$)
+\end{itemize}
+In a nonlinear model, where the dependent variable is not continuous,
+assessing model fit may not be quite as straightforward
+\begin{itemize}
+\item Discrete choice model: Match $\hat{P}_{j}$ with $\left(1/N\right)\sum_{i}1\left[y=j\right]$,
+i.e. compare what the model predicts for the choice probabilities
+with what the data say
+\item Other nonlinear models: Match the average of some measure of the dependent
+variable with some average measure from data
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Model Fit}
+\begin{itemize}
+\item Nonlinear analog to $R^{2}$ is called the Likelihood Ratio Index
+(LRI):
+\[
+LRI=1-\frac{\ln L}{\ln L_{0}}
+\]
+where $\ln L$ is the log likelihood for the full model and $\ln L_{0}$
+is the log likelihood for the model with only an intercept.
+\item Other measures of goodness-of-fit are the Akaike Information Criterion
+(AIC) and the Bayes-Schwarz Information Criterion (BIC)
+
+\begin{itemize}
+\item These measures are similar to adjusted $R^{2}$ in that they penalize
+the inclusion of more variables
+\end{itemize}
+\item $BIC=-2\ln L+k\ln\left(n\right)$, where $k$ is the number of estimated
+parameters and $n$ is the sample size
+\item $AIC=2k-2\ln L$
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Counterfactual Simulation}
+\begin{itemize}
+\item Counterfactual simulation is the method by which structural empiricists
+simulate policy changes
+\item The main payoff to the structural approach (i.e. making a ton of assumptions---some
+more realistic than others) is that researchers can turn off certain
+channels of their model and literally see the effects of policy changes
+\item To the extent that the model is a good approximation to the real world,
+these counterfactual simulations can be quite enlightening
+\item A good structural model takes into account both direct and indirect
+effects (see below)
+\item The counterfactual simulation is able to account for what happens
+to both direct and indirect effects
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Counterfactual Simulation Example 1}
+
+Let's look at how counterfactual simulation answers a research question
+in a discrete choice model (recreational choice)
+\begin{itemize}
+\item In this model, people choose from among $J$ lakes to go fishing/boating/swimming
+in, or choose not to go at all
+\item People are utility maximizers, so the choice we observe is their utility
+maximizing choice (i.e. this is a random utility model)
+\item The following variables enter the utility function: travel distance,
+travel cost, park entry fees, lake amenities, fishing conditions,
+and congestion (how many other people are at the recreation site)
+\item The research question is ``what are the environmental implications
+of (i.e. what happens to park attendance in response to) an entry
+fee subsidy or a gas tax?''
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Counterfactual Simulation Example 1}
+
+We can answer our research question by completing the following steps:
+\begin{itemize}
+\item Simulate the effects of a gas tax by increasing travel costs for each
+person (proportional to travel distance)
+\item Simulate the effects of an entry fee subsidy by decreasing entry fees
+for each person
+\item Given these new values of the $X$ variables, re-generate the $\hat{P}_{j}$
+for each location
+\item Observe how $\hat{P}_{j,0}$ (the baseline choice probabilities) differ
+from $\hat{P}_{j,1}$ (the post-simulation choice probabilities)
+\item From this, the researcher can back out how many people go to each
+lake under the new scenario
+\item This can be informative of, e.g., the price elasticity of demand for
+lake recreation
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Counterfactual Simulation Example 2}
+
+Let's consider a model of job search
+\begin{itemize}
+\item Person chooses to accept a job (if she receives an offer) based on
+the offered wage, offered hours/week, and offered health care benefits
+\item State variables are her own health status, the health status of her
+spouse, and the health care benefits from her spouse's job
+\item She accepts the job if her utility from accepting the offer is larger
+than her utility from rejecting the offer
+\item Now a researcher can simulate the effects of a health care policy
+change (e.g. insurance can be obtained cheaply while unemployed)
+\item What happens to the reservation wage of the workers?
+\item What happens to the duration of unemployment spells?
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Conclusion}
+\begin{itemize}
+\item Your econometric model should do a good job of fitting the data
+\item There are various metrics by which to gauge model fit
+\item Counterfactual simulation is a great way to answer economic questions
+\item When doing work with structural models, your reasearch question is
+not answered until you've completed the counterfactual simulation(s)
+\end{itemize}
+
+\end{frame}
+\end{document}

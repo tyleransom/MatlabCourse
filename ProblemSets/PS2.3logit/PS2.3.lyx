@@ -1,0 +1,672 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\date{}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Problem Set 3
+\end_layout
+
+\begin_layout Standard
+Directions: Answer all questions.
+ Clearly label all answers.
+ Show all of your code.
+ Compute standard errors for all parameter estimates.
+ Turn in the following to me via your dropbox (in a folder labeled 'MatlabPS2.3')
+ in Sakai by 11:59 p.m.
+ on Thursday, August 9, 2012: 
+\end_layout
+
+\begin_layout Itemize
+m-file(s)
+\end_layout
+
+\begin_layout Itemize
+.sh shell script file that executes your m-file(s)
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Name your job something other than 
+\begin_inset Quotes eld
+\end_inset
+
+matsub,
+\begin_inset Quotes erd
+\end_inset
+
+ and have it send you an email upon completion.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+a log file (from off the cluster)
+\end_layout
+
+\begin_layout Itemize
+shell_name.oXXXXX file
+\end_layout
+
+\begin_layout Itemize
+pdf version of your writeup with its 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+LaTeX
+\end_layout
+
+\end_inset
+
+ source code
+\end_layout
+
+\begin_layout Standard
+Put the names of all group members at the top of your writeup (each student
+ must turn in his/her own materials).
+ As usual, set the seed for 
+\family typewriter
+rand
+\family default
+ and 
+\family typewriter
+randn
+\family default
+ to 1234.
+\end_layout
+
+\begin_layout Enumerate
+Simulation of a definite integral with no closed form.
+ In this question, compute the integral of 
+\begin_inset Formula $f\left(x\right)$
+\end_inset
+
+ from 
+\begin_inset Formula $-10$
+\end_inset
+
+ to 
+\begin_inset Formula $1$
+\end_inset
+
+, where 
+\begin_inset Formula 
+\[
+f\left(x\right)=\exp\left(-x^{2}\right)
+\]
+
+\end_inset
+
+This integral has no closed form solution, so we will approximate its value
+ by two methods:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Use one of the quadrature formulas in Matlab to approximate the solution.
+ Note: it's easiest (but not necessary) to use a function handle to define
+ the function.
+\end_layout
+
+\begin_layout Enumerate
+Simulate the solution to the integral using the notes from the lecture slide
+ entitled 
+\begin_inset Quotes eld
+\end_inset
+
+general steps for simulating an integral.
+\begin_inset Quotes erd
+\end_inset
+
+ Compare your solution with different numbers of draws.
+ How many draws are required to get close to the solution that the quadrature
+ gave? How long did each procedure take?
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Bootstrapping, using the dataset 
+\family typewriter
+nlsw88.mat
+\family default
+ (from problem set 1 of the first Matlab module).
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Bootstrap the sample mean of the variable 
+\family typewriter
+ttl_exp
+\family default
+ using Matlab's 
+\family typewriter
+bootstrp
+\family default
+ function.
+ Do 10,000 bootstrap iterations.
+ How does the boostrapped mean compare to the population mean? How does
+ the standard error of the bootstrapped mean compare to its population analog?
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Recall that the standard error of the mean of a variable is 
+\begin_inset Formula $\sigma/\sqrt{n}$
+\end_inset
+
+, where 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ is the standard deviation.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Bootstrap the sample median of the natural logarithm of the variable 
+\family typewriter
+wage
+\family default
+ without using Matlab's 
+\family typewriter
+bootstrp
+\family default
+ function.
+ Do 10,000 bootstrap iterations.
+ How does the boostrapped median compare to the population median? How does
+ the standard error of the bootstrapped median compare to its population
+ analog?
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+The standard error of the median of a variable is 
+\begin_inset Formula $1.253\sigma/\sqrt{n}$
+\end_inset
+
+, where 
+\begin_inset Formula $\sigma$
+\end_inset
+
+ is the standard deviation.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Estimate the following model using OLS (same as problem set 2 of the first
+ Matlab module).
+ Feel free to use any estimation method available to you.
+\begin_inset Formula 
+\begin{eqnarray*}
+\ln\left(wage_{i}\right) & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}collgrad_{i}+\\
+ &  & \beta_{6}grade_{i}+\beta_{7}married_{i}+\beta_{8}south_{i}+\beta_{9}c\_city_{i}+\\
+ &  & \beta_{10}union_{i}+\beta_{11}ttl\_exp_{i}+\beta_{12}tenure_{i}+\beta_{13}age_{i}^{2}+\\
+ &  & \beta_{14}hours_{i}+\beta_{15}never\_married_{i}+\varepsilon_{i}
+\end{eqnarray*}
+
+\end_inset
+
+(Be sure to drop observations for all variables where any of the variables
+ are missing.) Obtain bootstrapped standard errors for 10,000 replications
+ for this simple OLS model using Matlab's 
+\family typewriter
+bootstrp
+\family default
+ function.
+ How do your bootstrapped 
+\begin_inset Formula $\beta$
+\end_inset
+
+'s and standard errors compare to the 
+\begin_inset Formula $\beta$
+\end_inset
+
+'s and standard errors from the regular OLS?
+\end_layout
+
+\begin_layout Enumerate
+Repeat (c) but this time code the bootstrapping by hand.
+ Do not use loops over individual observations (or else your bootstrap will
+ never finish).
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Examining heterogeneity methods in a binomial probit model.
+ Using the dataset 
+\family typewriter
+nlsy97.mat
+\family default
+ (from problem set 1 of this module), consider the following model (similar
+ to before)
+\begin_inset Formula 
+\begin{eqnarray*}
+d_{it} & = & \beta_{1}+\beta_{2}male_{i}+\beta_{3}AFQT_{i}+\beta_{4}Mhgc_{i}+\beta_{5}hgc_{it}+\beta_{6}exper_{it}+\\
+ &  & \beta_{7}Diploma_{it}+\beta_{8}AA_{it}+\beta_{9}BA_{it}+\alpha_{i}+\varepsilon_{it}
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $d_{it}$
+\end_inset
+
+ is 1 if 
+\begin_inset Formula $activity_{it}=2$
+\end_inset
+
+ and 0 otherwise.
+ Assume a random effect: 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\alpha_{i}\sim Bernoulli\left(\pi\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\alpha_{i}=0$
+\end_inset
+
+ with probability 
+\begin_inset Formula $1-\pi$
+\end_inset
+
+, 
+\begin_inset Formula $\alpha_{i}=1$
+\end_inset
+
+ with probability 
+\begin_inset Formula $\pi$
+\end_inset
+
+,
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ and 
+\begin_inset Formula $\varepsilon_{it}\sim N\left(0,1\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+First estimate the model with no heterogeneity using 
+\family typewriter
+glmfit
+\family default
+, i.e.
+ assume 
+\begin_inset Formula $\alpha_{i}=0$
+\end_inset
+
+ for all 
+\begin_inset Formula $i$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Estimate the model with unobserved heterogeneity using 
+\family typewriter
+fminunc
+\family default
+.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+You may need to use 
+\family typewriter
+fminsearch
+\family default
+, then start 
+\family typewriter
+fminunc
+\family default
+ at the 
+\family typewriter
+fminsearch
+\family default
+ answers.
+ This is an example of when optimization can be more of an art than a science.
+\end_layout
+
+\end_inset
+
+ Use the 
+\family typewriter
+glmfit
+\family default
+ estimates + random noise as your starting values.
+ How do your parameter estimates change? Report the standard errors for
+ each of your parameters.
+ What is 
+\begin_inset Formula $\hat{\pi}$
+\end_inset
+
+? How would you interpret this coefficient estimate?
+\end_layout
+
+\begin_layout Enumerate
+Now assume that the random effect follows a normal distribution; i.e.
+ 
+\begin_inset Formula $\alpha_{i}\sim N\left(0,\sigma_{\alpha}^{2}\right)$
+\end_inset
+
+.
+ Estimate the parameters 
+\begin_inset Formula $\beta$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{\alpha}^{2}$
+\end_inset
+
+ using the Composite Simpson's rule
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+See 
+\begin_inset Quotes eld
+\end_inset
+
+Composite Simpson's rule
+\begin_inset Quotes erd
+\end_inset
+
+ in Wikipeida for further details.
+\end_layout
+
+\end_inset
+
+ over discretized values of 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+ (e.g.
+ from -3 to 3).
+ In order to integrate out the random effects, your log likelihood function
+ should look something like
+\begin_inset Formula 
+\[
+\ell=\sum_{i}\ln\left(\int_{-3}^{3}g_{i}\left(\alpha_{i}\right)f\left(\alpha_{i}\right)d\alpha_{i}\right)
+\]
+
+\end_inset
+
+ where
+\begin_inset Formula 
+\[
+g_{i}\left(\alpha_{i}\right)=\prod_{t}\Phi\left(X_{it}\beta+\alpha_{i}\right)^{y_{it}}\left(1-\Phi\left(X_{it}\beta+\alpha_{i}\right)\right)^{1-y_{it}}
+\]
+
+\end_inset
+
+and 
+\begin_inset Formula $f\left(\alpha_{i}\right)$
+\end_inset
+
+ is the pdf of the normal distribution with mean 
+\begin_inset Formula $0$
+\end_inset
+
+ and variance 
+\begin_inset Formula $\sigma_{\alpha}^{2}$
+\end_inset
+
+, evaluated at 
+\begin_inset Formula $\alpha_{i}$
+\end_inset
+
+.
+ The Composite Simpson's rule for quadrature states that the integral
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ can be approximated as
+\begin_inset Formula 
+\begin{eqnarray*}
+\int_{-3}^{3}g_{i}\left(\alpha_{i}\right)f\left(\alpha_{i}\right)d\alpha_{i} & \approx & \frac{h}{3}\left[g_{i}\left(-3\right)f\left(-3\right)+4g_{i}\left(-3+h\right)f\left(-3+h\right)+2g_{i}\left(-3+2h\right)f\left(-3+2h\right)\right.\\
+ &  & \left.\,\,\,\,+\cdots+4g_{i}\left(3-h\right)f\left(3-h\right)+g_{i}\left(3\right)f\left(3\right)\right],
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $h$
+\end_inset
+
+ is the step size of the discretized grid.
+ Hence, the log likelihood function should look like
+\begin_inset Formula 
+\[
+\ell=\sum_{i=1}^{n}\ln\left(\sum_{g=1}^{G}\left\{ \prod_{t=1}^{T}\Phi\left(X_{it}\beta+\alpha_{g}\right)^{y_{it}}\left(1-\Phi\left(X_{it}\beta+\alpha_{g}\right)\right)^{1-y_{it}}\right\} s_{g}w_{g}\right)
+\]
+
+\end_inset
+
+where
+\begin_inset Formula 
+\[
+\alpha_{g}=\left\{ -3,-3+h,-3+2h,\ldots,3-2h,3-h,3\right\} ,\,\,\, g=1,\ldots G,
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+s_{g}=\frac{h}{3}\left\{ 1,2,4,2,\ldots,2,4,1\right\} ,\,\,\, g=1,\ldots G,
+\]
+
+\end_inset
+
+and
+\begin_inset Formula 
+\[
+w_{g}=f\left(\alpha_{g}\right).
+\]
+
+\end_inset
+
+Notice that the 
+\begin_inset Quotes eld
+\end_inset
+
+Simpson's weights
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset Formula $s_{g}$
+\end_inset
+
+ are 
+\begin_inset Formula $2$
+\end_inset
+
+ if the element of the grid is even, and 
+\begin_inset Formula $4$
+\end_inset
+
+ if odd, with 
+\begin_inset Formula $1$
+\end_inset
+
+ as the first and last element.
+ 
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\family default
+\series bold
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+Notes:
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ This is quite computationally intensive, so if you can't get estimates
+ for the parameters, don't worry.
+ I want to see you code this.
+ Of course, if you code it successfully, you should estimate it; but it
+ will take awhile, even on the cluster.
+
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+ Avoid loops at all costs, because they go very slowly inside of Matlab's
+ optimizers.
+ It takes a lot of thinking (and use of 3-dimensional matrices), but this
+ problem can be coded with no loops.
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

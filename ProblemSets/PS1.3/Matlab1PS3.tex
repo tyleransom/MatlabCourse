@@ -1,0 +1,142 @@
+%% LyX 2.0.0 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{babel}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
+ {hyperref}
+\usepackage{breakurl}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{}
+
+\makeatother
+
+\begin{document}
+
+\title{Problem Set 3}
+
+\maketitle
+Directions: Answer all questions. Clearly label all answers. Show
+all of your code. Turn in the following to me via your dropbox (in
+a folder labeled 'MatlabPS1.3') in Sakai by 11:59 p.m. on Thursday,
+July 19, 2012: 
+\begin{itemize}
+\item m-file(s)
+\item a log file (from off the cluster)
+\item matsub.oXXXXX file
+\item pdf version of your writeup with its \LaTeX source code
+\end{itemize}
+Put the names of all group members at the top of your writeup (each
+student must turn in his/her own materials).
+\begin{enumerate}
+\item Practice with Matlab's graphics using \texttt{nhanes2d.mat} (from
+PS2) --- visualizing descriptive evidence
+
+\begin{enumerate}
+\item Generate a kernel density plot of the variable \texttt{hct}. How {}``normal''
+does the variable look? Be sure to add axis labels and a title to
+your graph.
+\item Now generate a histogram of \texttt{hct} with a normal pdf overlaying
+it. Again, label axes and assign a title appropriately. Do you think
+\texttt{hct} still looks {}``normal''? 
+\item On the same figure, plot the empirical cdf of \texttt{hct} by gender.
+Plot males and females with different line styles and include a legend.
+Does one gender stochastically dominate another?
+\item Now repeat (c) but break out the distribution by region instead of
+gender. 
+\item Now repeat (c) but break out the distribution by race instead of gender.
+\end{enumerate}
+\item Viewing model fit graphically
+
+\begin{enumerate}
+\item Graphing a predicted OLS plane
+
+\begin{enumerate}
+\item Estimate the following model (from question 2(a) of Problem Set 2):
+\begin{eqnarray}
+hct_{i} & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}heartatk_{i}+\nonumber \\
+ &  & \beta_{6}female_{i}+\beta_{7}highbp_{i}+\beta_{8}northeast_{i}+\beta_{9}midwest_{i}+\nonumber \\
+ &  & \beta_{10}south_{i}+\beta_{11}non\_central\_city_{i}+\beta_{12}rural_{i}+\beta_{13}height_{i}+\\
+ &  & \beta_{14}weight_{i}+\beta_{15}houssiz_{i}+\varepsilon_{i}\nonumber 
+\end{eqnarray}
+\emph{Be sure to drop observations for all variables where any of
+the variables are missing. Also, report the sum of squared residuals
+and/or log likelihood at convergence, number of iterations to convergence,
+and the estimation sample size.}\\
+\\
+Use \texttt{ezsurf} to graph the {}``marginal'' OLS plane for the
+intercept and the variables \texttt{height} and \texttt{weight}. Display
+the graph over the bounds $\left[\min\left(height\right),\max\left(height\right)\right]\times\left[\min\left(weight\right),\max\left(weight\right)\right]$.
+Correctly label all axes, and title your graph appropriately.
+\end{enumerate}
+\item Graphing actual data vs predicted OLS plane
+
+\begin{enumerate}
+\item Add actual data points to your graph in part (i) of question (a).
+Make sure your dimensions are correctly lined up. How well do height
+and weight jointly predict hematocrit percentage (conditional on all
+other covariates in the OLS data matrix)? 
+\end{enumerate}
+\end{enumerate}
+\item Maximum likelihood estimation for a discrete dependent variable (high
+blood pressure)
+
+\begin{enumerate}
+\item Using \texttt{fminunc} (with convergence tolerances at $10^{-8}$),
+estimate the following model:
+\begin{eqnarray}
+highbp_{i} & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}heartatk_{i}+\nonumber \\
+ &  & \beta_{6}female_{i}+\beta_{7}hct_{i}+\beta_{8}northeast_{i}+\beta_{9}midwest_{i}+\nonumber \\
+ &  & \beta_{10}south_{i}+\beta_{11}non\_central\_city_{i}+\beta_{12}rural_{i}+\beta_{13}height_{i}+\\
+ &  & \beta_{14}weight_{i}+\beta_{15}houssiz_{i}+\varepsilon_{i}\nonumber 
+\end{eqnarray}
+assuming $\varepsilon_{i}\sim$logistic. For this problem, the log
+likelihood looks like
+\[
+\ell\left(X_{i};\beta\right)=\sum_{i=1}^{n}\left\{ 1\left[highbp_{i}=1\right]\ln\left(P_{i}\right)+1\left[highbp_{i}=0\right]\ln\left(1-P_{i}\right)\right\} 
+\]
+where $1\left[highbp_{i}=1\right]$ is a dummy for whether or not
+$highbp_{i}$ is 1, and
+\[
+P_{i}=\frac{\exp\left(X_{i}\beta\right)}{1+\exp\left(X_{i}\beta\right)}.
+\]
+\emph{Be sure to drop observations for all variables where any of
+the variables are missing. Also, report the standard errors of $\hat{\beta}$,
+the log likelihood at convergence, number of iterations to convergence,
+and the estimation sample size.}
+\item Repeat (a), but now assume that $\varepsilon_{i}\sim N\left(0,1\right)$
+(i.e., estimate the probit model). In this case, the log likelihood
+is the same as in (a), but with
+\[
+P_{i}=\Phi\left(X_{i}\beta\right),
+\]
+where $\Phi$ is the CDF of the standard normal distribution. \textbf{}\\
+\textbf{}\\
+\textbf{Note:} If you're like me and have trouble getting your probit
+likelihood to converge, try estimating it first with \texttt{fminsearch}
+(starting from your logit answers), then with \texttt{fminunc} (starting
+from where \texttt{fminsearch} ended). If this is still problematic,
+consider modifying your likelihood function so that Matlab doesn't
+attempt to evaluate the log of 0. This can be done, e.g., by setting
+$P_{i}=10^{-200}$ if $P_{i}=0$.
+\item Divide your logit $\hat{\beta}$ estimates by 1.6 and compare with
+your probit $\hat{\beta}$ estimates. How different are the two vectors?
+Briefly discuss some of the main results from this estimation.
+\item Compare the fit of the models estimated in (a) and (b) in two ways:
+\emph{(i)} compare the average of $highbp$ with the average $\hat{P}_{logit}$
+and $\hat{P}_{probit}$%
+\footnote{$\hat{P}_{i}=f\left(X_{i}\hat{\beta}\right)$%
+}; \emph{(ii)} compare the maximum likelihood values. Which model does
+better at fitting the average probability? Which model has a higher
+likelihood value?\end{enumerate}
+\end{enumerate}
+
+\end{document}

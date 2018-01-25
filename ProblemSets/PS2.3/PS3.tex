@@ -1,0 +1,177 @@
+%% LyX 2.0.0 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{babel}
+\usepackage{esint}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
+ {hyperref}
+\usepackage{breakurl}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{}
+
+\makeatother
+
+\begin{document}
+
+\title{Problem Set 3}
+
+\maketitle
+Directions: Answer all questions. Clearly label all answers. Show
+all of your code. Compute standard errors for all parameter estimates.
+Turn in the following to me via your dropbox (in a folder labeled
+'MatlabPS2.3') in Sakai by 11:59 p.m. on Thursday, August 9, 2012: 
+\begin{itemize}
+\item m-file(s)
+\item .sh shell script file that executes your m-file(s)%
+\footnote{Name your job something other than {}``matsub,'' and have it send
+you an email upon completion.%
+}
+\item a log file (from off the cluster)
+\item shell\_name.oXXXXX file
+\item pdf version of your writeup with its \LaTeX source code
+\end{itemize}
+Put the names of all group members at the top of your writeup (each
+student must turn in his/her own materials). As usual, set the seed
+for \texttt{rand} and \texttt{randn} to 1234.
+\begin{enumerate}
+\item Simulation of a definite integral with no closed form. In this question,
+compute the integral of $f\left(x\right)$ from $-10$ to $1$, where
+\[
+f\left(x\right)=\exp\left(-x^{2}\right)
+\]
+This integral has no closed form solution, so we will approximate
+its value by two methods:
+
+\begin{enumerate}
+\item Use one of the quadrature formulas in Matlab to approximate the solution.
+Note: it's easiest (but not necessary) to use a function handle to
+define the function.
+\item Simulate the solution to the integral using the notes from the lecture
+slide entitled {}``general steps for simulating an integral.'' Compare
+your solution with different numbers of draws. How many draws are
+required to get close to the solution that the quadrature gave? How
+long did each procedure take?
+\end{enumerate}
+\item Bootstrapping, using the dataset \texttt{nlsw88.mat} (from problem
+set 1 of the first Matlab module).
+
+\begin{enumerate}
+\item Bootstrap the sample mean of the variable \texttt{ttl\_exp} using
+Matlab's \texttt{bootstrp} function. Do 10,000 bootstrap iterations.
+How does the boostrapped mean compare to the population mean? How
+does the standard error of the bootstrapped mean compare to its population
+analog?%
+\footnote{Recall that the standard error of the mean of a variable is $\sigma/\sqrt{n}$,
+where $\sigma$ is the standard deviation.%
+}
+\item Bootstrap the sample median of the natural logarithm of the variable
+\texttt{wage} without using Matlab's \texttt{bootstrp} function. Do
+10,000 bootstrap iterations. How does the boostrapped median compare
+to the population median? How does the standard error of the bootstrapped
+median compare to its population analog?%
+\footnote{The standard error of the median of a variable is $1.253\sigma/\sqrt{n}$,
+where $\sigma$ is the standard deviation.%
+}
+\item Estimate the following model using OLS (same as problem set 2 of the
+first Matlab module). Feel free to use any estimation method available
+to you.
+\begin{eqnarray*}
+\ln\left(wage_{i}\right) & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}collgrad_{i}+\\
+ &  & \beta_{6}grade_{i}+\beta_{7}married_{i}+\beta_{8}south_{i}+\beta_{9}c\_city_{i}+\\
+ &  & \beta_{10}union_{i}+\beta_{11}ttl\_exp_{i}+\beta_{12}tenure_{i}+\beta_{13}age_{i}^{2}+\\
+ &  & \beta_{14}hours_{i}+\beta_{15}never\_married_{i}+\varepsilon_{i}
+\end{eqnarray*}
+(Be sure to drop observations for all variables where any of the variables
+are missing.) Obtain bootstrapped standard errors for 10,000 replications
+for this simple OLS model using Matlab's \texttt{bootstrp} function.
+How do your bootstrapped $\beta$'s and standard errors compare to
+the $\beta$'s and standard errors from the regular OLS?
+\item Repeat (c) but this time code the bootstrapping by hand. Do not use
+loops over individual observations (or else your bootstrap will never
+finish).
+\end{enumerate}
+\item Examining heterogeneity methods in a binomial probit model. Using
+the dataset \texttt{nlsy97.mat} (from problem set 1 of this module),
+consider the following model (similar to before)
+\begin{eqnarray*}
+d_{it} & = & \beta_{1}+\beta_{2}male_{i}+\beta_{3}AFQT_{i}+\beta_{4}Mhgc_{i}+\beta_{5}hgc_{it}+\beta_{6}exper_{it}+\\
+ &  & \beta_{7}Diploma_{it}+\beta_{8}AA_{it}+\beta_{9}BA_{it}+\alpha_{i}+\varepsilon_{it}
+\end{eqnarray*}
+where $d_{it}$ is 1 if $activity_{it}=2$ and 0 otherwise. Assume
+a random effect: $\alpha_{i}\sim Bernoulli\left(\pi\right)$, where
+$\alpha_{i}=0$ with probability $1-\pi$, $\alpha_{i}=1$ with probability
+$\pi$, and $\varepsilon_{it}\sim N\left(0,1\right)$. 
+
+\begin{enumerate}
+\item First estimate the model with no heterogeneity using \texttt{glmfit},
+i.e. assume $\alpha_{i}=0$ for all $i$.
+\item Estimate the model with unobserved heterogeneity using \texttt{fminunc}.%
+\footnote{You may need to use \texttt{fminsearch}, then start \texttt{fminunc}
+at the \texttt{fminsearch} answers. This is an example of when optimization
+can be more of an art than a science.%
+} Use the \texttt{glmfit} estimates + random noise as your starting
+values. How do your parameter estimates change? Report the standard
+errors for each of your parameters. What is $\hat{\pi}$? How would
+you interpret this coefficient estimate?
+\item Now assume that the random effect follows a normal distribution; i.e.
+$\alpha_{i}\sim N\left(0,\sigma_{\alpha}^{2}\right)$. Estimate the
+parameters $\beta$ and $\sigma_{\alpha}^{2}$ using the Composite
+Simpson's rule%
+\footnote{See {}``Composite Simpson's rule'' in Wikipeida for further details.%
+} over discretized values of $\alpha_{i}$ (e.g. from -3 to 3). In
+order to integrate out the random effects, your log likelihood function
+should look something like
+\[
+\ell=\sum_{i}\ln\left(\int_{-3}^{3}g_{i}\left(\alpha_{i}\right)f\left(\alpha_{i}\right)d\alpha_{i}\right)
+\]
+ where
+\[
+g_{i}\left(\alpha_{i}\right)=\prod_{t}\Phi\left(X_{it}\beta+\alpha_{i}\right)^{y_{it}}\left(1-\Phi\left(X_{it}\beta+\alpha_{i}\right)\right)^{1-y_{it}}
+\]
+and $f\left(\alpha_{i}\right)$ is the pdf of the normal distribution
+with mean $0$ and variance $\sigma_{\alpha}^{2}$, evaluated at $\alpha_{i}$.
+The Composite Simpson's rule for quadrature states that the integral
+can be approximated as
+\begin{eqnarray*}
+\int_{-3}^{3}g_{i}\left(\alpha_{i}\right)f\left(\alpha_{i}\right)d\alpha_{i} & \approx & \frac{h}{3}\left[g_{i}\left(-3\right)f\left(-3\right)+4g_{i}\left(-3+h\right)f\left(-3+h\right)+2g_{i}\left(-3+2h\right)f\left(-3+2h\right)\right.\\
+ &  & \left.\,\,\,\,+\cdots+4g_{i}\left(3-h\right)f\left(3-h\right)+g_{i}\left(3\right)f\left(3\right)\right],
+\end{eqnarray*}
+where $h$ is the step size of the discretized grid. Hence, the log
+likelihood function should look like
+\[
+\ell=\sum_{i=1}^{n}\ln\left(\sum_{g=1}^{G}\left\{ \prod_{t=1}^{T}\Phi\left(X_{it}\beta+\alpha_{g}\right)^{y_{it}}\left(1-\Phi\left(X_{it}\beta+\alpha_{g}\right)\right)^{1-y_{it}}\right\} s_{g}w_{g}\right)
+\]
+where
+\[
+\alpha_{g}=\left\{ -3,-3+h,-3+2h,\ldots,3-2h,3-h,3\right\} ,\,\,\, g=1,\ldots G,
+\]
+\[
+s_{g}=\frac{h}{3}\left\{ 1,2,4,2,\ldots,2,4,1\right\} ,\,\,\, g=1,\ldots G,
+\]
+and
+\[
+w_{g}=f\left(\alpha_{g}\right).
+\]
+Notice that the {}``Simpson's weights'' $s_{g}$ are $2$ if the
+element of the grid is even, and $4$ if odd, with $1$ as the first
+and last element. \\
+\\
+\textbf{Notes:} This is quite computationally intensive, so if you
+can't get estimates for the parameters, don't worry. I want to see
+you code this. Of course, if you code it successfully, you should
+estimate it; but it will take awhile, even on the cluster. Avoid loops
+at all costs, because they go very slowly inside of Matlab's optimizers.
+It takes a lot of thinking (and use of 3-dimensional matrices), but
+this problem can be coded with no loops.\end{enumerate}
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,89 @@
+LyX lab "exercises"
+
+1.
+have them type a "hello world" example and export it to PDF
+
+2. 
+Show them how to find-and-replace, cut, copy, center, bold/emphasize, change font size
+
+3.
+practice with sections and subsections:
+
+number these sections:
+Sections and subsections are described below.
+Section Description
+Sections are bigger than subsections.
+Subsection description
+Subsections are smaller than sections.
+
+now change them to unnumbered
+
+4. 
+practice with list environments:
+
+Somewhere in your document, type:
+LyX is better than other word processors because:
+Typesetting is done for you.
+Math is WYSIWYG
+Lists are very easy to create!
+
+-change this from itemized to enumerated to description
+-change the order with the side arrows
+
+5.
+practice with ohter environments: quote, verse, LyX note, etc.
+
+6.
+practice changing the document class: swtich from article to book to letter to article(beamer) and see how the environment options change
+
+7.
+practice creating titles and title matter (author, date, etc.)
+
+8.
+practice cross-referencing and labels
+-create a label for "Section Description"
+-create a new section called "Labels and References"
+- type the following:
+If you want to know more about this document, then see
+section, which can be found on page.
+- insert the cross-reference for the label 
+
+9.
+create footnotes
+Under "LyX" in number 4, create a footnote that says "LyX is a typesetting word processor."
+create margin notes
+Write a marginal note after "subsection description" that says "subsections are a good way to organize sections."
+
+10.
+Index and Table of Contents
+- create a ToC right after the title
+- show the "table of contents" (outline) on the left side of the screen
+
+11. 
+Math
+- Type "I like what Einstein said, E=mc^2, because it is so simple."
+- Now select the math part and hit ctrl+m or click on the "Sigma" icon in the top menu
+- edit the equation by changing it to E=1+mc^2
+- ctrl+m or ctrl+shift+m to enter math mode (show difference)
+- exponentiate with ^ ; subscript with _
+- Math toolbar has all sorts of goodies; go through each of these
+- greek letters are prefaced with \ (e.g. \beta, \varepsilon)
+- Matrices
+- math functions (sin, exp, log, ln, etc.)
+
+12.
+Figures, Floats, Tables
+- Insert a Table float
+- insert a table
+- Insert a figure float
+- Insert a figure (.png, .jpg, .eps)
+
+13.
+Show how to use Beamer in LyX
+Show output for Beamer
+Show how to use different styles and colors
+
+
+
+
+

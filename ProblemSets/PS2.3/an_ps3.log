@@ -1,0 +1,344 @@
+----------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /afs/econ.duke.edu/home/t/tmr17/Teaching/PS2.3/an_ps3.log
+  log type:  text
+ opened on:   9 Aug 2012, 12:30:18
+
+. 
+. * Clean data from master.dta to class example
+. * variables desired:
+. * male
+. * AFQT
+. * Mhgc
+. * hgc
+. * exper
+. * Diploma
+. * AA
+. * BA
+. * wage
+. * activity
+. 
+. use "/afs/econ.duke.edu/home/t/tmr17/RA_Peter/NLSY97_Data/master.dta", clear
+
+. 
+. generat activity = 1 if Primary_activity<2
+(109832 missing values generated)
+
+. replace activity = 2 if Primary_activity>2 & Primary_activity<5
+(46384 real changes made)
+
+. replace activity = 3 if activity >=.
+(63448 real changes made)
+
+. 
+. replace Highest_Grade_Completed = . if Highest_Grade_Completed>25
+(14169 real changes made, 14169 to missing)
+
+. bys ID: gen t = _n
+
+. bys ID: ipolate Highest_Grade_Completed t, gen(hgc) epolate
+(3619 missing values generated)
+
+. 
+. replace Bio_mother_highest_educ = . if Bio_mother_highest_educ>25
+(9716 real changes made, 9716 to missing)
+
+. rename  Bio_mother_highest_educ Mhgc
+
+. 
+. drop if ASVAB>=.
+(26474 observations deleted)
+
+. drop if hgc>=.
+(1815 observations deleted)
+
+. drop if Mhgc>=.
+(6795 observations deleted)
+
+. 
+. drop BA AA Diploma GED
+
+. 
+. gen Diploma = year>=Diploma_year
+
+. gen AA      = year>=AA_year
+
+. gen BA      = year>=BA_year
+
+. 
+. replace BA = 0 if Diploma==0
+(0 real changes made)
+
+. replace AA = 0 if Diploma==0
+(71 real changes made)
+
+. 
+. zscore ASVAB
+z_ASVAB created with 0 missing values
+
+. ren    z_ASVAB AFQT
+
+. 
+. gen in_work = activity==2
+
+. bys ID: gen exper = sum(in_work)
+
+. 
+. merge 1:1 ID year using /afs/econ.duke.edu/data/vjh3/WageReturns/Data/y97/y97_master, keepusing(activityOct) nogen
+(label vlZ9083900 already defined)
+(label vlZ9063900 already defined)
+(label vlZ9063800 already defined)
+(label vlZ9063700 already defined)
+(label vlZ9063600 already defined)
+(label vlZ9063500 already defined)
+(label vlZ9063400 already defined)
+(label vlZ9063300 already defined)
+(label vlZ9063200 already defined)
+(label vlZ9063100 already defined)
+(label vlZ9063000 already defined)
+(label vlZ9062900 already defined)
+(label vlZ9062800 already defined)
+(label vlZ9062700 already defined)
+(label vlZ9062600 already defined)
+(label vlZ9062500 already defined)
+(label vlZ9062400 already defined)
+(label vlZ9062300 already defined)
+(label vlZ9062200 already defined)
+(label vlZ9062100 already defined)
+(label vlZ9062000 already defined)
+(label vlZ9061900 already defined)
+(label vlZ9061800 already defined)
+(label vlZ9061700 already defined)
+(label vlZ9061600 already defined)
+(label vlZ9061500 already defined)
+(label vlZ9061400 already defined)
+(label vlZ9061300 already defined)
+(label vlZ9061200 already defined)
+(label vlZ9061100 already defined)
+(label vlZ9061000 already defined)
+(label vlT2022500 already defined)
+(label vlT2021200 already defined)
+(label vlT2020900 already defined)
+(label vlT2020400 already defined)
+(label vlS1541501 already defined)
+(label vlR9829600 already defined)
+(label vlR6469600 already defined)
+(label vlR5828100 already defined)
+(label vlR5821400 already defined)
+(label vlR3788101 already defined)
+(label vlR2480900 already defined)
+(label vlR2480800 already defined)
+(label vlR2480700 already defined)
+(label vlR2480600 already defined)
+(label vlR2480500 already defined)
+(label vlR2479800 already defined)
+(label vlR2479700 already defined)
+(label vlR2479600 already defined)
+(label vlR2479500 already defined)
+(label vlR2479400 already defined)
+(label vlR1487600 already defined)
+(label vlR1487500 already defined)
+(label vlR1487400 already defined)
+(label vlR1487300 already defined)
+(label vlR1487200 already defined)
+(label vlR1487100 already defined)
+(label vlR1486900 already defined)
+(label vlR1302700 already defined)
+(label vlR1302600 already defined)
+(label vlR1302500 already defined)
+(label vlR1302400 already defined)
+(label vlR1205400 already defined)
+(label vlR1205200 already defined)
+(label vlR1205100 already defined)
+(label vlR1205000 already defined)
+(label vlR1204600 already defined)
+(label vlR1201400 already defined)
+(label vlR1201300 already defined)
+(label vlR1200200 already defined)
+(label vlR1200100 already defined)
+(label vlR1193300 already defined)
+(label vlR1193000 already defined)
+(label vlR0735700 already defined)
+(label vlR0689100 already defined)
+(label vlR0689000 already defined)
+(label vlR0688900 already defined)
+(label vlR0688800 already defined)
+(label vlR0688700 already defined)
+(label vlR0688600 already defined)
+(label vlR0688500 already defined)
+(label vlR0681200 already defined)
+(label vlR0649100 already defined)
+(label vlR0648900 already defined)
+(label vlR0609100 already defined)
+(label vlR0609000 already defined)
+(label vlR0608900 already defined)
+(label vlR0608700 already defined)
+(label vlR0608600 already defined)
+(label vlR0608500 already defined)
+(label vlR0539700 already defined)
+(label vlR0539600 already defined)
+(label vlR0538600 already defined)
+(label vlR0538200 already defined)
+(label vlR0537200 already defined)
+(label vlR0534300 already defined)
+(label vlR0533800 already defined)
+(label vlR0529701 already defined)
+(label vlR0254700 already defined)
+(label vlR0058700 already defined)
+(label vlR0057700 already defined)
+(label vlE5111808 already defined)
+(label vlcensus_region already defined)
+(label vlCollTypeAll already defined)
+(label vlR0000100 already defined)
+(label vlR0536300 already defined)
+(label vlR1235800 already defined)
+(label vlR1482600 already defined)
+(label vlZ9065800 already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       178,828
+        from master                         0  
+        from using                    178,828  
+
+    matched                            90,692  
+    -----------------------------------------
+
+. 
+. keep if age_now>=20 & age_now<=24
+(237145 observations deleted)
+
+. 
+. keep ID age_now male t AFQT Mhgc hgc exper Diploma AA BA log_wage activity activityOct in_work
+
+. ren age_now age
+
+. drop t
+
+. bys ID: gen t = _n
+
+. xtset ID t
+       panel variable:  ID (unbalanced)
+        time variable:  t, 1 to 5
+                delta:  1 unit
+
+. drop if ID==3082 | ID==3234 | ID==4530 | ID==6574 | ID==7353
+(5 observations deleted)
+
+. xtset
+       panel variable:  ID (strongly balanced)
+        time variable:  t, 1 to 5
+                delta:  1 unit
+
+. 
+. replace hgc = 18 if ID==965  & t>=3
+(3 real changes made)
+
+. replace hgc = 20 if ID==8222 & t>=3
+(3 real changes made)
+
+. replace hgc = 20 if ID==3278 & t>=3
+(3 real changes made)
+
+. replace hgc = 20 if ID==125  & t==5
+(1 real change made)
+
+. replace hgc = 20 if ID==3559 & t==5
+(1 real change made)
+
+. replace hgc = 9  if ID==1890
+(3 real changes made)
+
+. replace hgc = 15 if (ID==960 | ID==3630 | ID==7086) & t>=3
+(9 real changes made)
+
+. 
+. 
+. ** Analysis
+. probit in_work male AFQT Mhgc hgc exper Diploma AA BA
+
+Iteration 0:   log likelihood = -21777.661  
+Iteration 1:   log likelihood = -13147.545  
+Iteration 2:   log likelihood =  -13028.63  
+Iteration 3:   log likelihood = -13028.475  
+Iteration 4:   log likelihood = -13028.475  
+
+Probit regression                                 Number of obs   =      32370
+                                                  LR chi2(8)      =   17498.37
+                                                  Prob > chi2     =     0.0000
+Log likelihood = -13028.475                       Pseudo R2       =     0.4018
+
+------------------------------------------------------------------------------
+     in_work |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        male |   .1270186    .017798     7.14   0.000     .0921352     .161902
+        AFQT |  -.1169501   .0108584   -10.77   0.000    -.1382321    -.095668
+        Mhgc |  -.0089403    .003436    -2.60   0.009    -.0156747   -.0022059
+         hgc |  -.1041094   .0071042   -14.65   0.000    -.1180334   -.0901855
+       exper |   .5769067   .0064442    89.52   0.000     .5642763    .5895372
+     Diploma |   .5763292   .0294384    19.58   0.000      .518631    .6340273
+          AA |   .4479314   .0410006    10.92   0.000     .3675717    .5282912
+          BA |    1.36091   .0349488    38.94   0.000     1.292411    1.429408
+       _cons |  -.2338565   .0922692    -2.53   0.011    -.4147009   -.0530122
+------------------------------------------------------------------------------
+
+. xtprobit in_work male AFQT Mhgc hgc exper Diploma AA BA, re
+
+Fitting comparison model:
+
+Iteration 0:   log likelihood = -21777.661  
+Iteration 1:   log likelihood = -13147.545  
+Iteration 2:   log likelihood =  -13028.63  
+Iteration 3:   log likelihood = -13028.475  
+Iteration 4:   log likelihood = -13028.475  
+
+Fitting full model:
+
+rho =  0.0     log likelihood = -13028.475
+rho =  0.1     log likelihood = -12849.349
+rho =  0.2     log likelihood =  -12811.51
+rho =  0.3     log likelihood = -12874.479
+
+Iteration 0:   log likelihood =  -12811.51  
+Iteration 1:   log likelihood = -12733.669  
+Iteration 2:   log likelihood = -12732.962  
+Iteration 3:   log likelihood = -12732.961  
+Iteration 4:   log likelihood = -12732.961  
+
+Random-effects probit regression                Number of obs      =     32370
+Group variable: ID                              Number of groups   =      6474
+
+Random effects u_i ~ Gaussian                   Obs per group: min =         5
+                                                               avg =       5.0
+                                                               max =         5
+
+                                                Wald chi2(8)       =   6914.90
+Log likelihood  = -12732.961                    Prob > chi2        =    0.0000
+
+------------------------------------------------------------------------------
+     in_work |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        male |   .1629164   .0247869     6.57   0.000     .1143349    .2114978
+        AFQT |  -.1464014   .0150726    -9.71   0.000    -.1759431   -.1168596
+        Mhgc |  -.0128803   .0047885    -2.69   0.007    -.0222656    -.003495
+         hgc |  -.1408554   .0093881   -15.00   0.000    -.1592557   -.1224551
+       exper |   .6422034   .0085952    74.72   0.000     .6253572    .6590496
+     Diploma |   .6953772   .0406119    17.12   0.000     .6157793    .7749752
+          AA |   .5997182   .0534612    11.22   0.000     .4949362    .7045002
+          BA |   1.730956   .0464602    37.26   0.000     1.639895    1.822016
+       _cons |   .0612298    .121125     0.51   0.613    -.1761709    .2986304
+-------------+----------------------------------------------------------------
+    /lnsig2u |  -1.075205   .0616709                     -1.196078   -.9543324
+-------------+----------------------------------------------------------------
+     sigma_u |    .584147   .0180124                       .549889    .6205394
+         rho |   .2544145   .0116982                      .2321737    .2780144
+------------------------------------------------------------------------------
+Likelihood-ratio test of rho=0: chibar2(01) =   591.03 Prob >= chibar2 = 0.000
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /afs/econ.duke.edu/home/t/tmr17/Teaching/PS2.3/an_ps3.log
+  log type:  text
+ closed on:   9 Aug 2012, 12:31:50
+----------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,155 @@
+%% LyX 2.0.0 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{babel}
+\usepackage{amsmath}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
+ {hyperref}
+\usepackage{breakurl}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{}
+
+\makeatother
+
+\begin{document}
+
+\title{Problem Set 2}
+
+\maketitle
+Directions: Answer all questions. Clearly label all answers. Show
+all of your code. Compute standard errors for all parameter estimates.
+Turn in the following to me via your dropbox (in a folder labeled
+'MatlabPS2.2') in Sakai by 11:59 p.m. on Thursday, August 2, 2012: 
+\begin{itemize}
+\item m-file(s)
+\item .sh shell script file that executes your m-file(s)%
+\footnote{Name your job something other than {}``matsub,'' and have it send
+you an email upon completion.%
+}
+\item a log file (from off the cluster)
+\item matsub.oXXXXX file
+\item pdf version of your writeup with its \LaTeX source code
+\end{itemize}
+Put the names of all group members at the top of your writeup (each
+student must turn in his/her own materials).
+\begin{enumerate}
+\item Gradient of Multinomial Logit.
+
+\begin{enumerate}
+\item Derive the gradient of the multinomial logit log likelihood function,
+i.e. find $\partial\ell/\partial\beta_{j}$ where 
+\begin{eqnarray*}
+\mathcal{L}\left(X_{it};\beta\right) & = & \prod_{i}\prod_{j}\prod_{t}P_{ijt}^{d_{ijt}}\\
+\ln\left(\mathcal{L}\left(X_{it};\beta\right)\right) & = & \ln\left(\prod_{i}\prod_{j}\prod_{t}P_{ijt}^{d_{ijt}}\right)\\
+\ell\left(X_{it};\beta\right) & = & \sum_{i}\sum_{j}\sum_{t}d_{ijt}\ln\left(P_{ijt}\right)\\
+ & = & \sum_{i}\sum_{j}\sum_{t}d_{ijt}\ln\left(\frac{\exp\left(X_{ijt}\beta_{j}\right)}{\sum_{k}\exp\left(X_{ikt}\beta_{k}\right)}\right).
+\end{eqnarray*}
+Express this derivative in matrix form. For more help, see p. 63 of
+Train%
+\footnote{Available for free online at \url{http://elsa.berkeley.edu/books/choice2.html}.
+Note that Train expresses his formula in terms of $\partial\ell/\partial\beta$,
+not $\partial\ell/\partial\beta_{j}$.%
+}.
+\end{enumerate}
+\item Estimation of Multinomial Logit with and without gradient. Using the
+dataset \texttt{nlsy97m.mat}, consider the following model (same as
+Problem Set 1)
+\begin{eqnarray}
+d_{ijt} & = & \beta_{1j}+\beta_{2j}male_{i}+\beta_{3j}AFQT_{i}+\beta_{4j}Mhgc_{i}+\beta_{5j}hgc_{it}+\beta_{6j}exper_{it}+\\
+ &  & \beta_{7j}Diploma_{it}+\beta_{8j}AA_{it}+\beta_{9j}BA_{it}+\varepsilon_{ijt}\nonumber 
+\end{eqnarray}
+where $\varepsilon_{ijt}\overset{iid}{\sim}$Type I Extreme Value,
+and $d_{ijt}$ is an indicator that $choice_{it}=j$ for individual
+$i$ in time $t$. $choice_{it}$ now takes on values $1,\ldots,6$
+according to the following fashion:
+
+\begin{itemize}
+\item school only
+\item work while attending school
+\item work part-time (no school)
+\item work full-time (no school)
+\item active military duty
+\item all other activities\end{itemize}
+\begin{enumerate}
+\item Tabulate the choice set.
+\item Estimate $\beta$ using \texttt{fminunc} and random starting values%
+\footnote{As usual, set the seed to 1234.%
+}. Normalize $\beta_{6}$ to be zero (i.e. use {}``other activities''
+as the reference group). Report $\hat{\beta}$ and its standard errors,
+along with the log likelihood value at convergence and number of iterations
+to convergence.
+\item Now estimate $\beta$ using \texttt{fminunc} and random starting values,
+but this time supply \texttt{fminunc} with the gradient you computed
+in part (a) of question 1.%
+\footnote{Remember that you can use the \texttt{'DerivativeCheck','on'} option
+in \texttt{fminunc} to compare your analytical derivative with Matlab's
+numerical approximation.%
+} What difference does the user-supplied gradient make in terms of
+computational time as well as estimate precision?
+\end{enumerate}
+\item Constrained optimization within \texttt{fminunc}. Using the same dataset
+as in question 2, estimate the following model:
+\begin{eqnarray*}
+\ln\left(wage_{it}\right) & = & \gamma_{1}+\gamma_{2}male_{i}+\gamma_{3}AFQT_{i}+\gamma_{4}Mhgc_{i}+\gamma_{5}hgc_{it}+\gamma_{6}exper_{it}+\\
+ &  & \gamma_{7}Diploma_{it}+\gamma_{8}AA_{it}+\gamma_{9}BA_{it}+\gamma_{10}school\&work_{it}+\gamma_{11}workPT_{it}+\varepsilon_{it}
+\end{eqnarray*}
+where $\varepsilon_{it}\overset{iid}{\sim}N\left(0,\sigma^{2}\right)$.
+$school\&work_{it}$ is a dummy for whether or not the individual
+$i$ chose school and work (choice 2) in time $t$, and $workPT_{it}$
+is a dummy for whether or not individual $i$ chose work part-time
+(choice 3) in time $t$.
+
+\begin{enumerate}
+\item Estimate $\hat{\gamma}$ using \texttt{fminunc} and imposing the following
+constraints within the optimization%
+\footnote{Hint: The following constraint functions are compatible with these
+constraints: $\exp(x)$, $-x^{2}$, $.15*\tanh(x)+.05$%
+}: 
+
+\begin{itemize}
+\item $\hat{\sigma}>0$
+\item $\hat{\gamma}_{10}<0$
+\item $-.1<\hat{\gamma}_{2}<.2$
+\end{itemize}
+
+Be sure to report the delta-method-corrected standard errors with
+your point estimates.
+
+\end{enumerate}
+\item Estimation of normal MLE with and without gradient and hessian.%
+\footnote{For this problem, start all optimization at the same starting values
+(one specific draw from a $U[0,1]$ distribution).%
+}
+
+\begin{enumerate}
+\item Estimate the same model as in question 3, but this time supply the
+gradient of the log likelihood to \texttt{fminunc}. Compare your results
+with and without the user-provided gradient. Report coefficient estimates,
+log likelihood values, iteration counts, and standard errors of your
+coefficient estimates. Comment on the computational savings of a user-provided
+gradient.
+\item Repeat (a), but this time supply both the gradient and the hessian.%
+\footnote{Note: Matlab does not have an analogous option to \texttt{'DerivativeCheck'}
+for the user-supplied hessian. However, there is a user-written script
+called \texttt{hessian} (the full package name is {}``Adaptive Robust
+Numerical Differentiation'' which you can find on the Matlab file
+exchange), which will numerically calculate the hessian of an objective
+function. This is useful as a way to check that your differentiation
+is correct.%
+} For help on what this looks like, consult Hayashi (pp. 49-51) or
+Greene (pp. 518-519). Compare your results with and without the user-provided
+hessian. Report coefficient estimates, log likelihood values, iteration
+counts, and standard errors of your coefficient estimates. Comment
+on the computational savings of a user-provided hessian.\end{enumerate}
+\end{enumerate}
+
+\end{document}

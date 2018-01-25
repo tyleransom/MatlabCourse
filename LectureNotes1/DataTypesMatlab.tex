@@ -1,0 +1,239 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[numbered,framed,autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+\begin{document}
+\begin{frame}
+\title{Data Types in Matlab}
+\author{
+	Tyler Ransom\\
+	\emph{Duke University}\\
+%    \today \\
+%    \vspace{10cm}
+}
+\titlepage
+\end{frame}
+
+\begin{frame}{Data Types in Matlab}
+\begin{itemize}
+\item Numeric Classes
+\item The Logical Class
+\item Characters and Strings
+\item Structures
+\item Cell Arrays
+\item Function Handles
+\item Map Containers
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Why worry about data types?}
+\begin{itemize}
+\item Matlab makes it difficult to combine different data types
+\item For numeric classes, data types may affect accuracy
+\begin{itemize}
+\item e.g. rounding error
+\end{itemize}
+\item It's important to know about data types when working with data in
+any program, because different data types take up different amounts
+of disk space
+\item Don't waste disk space by saving a dummy variable in a format that
+has precision to 15 decimal points
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Numeric Classes}
+Integers
+\begin{itemize}
+\item can take 8, 16, 32, or 64 bits
+\item can be signed or unsigned
+\item if unsigned, user can get twice as long of integers per byte
+\end{itemize}
+Double Floating-Point Numbers
+\begin{itemize}
+\item always take up 64 bits
+\item most precise numerical format (16 digits of accuracy)
+\end{itemize}
+Single Floating-Point Numbers
+\begin{itemize}
+\item always take up 32 bits
+\item only 8 digits of accuracy
+\end{itemize}
+Complex Numbers
+\begin{itemize}
+\item can be formatted in any fashion above, but Matlab has an additional
+flag to denote complexity
+\end{itemize}
+\texttt{Inf} and \texttt{NaN}
+\begin{itemize}
+\item stored as 64-bit double
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Working with Numeric Classes}
+\begin{itemize}
+\item Viewing which variables are which type
+\begin{itemize}
+\item At the command line, type \texttt{whos}
+\item User can see a list of variables and which class they are formatted
+\end{itemize}
+\item Generating a variable of a certain type:
+\end{itemize}
+\begin{lstlisting}
+y = int64(-589324077574); % Create a 64-bit integer
+x = double(y)             % Convert to double
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}{How can I optimize my data storage?}
+\begin{itemize}
+\item Suppose a user has data she wants to save in a mat-file
+\item Suppose also that she has a number of variables that are stored in
+{}``too big'' of numeric classes
+\begin{itemize}
+\item e.g. she has a dummy variable stored as a 32-bit integer and a 16-bit
+integer stored as a 64-bit double
+\end{itemize}
+\item How can she quickly and easily convert her numerical variables to
+the most efficient numerical class?
+\item The easiest way is the \texttt{save} command
+\item Matlab's \texttt{save} command is streamlined to automatically convert
+variables to the optimal format
+\item Beyond this, there are user-written scripts that store data even more
+efficiently than Matlab's \texttt{save} command
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Logical Class}
+\begin{itemize}
+\item Any variable that is a logical (e.g. {}``\texttt{Z=(x<5);}'') is
+stored as an 8-bit \emph{logical}.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Characters and Strings}
+\begin{itemize}
+\item Strings in Matlab are stored as 16-bits per character
+\item Character arrays must have all elements be the same length, so spaces
+are automatically inserted to make the dimensions match
+\item Thus, if you tried %\mcode{data = ['Allison Jones';'Development';'Phoenix'];}\\
+you would get an error because the dimensions don't match up
+\item Instead, use the \texttt{char} function:\\
+%\mcode{data = char('Allison Jones','Development','Phoenix')}
+\item Can convert strings to cell arrays (see below)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Structures}
+Structures are invoked with a period, e.g. (\texttt{A.data}). \texttt{A}
+is a structure with substructure \texttt{data}.
+\end{frame}
+
+
+\begin{frame}{Cell Arrays}
+Cell arrays are the only way to store data of two different types
+in the same array, side-by-side.
+\begin{itemize}
+\item Cell arrays contain multiple data containers called cells
+\item Each cell can contain any type of data
+\item When referencing elements, use \texttt{()} to reference cells (data
+containers) and use \texttt{\{\}} to reference individual elements
+within a cell
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Operations with Cell Arrays}
+\begin{itemize}
+\item Generate a blank cell array \texttt{A} with the command \texttt{A=cell(3,4,2);}
+\item concatenate cell arrays along dimension $k$ with the command \texttt{cat(k,array1,array2,...arrayN);}
+\item delete the $(i,j)$ observation of cell array \texttt{myarray} with
+the command \texttt{myarray\{i,j\}={[}{]};}
+\item create a nested cell array called super\_array with the command \texttt{super\_array
+= \{array1; array2;\};}
+\begin{itemize}
+\item super\_array is now a 2x1 cell array with array1 in the first cell
+and array2 in the second cell
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Operations with Cell Arrays}
+\begin{itemize}
+\item In order to turn a string into a cell array, use the command \texttt{cellstr}
+\item In order to turn a numerical array into a cell array, use \texttt{num2cell}
+\item Once this formatting is taken care of, the string and numerical cells
+can be concatenated together with the \texttt{cat} command
+\item Example: want to list variable names next to their point estimates
+in a regression output table:
+\end{itemize}
+\begin{lstlisting}
+varnames = cellstr(char('Var1','Var2',...,'VarK'));
+estimate = num2cell(X\y);
+result   = cat(2,varnames,estimate);
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}{Function Handles}
+From the Mathworks website:
+{}``A function handle is a callable association to a MATLAB function.
+It contains an association to that function that enables you to invoke
+the function regardless of where you call it from. This means that,
+even if you are outside the normal scope of a function, you can still
+call it if you use its handle.
+With function handles, you can:
+\begin{itemize}
+\item Pass a function to another function
+\item Capture data values for later use by a function
+\item Call functions outside of their normal scope
+\item Save the handle in a MAT-file to be used in a later MATLAB session''
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Map Containers}
+\begin{itemize}
+\item Map containers are data structures that are organized by a key and
+a data value
+\item In regular arrays, the key is a number (corresponding to the element
+of the matrix)
+\item The advantage to map containers is that the key can be a string
+\end{itemize}
+\end{frame}
+\end{document}

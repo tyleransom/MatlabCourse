@@ -1,0 +1,569 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding default
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Linux Lab
+\end_layout
+
+\begin_layout Standard
+This exercise is meant to familiarize you with commands in Linux in order
+ to be more comfortable using Duke's computational resources.
+ Things you will need:
+\end_layout
+
+\begin_layout Itemize
+laptop (or work with a group member who has a laptop)
+\end_layout
+
+\begin_layout Itemize
+access to Duke's computational cluster
+\end_layout
+
+\begin_layout Itemize
+matlab file(s) loaded in your directory on the cluster
+\end_layout
+
+\begin_layout Section
+Linux basics
+\end_layout
+
+\begin_layout Subsection
+Navigation and File Commands
+\end_layout
+
+\begin_layout Enumerate
+View current location.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Type 
+\family typewriter
+pwd
+\family default
+ at the command line.
+ The system should return the following 
+\family typewriter
+/afs/econ.duke.edu/home/m/mynetID
+\family default
+ where 
+\family typewriter
+m
+\family default
+ is the first letter of your netID and 
+\family typewriter
+mynetID
+\family default
+ is your netID.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Change directories.
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Move down in the file tree by using the command 
+\family typewriter
+cd DirectoryName
+\family default
+.
+ For example: type 
+\family typewriter
+cd Matlab
+\family default
+ if you have a subdirectory called 
+\family typewriter
+Matlab
+\family default
+ in your home directory.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Move up in the file tree by typing 
+\family typewriter
+cd ..
+
+\family default
+ (two periods).
+\end_layout
+
+\begin_layout Enumerate
+Move to your home directory by typing 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+cd 
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+List directory contents.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+To view the contents of a directory, type 
+\family typewriter
+ls
+\family default
+.
+ Files appear in black and directories in blue.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Create a directory.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Change to your home directory.
+ Create a directory called Matlab_Module by typing 
+\family typewriter
+mkdir Matlab_Module
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Change to this directory and create a directory within it called 
+\family typewriter
+Linux_Lab
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Change to this directory.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Create a file.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Create a blank m-file in the directory 
+\family typewriter
+/afs/econ.duke.edu/home/m/mynetID/Matlab_Module/Linux_Lab
+\family default
+.
+ This is done by typing 
+\family typewriter
+touch linuxlab.m
+\family default
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Rename a file.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Rename your newly created file 
+\family typewriter
+linuxlab1.m
+\family default
+.
+ This is done by typing 
+\family typewriter
+mv linuxlab.m linuxlab1.m
+\family default
+.
+ The general syntax is 
+\family typewriter
+mv old_file_name new_file_name
+\family default
+.
+ The mv stands for 
+\begin_inset Quotes eld
+\end_inset
+
+move.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Copy a file.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Copy the file 
+\family typewriter
+linuxlab1.m
+\family default
+ to a new filename in your directory called 
+\family typewriter
+linuxlab2.m
+\family default
+.
+ To do this, type 
+\family typewriter
+cp -f linuxlab1.m linuxlab2.m
+\family default
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Copy a directory.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Copy the directory 
+\family typewriter
+Linux_Lab
+\family default
+ to a new directory called 
+\family typewriter
+Linux_Lab1
+\family default
+.
+ To do this, first move up the directory tree by typing 
+\family typewriter
+cd ..
+\family default
+.
+ Then type 
+\family typewriter
+cp -r Linux_Lab Linux_Lab1
+\family default
+.
+ Type 
+\family typewriter
+ls
+\family default
+ and make sure that you have two directories in this folder now.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Remove a file.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Go into the new directory 
+\family typewriter
+Linux_Lab1
+\family default
+.
+ In this directory, delete the file 
+\family typewriter
+linuxlab2.m
+\family default
+ by typing 
+\family typewriter
+rm linuxlab2.m
+\family default
+.
+ Double check that this command was executed by typing 
+\family typewriter
+ls
+\family default
+ and verifying that 
+\family typewriter
+linuxlab2.m
+\family default
+ doesn't exist.
+\end_layout
+
+\begin_layout Enumerate
+NOTE: Be very careful when using the 
+\family typewriter
+rm
+\family default
+ command.
+ This deletes the file forever.
+ It is very powerful and should be used with caution.
+ Do not ever use wildcards when specifying files to delete.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Remove a directory.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Go back to the directory Matlab_Module and delete the directory you just
+ copied (Linux_Lab1) by typing 
+\family typewriter
+rm -r Linux_Lab1
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+NOTE: Be even more careful when using the 
+\family typewriter
+rm
+\family default
+ command to delete directories.
+ This deletes the directory forever!
+\end_layout
+
+\begin_layout Enumerate
+Verify that the action was done by typing 
+\family typewriter
+ls
+\family default
+.
+ You should only have one directory now, 
+\family typewriter
+Linux_Lab
+\family default
+.
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+System Info
+\end_layout
+
+\begin_layout Enumerate
+Check who's online right now by typing 
+\family typewriter
+w
+\end_layout
+
+\begin_layout Enumerate
+Check which server you're logged into by typing 
+\family typewriter
+uname -a
+\end_layout
+
+\begin_layout Enumerate
+Check who you're logged in as by typing 
+\family typewriter
+whoami
+\end_layout
+
+\begin_layout Enumerate
+Check the credentials of a user by typing 
+\family typewriter
+finger [netID]
+\family default
+, e.g.
+ 
+\family typewriter
+finger tmr17
+\end_layout
+
+\begin_layout Section
+Computational Jobs
+\end_layout
+
+\begin_layout Standard
+Before attempting this section, please move one or more of your problem
+ set files into a directory on the Duke Econ cluster.
+ It can be Problem Set 2.1, or one of the problem sets from the Matlab 1
+ module.
+\end_layout
+
+\begin_layout Subsection
+Submitting a job
+\end_layout
+
+\begin_layout Enumerate
+Change directories to the folder where your m-file and function files reside.
+\end_layout
+
+\begin_layout Enumerate
+Submit the m-file for batch computation using the 
+\family typewriter
+matsub
+\family default
+ command, e.g.
+ 
+\family typewriter
+matsub ps3main.m ps3main.log
+\end_layout
+
+\begin_layout Enumerate
+Now download the example shell script from Sakai (Resources/Matlab2 Materials/Ex
+amples/example.sh) and copy it into the same folder where you did your 
+\family typewriter
+matsub
+\family default
+ from.
+\end_layout
+
+\begin_layout Enumerate
+Edit the example shell script to have a new name, a different email address,
+ and the same filenames as your 
+\family typewriter
+matsub
+\family default
+ command.
+\end_layout
+
+\begin_layout Enumerate
+Now submit your shell script with the command 
+\family typewriter
+qsub -q all.q myshell.sh
+\end_layout
+
+\begin_layout Subsection
+Checking job status
+\end_layout
+
+\begin_layout Enumerate
+After submitting your job, check its status by typing 
+\family typewriter
+qstat
+\end_layout
+
+\begin_layout Enumerate
+Before submitting a job, look at the status of the cluster by typing 
+\family typewriter
+qstat -u 
+\begin_inset Quotes eld
+\end_inset
+
+*
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Check which node your job is running on by typing 
+\family typewriter
+qstat -f
+\end_layout
+
+\begin_layout Enumerate
+Check the status of all nodes with 
+\family typewriter
+qstat -u 
+\begin_inset Quotes eld
+\end_inset
+
+*
+\begin_inset Quotes erd
+\end_inset
+
+ -f
+\end_layout
+
+\begin_layout Enumerate
+Check the detailed status of a particular job with 
+\family typewriter
+qstat -j [jobID]
+\end_layout
+
+\begin_layout Subsection
+Deleting jobs
+\end_layout
+
+\begin_layout Enumerate
+Delete a job that is still running with 
+\family typewriter
+qdel [jobID]
+\end_layout
+
+\begin_layout Section
+Logout
+\end_layout
+
+\begin_layout Standard
+Type 
+\family typewriter
+exit
+\family default
+ or 
+\family typewriter
+ctrl+d
+\end_layout
+
+\end_body
+\end_document

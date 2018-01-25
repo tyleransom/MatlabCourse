@@ -1,0 +1,445 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Notes on Matlab's Optimizers
+\end_layout
+
+\begin_layout Section*
+fminsearch
+\end_layout
+
+\begin_layout Subsection*
+Nelder-Mead Simplex Algorithm
+\end_layout
+
+\begin_layout Standard
+The algorithm iterates on the following steps:
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+For more details, see 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+url{http://www.mathworks.com/help/techdoc/math/bsotu2d.html
+\backslash
+#bsgpq6p-11}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Create a simplex of dimension 
+\begin_inset Formula $K+1$
+\end_inset
+
+ (where there are 
+\begin_inset Formula $K$
+\end_inset
+
+ parameters to be estimated) around the starting value 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Modify the simplex based on how the function looks at different trial modificati
+ons.
+ In particular, 
+\begin_inset Quotes eld
+\end_inset
+
+order the points in the simplex from lowest function value 
+\begin_inset Formula $f(x(1))$
+\end_inset
+
+ to highest 
+\begin_inset Formula $f(x(K+1))$
+\end_inset
+
+.
+ At each step in the iteration, the algorithm discards the current worst
+ point 
+\begin_inset Formula $x(K+1)$
+\end_inset
+
+, and accepts another point into the simplex
+\begin_inset Quotes erd
+\end_inset
+
+ (Matlab website).
+ Possible simplex modifications are:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Reflect
+\end_layout
+
+\begin_layout Enumerate
+Expand
+\end_layout
+
+\begin_layout Enumerate
+Contract outside
+\end_layout
+
+\begin_layout Enumerate
+Contract inside
+\end_layout
+
+\begin_layout Enumerate
+Shrink
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Repeat steps 1-2 until the diameter of the simplex is smaller than the tolerance
+ (default is 
+\begin_inset Formula $10^{-4}$
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Section*
+fminunc
+\begin_inset Foot
+status open
+
+\begin_layout Plain Layout
+For more info on these algorithms, see 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+url{http://www.mathworks.com/help/toolbox/optim/ug/brnoxr7-1.html
+\backslash
+#brnpcy5}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Medium-Scale algorithm: line search (BFGS method) --- No user-supplied gradient
+ or hessian
+\end_layout
+
+\begin_layout Standard
+The medium-scale algorithm iterates on the following four steps for the
+ 
+\begin_inset Formula $k$
+\end_inset
+
+th iteration:
+\end_layout
+
+\begin_layout Enumerate
+compute the search direction 
+\begin_inset Formula $p_{k}$
+\end_inset
+
+ by solving
+\begin_inset Formula 
+\begin{eqnarray*}
+\hat{H}_{k}p_{k} & = & -\nabla f\left(x_{k}\right),\,\,\mbox{or}\\
+p_{k} & = & -\hat{H}_{k}^{-1}\nabla f\left(x_{k}\right)
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\hat{H}_{k}$
+\end_inset
+
+ is an approximation of the hessian.
+\end_layout
+
+\begin_layout Enumerate
+Choose the step size 
+\begin_inset Formula $\alpha_{k}$
+\end_inset
+
+ by solving
+\begin_inset Formula 
+\[
+\min_{\alpha}f\left(x_{k}+\alpha_{k}p_{k}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Update 
+\begin_inset Formula $x_{k+1}=x_{k}+\alpha_{k}p_{k}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Update 
+\begin_inset Formula $\hat{H}_{k+1}$
+\end_inset
+
+, letting 
+\begin_inset Formula $s_{k}=\alpha_{k}p_{k}$
+\end_inset
+
+ and 
+\begin_inset Formula $y_{k}=\nabla f\left(x_{k+1}\right)-\nabla f\left(x_{k}\right)$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+\hat{H}_{k+1}=\hat{H}_{k}+\frac{y_{k}y_{k}^{\prime}}{y_{k}^{\prime}s_{k}}-\frac{\hat{H}_{k}s_{k}s_{k}^{\prime}\hat{H}_{k}}{s_{k}^{\prime}\hat{H}_{k}s_{k}}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $^{\prime}$
+\end_inset
+
+ refers to matrix transpose, not differentiation.
+\end_layout
+
+\begin_layout Enumerate
+Continue steps 1-4 until 
+\begin_inset Formula $\left\Vert \nabla f\left(x_{k}\right)\right\Vert <\mbox{tolerance}$
+\end_inset
+
+, where 
+\begin_inset Formula $\mbox{tolerance}=10^{-6}$
+\end_inset
+
+ by default.
+\end_layout
+
+\begin_layout Subsection*
+Large-Scale algorithm: trust region method --- user-supplied gradient and/or
+ hessian
+\end_layout
+
+\begin_layout Standard
+The trust region method operates by dividing the optimization into a series
+ of 2-dimensional trust region subproblems.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+The basic idea is to approximate 
+\begin_inset Formula $f$
+\end_inset
+
+ with a simpler function 
+\begin_inset Formula $q$
+\end_inset
+
+, which reasonably reflects the behavior of function 
+\begin_inset Formula $f$
+\end_inset
+
+ in a neighborhood 
+\begin_inset Formula $N$
+\end_inset
+
+ around the point 
+\begin_inset Formula $x$
+\end_inset
+
+.
+ This neighborhood is the 
+\series bold
+trust region
+\series default
+
+\begin_inset Quotes erd
+\end_inset
+
+ (Matlab website, emphasis added).
+ The algorithm iterates on the following steps:
+\end_layout
+
+\begin_layout Enumerate
+Divide the problem into a series of 2-dimensional trust-region subproblems
+\end_layout
+
+\begin_layout Enumerate
+Find the optimal step size 
+\begin_inset Formula $s$
+\end_inset
+
+ by solving the following equation:
+\begin_inset Formula 
+\[
+\min_{s}\frac{1}{2}s^{\prime}Hs+s^{\prime}g\,\,\mbox{subject to}\,\,\left\Vert Ds\right\Vert <\Delta
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $H$
+\end_inset
+
+ is the hessian, 
+\begin_inset Formula $g$
+\end_inset
+
+ is the gradient, 
+\begin_inset Formula $D$
+\end_inset
+
+ is a diagonal scaling matrix, and 
+\begin_inset Formula $\Delta$
+\end_inset
+
+ is a positive scalar.
+ 
+\begin_inset Formula $\left\Vert \cdot\right\Vert $
+\end_inset
+
+ is the 2-norm.
+\end_layout
+
+\begin_layout Enumerate
+If 
+\begin_inset Formula $f\left(x+s\right)<f\left(x\right)$
+\end_inset
+
+ then 
+\begin_inset Formula $x_{k+1}=x_{k}+s$
+\end_inset
+
+.
+ If not, then adjust 
+\begin_inset Formula $\Delta$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Continue steps 1-3 until 
+\begin_inset Formula $\left\Vert \nabla f\left(x_{k}\right)\right\Vert <\mbox{tolerance}$
+\end_inset
+
+, or 
+\begin_inset Formula $f\left(x_{k+1}\right)-f\left(x_{k}\right)<\mbox{tolerance}$
+\end_inset
+
+, or 
+\begin_inset Formula $s<\mbox{tolerance}$
+\end_inset
+
+(each 
+\begin_inset Formula $10^{-6}$
+\end_inset
+
+ by default).
+\end_layout
+
+\end_body
+\end_document

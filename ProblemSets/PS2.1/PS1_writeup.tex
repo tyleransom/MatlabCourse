@@ -1,0 +1,226 @@
+%% LyX 2.0.0 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{babel}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
+ {hyperref}
+\usepackage{breakurl}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{}
+
+\makeatother
+
+\begin{document}
+
+\title{Problem Set 1 Solutions}
+
+
+\author{Tyler Ransom}
+
+\maketitle
+Directions: Answer all questions. Clearly label all answers. Show
+all of your code. Compute standard errors for all parameter estimates.
+Turn in the following to me via your dropbox (in a folder labeled
+'MatlabPS2.1') in Sakai by 11:59 p.m. on Thursday, July 26, 2012: 
+\begin{itemize}
+\item m-file(s)
+\item a log file (from off the cluster)
+\item matsub.oXXXXX file
+\item pdf version of your writeup with its \LaTeX source code
+\end{itemize}
+Put the names of all group members at the top of your writeup (each
+student must turn in his/her own materials).
+\begin{enumerate}
+\item Multinomial Logit. 
+
+\begin{enumerate}
+\item See m-code
+\item See results in Table 1. 
+\item See results in Table 2. Coefficients and standard errors are the same
+to two decimal places
+\item $\beta_{5j}$ is the effect of an additional year of schooling on
+the probability of choosing choice $j$ (in relation to the base choice,
+{}``other'').
+\end{enumerate}
+\item Unobserved heterogeneity (Fixed and Random Effects). 
+
+\begin{enumerate}
+\item See Table 3.
+\item See Table 3. The coefficients on male, hgc and BA all go down a little
+bit when including the full set of regressors. The coefficients on
+experience, Diploma, and AA (and the constant) all go up. This relates
+to unobserved heterogeneity because AFQT and mother's education are
+time-invariant unobservables which are correlated with the other covariantes
+(e.g. own education). This exercise was meant to approximate for unobserved
+heterogeneity by treating some time invariant regressors as unobservables.
+\item See Table 4. Examples of variables in the error term in (a) and (b)
+but not (c) {[}and which are correlated with the regressors{]} are:
+father's education, family income at age 12, and innate ability. Each
+of these variables is time-invariant, and so is differenced out by
+the fixed effect estimator.
+\item See Table 5. \texttt{male} goes down with RE; \texttt{AFQT} goes down
+with RE; \texttt{Mhgc} stays the same; \texttt{hgc} goes up with both
+FE and RE; \texttt{exper} stays pretty much the same; \texttt{Diploma}
+goes up with FE and down with RE; \texttt{AA} goes down with FE and
+RE; \texttt{BA} goes up with FE and RE. As you can see, there is no
+hard-and-fast rule for how coefficients change when unobserved heterogeneity
+is corrected for. The estimates also are sensitive to the assumptions
+about the structure of the unobserved heterogeneity.
+\end{enumerate}
+\end{enumerate}
+\pagebreak{}
+
+\begin{table}
+
+
+\caption{Multinomial Logit Coefficients (\texttt{fminunc})}
+
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{ccccc}
+\hline 
+ & \multicolumn{2}{c}{Coefficients} & \multicolumn{2}{c}{Standard Errors}\tabularnewline
+ & (school) & (work) & (school) & (work)\tabularnewline
+\hline 
+constant & -3.437 & -0.444 & 0.362 & 0.165\tabularnewline
+male & 0.344 & 0.222 & 0.072 & 0.032\tabularnewline
+AFQT & -0.237 & -0.208 & 0.043 & 0.019\tabularnewline
+Mhgc & 0.038 & -0.012 & 0.014 & 0.006\tabularnewline
+hgc & 0.017 & -0.177 & 0.026 & 0.013\tabularnewline
+exper & -0.417 & 1.034 & 0.042 & 0.013\tabularnewline
+Diploma & 0.332 & 1.016 & 0.137 & 0.053\tabularnewline
+AA & -0.283 & 0.736 & 0.191 & 0.071\tabularnewline
+BA & -0.032 & 2.252 & 0.156 & 0.061\tabularnewline
+\hline 
+log likelihood & \multicolumn{4}{c}{-3,877.14}\tabularnewline
+$N\times T$ & \multicolumn{4}{c}{32,370}\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+
+\begin{table}
+\caption{Multinomial Logit Coefficients (\texttt{mnrfit})}
+
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{ccccc}
+\hline 
+ & \multicolumn{2}{c}{Coefficients} & \multicolumn{2}{c}{Standard Errors}\tabularnewline
+ & (school) & (work) & (school) & (work)\tabularnewline
+\hline 
+constant & -3.437 & -0.443 & 0.362 & 0.165\tabularnewline
+male & 0.344 & 0.222 & 0.072 & 0.032\tabularnewline
+AFQT & -0.237 & -0.208 & 0.043 & 0.019\tabularnewline
+Mhgc & 0.038 & -0.012 & 0.014 & 0.006\tabularnewline
+hgc & 0.017 & -0.177 & 0.026 & 0.013\tabularnewline
+exper & -0.417 & 1.034 & 0.042 & 0.013\tabularnewline
+Diploma & 0.333 & 1.016 & 0.137 & 0.053\tabularnewline
+AA & -0.283 & 0.736 & 0.191 & 0.071\tabularnewline
+BA & -0.031 & 2.252 & 0.156 & 0.061\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+
+\begin{table}
+\caption{Pooled OLS Coefficients}
+
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{ccccc}
+\hline 
+ & \multicolumn{2}{c}{2(a)} & \multicolumn{2}{c}{2(b)}\tabularnewline
+ & Coeff. & Std. Err. & Coeff. & Std. Err.\tabularnewline
+\hline 
+constant & 1.297 & 0.033 & 1.420 & 0.037\tabularnewline
+male & 0.121 & 0.006 & 0.119 & 0.006\tabularnewline
+AFQT & --- & --- & 0.035 & 0.004\tabularnewline
+Mhgc & --- & --- & -0.003 & 0.001\tabularnewline
+hgc & 0.047 & 0.003 & 0.040 & 0.003\tabularnewline
+exper & 0.051 & 0.002 & 0.052 & 0.002\tabularnewline
+Diploma & 0.000 & 0.011 & 0.001 & 0.011\tabularnewline
+AA & 0.129 & 0.015 & 0.134 & 0.015\tabularnewline
+BA & 0.173 & 0.013 & 0.170 & 0.013\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+
+\begin{table}
+\caption{Fixed Effects Coefficients}
+
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{ccc}
+\hline 
+ & Coeff. & Std. Err.\tabularnewline
+\hline 
+constant & --- & ---\tabularnewline
+male & --- & ---\tabularnewline
+AFQT & --- & ---\tabularnewline
+Mhgc & --- & ---\tabularnewline
+hgc     & 0.050 & 0.007\tabularnewline
+exper   & 0.051 & 0.004\tabularnewline
+Diploma & 0.015 & 0.105\tabularnewline
+AA      & 0.113 & 0.034\tabularnewline
+BA      & 0.180 & 0.021\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+
+\begin{table}
+\caption{Random Effects Coefficients}
+
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{ccc}
+\hline 
+ & Coeff. & Std. Err.\tabularnewline
+\hline 
+constant &  1.387 & 0.046\tabularnewline
+male     &  0.116 & 0.009\tabularnewline
+AFQT     &  0.031 & 0.006\tabularnewline
+Mhgc     & -0.003 & 0.002\tabularnewline
+hgc      &  0.043 & 0.004\tabularnewline
+exper    &  0.052 & 0.002\tabularnewline
+Diploma  & -0.014 & 0.016\tabularnewline
+AA       &  0.126 & 0.021\tabularnewline
+BA       &  0.185 & 0.015\tabularnewline
+$\hat{\sigma}_{\alpha}^{2}$ & 0.1084 & ---\tabularnewline
+$\hat{\sigma}_{\varepsilon}^{2}$ & 0.1284 & ---\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+\end{document}

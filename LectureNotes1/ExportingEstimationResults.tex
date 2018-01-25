@@ -1,0 +1,134 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[numbered,framed,autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bq}{\begin{quote}}
+\newcommand{\eq}{\end{quote}}
+\newcommand{\bd}{\begin{description}}
+\newcommand{\ed}{\end{description}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+
+\begin{document}
+\begin{frame}
+\title{Graphics and Exportation in Matlab}
+\author{
+	Tyler Ransom\\
+	\emph{Duke University}\\
+%    \today \\
+%    \vspace{10cm}
+}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Exporting Estimation Results}
+   \bi 
+   \item Exporting estimation results from Matlab to Excel or LaTeX is unfortunately not so straightforward
+   \item This is mostly due to Matlab's inability to simultaneously store numbers and characters in a matrix
+   \item We'll go through the pros and cons to each method
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Matlab to Excel (method 1)}
+   \bi 
+   \item Create a matrix that concatenates results
+   \item e.g. \mcode{results = [beta std_err beta./std_err];}
+   \item After estimation has completed, open the matrix ``results'' in the workspace, and copy and paste it into Excel
+   \item Pro: Very user friendly and quick
+   \item Con: Not reproducible, so if you need to re-run the estimation, you also will need to re-copy and paste
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Matlab to Excel (method 2)}
+   \bi 
+   \item Create the results matrix as in the previous slide
+   \item Use \mcode{xlswrite} to create a spreadsheet of the results matrix
+   \item Edit it further in Excel if needed
+   \item Pro: Can do this in batch mode
+   \item Con: Need to do a bit of editing on the Excel side (inconvenient when specification changes)
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Matlab to LaTeX (method 1)}
+   \bi 
+   \item Download \mcode{matrix2latex} on the Matlab file exchange
+   \item Save the results matrix as a LaTeX matrix
+   \item Input it into your tex file
+   \item Pro: This function does the LaTeX formatting for you
+   \item Con: variable names are not included in the results matrix, so you need to find a way to incorporate these
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Matlab to LaTeX (method 2)}
+   \bi 
+   \item Use \mcode{fprintf} to code the raw LaTeX version of your results table, variable names and all
+   \item Pro: All LaTeX source code is right in front of you
+   \item Con: More work if you decide to change the estimation specification (since you now need to change the LaTeX formatted table)
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Other ways of formatting}
+   \bi 
+   \item Create a cell array that has variable names in it already
+   \item Create another cell array with column headers
+   \item Create another cell array with numerical estimation results
+   \item Concatenate these cell arrays into a readable array of strings and numbers
+   \item Export this to Excel or LaTeX in the ways previously discussed
+   \item Pro: Cell array looks exactly how you want it to
+   \item Cons: variable names have quotes around them; a few extra lines of code to form the cell array
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Other ways of formatting}
+   \bi 
+   \item Use \mcode{mprint} (user-created Matlab function) to print the results
+   \item Pro: results look like Stata output
+   \item Con: can't get it into LaTeX very easily since it's formatted as plain text
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Converting Excel to LaTeX}
+   \bi 
+   \item There is an Excel utility called excel2latex which will convert any subset of an Excel spreadsheet into a LaTeX table
+   \item It works quite well and is something I have used extensively
+   \ei
+\end{frame}
+\end{document}

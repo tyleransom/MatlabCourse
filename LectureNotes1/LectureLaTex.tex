@@ -1,0 +1,220 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[numbered,autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{verbatim}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTE: With Ilmenau style, to get the bullets %
+% looking right, do one section and one sub-   %
+% section for each set of bullets              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{frame}
+\title{Introduction to \LaTeX}
+\author{
+	Tyler Ransom\\
+	\emph{Duke University}\\
+%    \today \\
+%    \vspace{10cm}
+}
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+\begin{itemize}
+	\item What is \LaTeX?
+	\item How does it work?
+	\item Why should I use it?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Main Components of \LaTeX}
+\begin{description}
+	\item[Typesetting engine:] MiKTeX  for PC; MacTeX  for Mac; TeX Live for Unix
+	\item[Source code file:] A text file (.tex) that contains commands---analagous to a .m file for Matlab or .do file for Stata
+	\item[Compiler:] A program that tells the typesetting engine to process your source code file(s)
+\end{description}
+\end{frame}
+
+\begin{frame}{How to get from source to PDF}
+\begin{itemize}
+	\item Most compilers (e.g. LyX, TeXnicCenter, TeXworks) integrate a source code text editor for ease of processing
+	\item LyX provides a What-You-See-Is-What-You-Get interface that makes things much simpler
+	\item \texttt{pdflatex} is the typesetting engine's command to convert your .tex source file to a PDF
+	\item Your compiler of choice will typically have some button that executes a command to \texttt{pdflatex} 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Anatomy of a source code file}
+A \LaTeX source file is broken up into two main sections
+\begin{enumerate}
+	\item Preamble (where user declares which packages and global options will be used)
+	\item Document (the content of your document) 
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Example}
+\begin{verbatim}
+\documentclass{article}
+\title{The Pythagorean Theorem Revisited}
+\author{Nicholas Halden}
+\date{July 31, 2011}
+
+\begin{document}
+   \maketitle
+   The Pythagorean Theorem states that $a^{2}+b^{2}=c^{2}.$
+\end{document}
+\end{verbatim}
+\end{frame}
+
+\begin{frame}{Power of \LaTeX}
+\begin{itemize}
+	\item Documents produced in \LaTeX\,are typeset---meaning there is no need for the user to worry about spacing between paragraphs, margins, etc.---the typesetting engine takes care of where to optimally place objects
+	\item Academic publishers use \LaTeX\,to typeset books and journals, so your product can look just as professional
+	\item Math equations look especially nice
+	\item Automatic export to PDF, a universally viewable file format
+	\item Millions of users, so if you run into a problem, Google can easily find a solution
+	\begin{itemize}
+		\item Note: I have never found a problem that someone else hasn't already encountered and solved on some discussion board somewhere
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Drawbacks of \LaTeX}
+\begin{itemize}
+	\item Somewhat of a learning curve (though this is greatly mitigated with WYSIWYG programs like LyX and Scientific Workplace)
+	\item Typesetter may not always put objects where you want them
+	\item Can be finicky if you try to get too fancy
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Typesetting your first \LaTeX\,document}
+\begin{itemize}
+	\item For beginners, I highly recommend LyX---it works on all platforms, doesn't require you to know any \LaTeX\,commands, and is already installed on all of the Econ department machines in the Bowling Alley and the Driving Range.
+	\item LyX's WYSIWYG structure allows the user to see updates to his document without having to re-compile.
+	\item For more advanced users, LyX has limitations in what it can do.
+	\item LyX has great documentation and tutorials for first-timers. When first opening LyX go to \textsf{Help$\blacktriangleright$Introduction} and \textsf{Help$\blacktriangleright$Tutorial}. Nothing else I can say will help you more than going through the Introduction and Tutorial on your own.
+	\item We'll go through this today.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Anatomy of a \LaTeX\,document: Environments}
+\begin{itemize}
+	\item \LaTeX\, has what are called \emph{environments}
+	\item These include things like:
+	\begin{itemize}
+		\item Section headings
+		\item Section subheadings
+		\item Numbered lists
+		\item Mathematical equations
+		\item Quotations
+		\item Normal text
+	\end{itemize}
+	\item In LyX, you can access these in the top left (just below the `File' menu)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Anatomy of a \LaTeX\,document: Document Classes}
+\LaTeX\, has different document classes which organize content in different ways:
+\begin{itemize}
+	\item article (scientific journal article; the default class)
+	\item book (allows for chapters and front/back matter)
+	\item presentation (presentation slides)
+	\item letter (includes extra environments for address lines, signature, etc.)
+\end{itemize}
+In LyX, change the document class by going to Document$\blacktriangleright$Settings
+\end{frame}
+
+\begin{frame}{Anatomy of a \LaTeX\,document: Labels and Cross-References}
+One of the great things about \LaTeX\, is that users can create ``links'' within a document to other parts of the document. e.g. if I referenced a equation 1 on page 5, I can create a link that the reader can click on and go back to page 3 where equation 1 was first defined. The following items can be referenced:
+\begin{itemize}
+	\item mathematical equations
+	\item chapters and sections and subsections (and subsubsections and ...)
+	\item footnotes
+	\item bibliographic references
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Anatomy of a \LaTeX\,document: Reference Sections}
+\LaTeX\, also makes tables of contents, bibliographies and indexes very easy to generate. 
+\begin{itemize}
+	\item Bibliographies are managed through Bib\TeX
+	\item Bib\TeX can accommodate any citation style (e.g. MLA, APA, Chicago, etc.)
+	\item Most professional journals require a Bib\TeX database of your references before publication
+	\item Tables of contents and indexes are typically only used in books (not journal articles)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Anatomy of a \LaTeX\,document: Math Formulas}
+\LaTeX\, was primarily invented to handle mathematical formulas
+\begin{itemize}
+	\item Many commands for many types of formulas
+	\item Greek letters invoked with, e.g. \begin{verbatim}{\beta}\end{verbatim}
+	\item Can do equations, matrices, fractions, accent marks (like $\tilde{x}$ and $\hat{y}$)
+	\item Other crazy stuff like
+\end{itemize}
+\begin{equation*}
+a_0+\cfrac{b_1}{
+a_1+\cfrac[l]{b_2}{
+a_2+\cfrac[r]{b_3}{
+a_3+\cdots}}}
+\end{equation*}
+\end{frame}
+
+
+\begin{frame}{Floats, Figures, Tables, Graphics}
+\begin{itemize}
+	\item Tables and figures look best when inserted in a float
+	\item Graphics images need to be certain file types: .jpg, .eps, .png
+	\item Can't use .gif
+	\item \LaTeX\,automatically numbers the floats
+	\item It's also possible to create sub-figures and sub-tables that are numbered (a), (b), etc.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Exporting/Importing \LaTeX\,documents into LyX}
+\begin{itemize}
+	\item You can easily import into LyX a .tex document that someone else has written
+	\item File$\blacktriangleright$Import$\blacktriangleright$LaTeX (plain)
+	\item Exporting a .lyx document into a .tex document (for someone else to read) is just as easy:
+	\item File$\blacktriangleright$Export$\blacktriangleright$LaTeX (plain)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Beamer}
+\begin{itemize}
+	\item Beamer is the ``PowerPoint'' of \LaTeX
+	\item These slides were made in Beamer
+	\item To use Beamer in LyX, select article(beamer) as the document class
+	\item For a tutorial in Beamer, go to \url{http://www.uncg.edu/cmp/reu/presentations/Charles\%20Batts\%20-\%20Beamer\%20Tutorial.pdf}
+	\item For a graphical table of Beamer slide styles, go to \url{http://www.hartwork.org/beamer-theme-matrix/}
+\end{itemize}
+\end{frame}
+
+\end{document}

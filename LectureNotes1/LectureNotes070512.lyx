@@ -1,0 +1,410 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Lecture Notes 7/5/2012
+\end_layout
+
+\begin_layout Section*
+Derivations of OLS and MLE optimization problems
+\end_layout
+
+\begin_layout Standard
+Model: 
+\begin_inset Formula 
+\[
+y_{i}=x_{i}^{\prime}\beta+\varepsilon_{i}
+\]
+
+\end_inset
+
+ in vector form: 
+\begin_inset Formula 
+\[
+y=X\beta+\varepsilon
+\]
+
+\end_inset
+
+We want to estimate 
+\begin_inset Formula $\beta$
+\end_inset
+
+ because it has some sort of economic significance: e.g.
+ elasticity of demand for a good; monetary returns to additional years of
+ schooling; etc.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Estimation procedure for recovering 
+\begin_inset Formula $\beta$
+\end_inset
+
+ depends on what assumptions we make on the error term, 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+OLS
+\end_layout
+
+\begin_layout Standard
+Assume 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ is mean-zero and uncorrelated with 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ We want to find the 
+\begin_inset Formula $\beta$
+\end_inset
+
+ that minimizes the distance between 
+\begin_inset Formula $X\beta$
+\end_inset
+
+ and 
+\begin_inset Formula $y$
+\end_inset
+
+.
+ This problem can be written as
+\begin_inset Formula 
+\begin{eqnarray*}
+\hat{\beta} & = & \arg\min_{\beta}\sum_{i}\varepsilon_{i}^{2}\\
+ & = & \arg\min_{\beta}\varepsilon^{\prime}\varepsilon\\
+ & = & \arg\min_{\beta}\left(y-X\beta\right)^{\prime}\left(y-X\beta\right)
+\end{eqnarray*}
+
+\end_inset
+
+We can solve this optimization problem with calculus:
+\begin_inset Formula 
+\begin{eqnarray*}
+ &  & \min_{\beta}\left(y-X\beta\right)^{\prime}\left(y-X\beta\right)\\
+ & = & \min_{\beta}y^{\prime}y-\beta^{\prime}X^{\prime}y-y^{\prime}X\beta-\beta^{\prime}X^{\prime}X\beta
+\end{eqnarray*}
+
+\end_inset
+
+taking first-order conditions for 
+\begin_inset Formula $\beta$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+\left[\beta\right] & : & -\frac{\partial}{\partial\beta}\beta^{\prime}X^{\prime}y-\frac{\partial}{\partial\beta}y^{\prime}X\beta-\frac{\partial}{\partial\beta}\beta^{\prime}X^{\prime}X\beta\\
+ & = & -X^{\prime}y-X^{\prime}y-2\left(X^{\prime}X\right)\hat{\beta}\\
+0 & = & -2X^{\prime}y-2\left(X^{\prime}X\right)\hat{\beta}\\
+X^{\prime}y & = & \left(X^{\prime}X\right)\hat{\beta}\\
+\hat{\beta} & = & \left(X^{\prime}X\right)^{^{-1}}X^{\prime}y
+\end{eqnarray*}
+
+\end_inset
+
+which is the OLS estimator.
+ Second-order conditions for a minimum: 
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial^{2}}{\partial\beta\partial\beta^{\prime}} & > & 0\\
+\left(X^{\prime}X\right) & > & 0\,\,\,\,\textrm{(trivially satisfied)}
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Maximum Likelihood
+\end_layout
+
+\begin_layout Standard
+Now let's look at a linear regression model when 
+\begin_inset Formula $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma^{2}\right)$
+\end_inset
+
+.
+ The likelihood function is
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathcal{L}\left(\varepsilon_{i};\beta,\sigma\right) & = & \prod_{i}f\left(\varepsilon_{i}\right)\\
+ & = & \prod_{i}\frac{1}{\sqrt{2\pi\sigma^{2}}}\exp\left(-\frac{\varepsilon_{i}^{2}}{2\sigma^{2}}\right)\\
+ & = & \left(\frac{1}{\sqrt{2\pi\sigma^{2}}}\right)^{n}\exp\left(-\frac{\sum_{i}\varepsilon_{i}^{2}}{2\sigma^{2}}\right)\\
+ & = & \left(\frac{1}{\sqrt{2\pi\sigma^{2}}}\right)^{n}\exp\left(-\frac{\varepsilon^{\prime}\varepsilon}{2\sigma^{2}}\right),\,\,\,\textrm{and\,\ taking\,\ logs,}\\
+\ell\left(y,X;\beta,\sigma\right) & = & -\frac{n}{2}\ln\left(2\pi\right)-n\ln\left(\sigma\right)-\frac{1}{2\sigma^{2}}\left(y-X\beta\right)^{\prime}\left(y-X\beta\right)
+\end{eqnarray*}
+
+\end_inset
+
+So the objective function is to maximize the likelihood (or the log likelihood)
+ with respect to 
+\begin_inset Formula $\beta$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma$
+\end_inset
+
+.
+\begin_inset Formula 
+\begin{eqnarray*}
+ &  & \max_{\beta,\sigma}-\frac{n}{2}\ln\left(2\pi\right)-n\ln\left(\sigma\right)-\frac{1}{2\sigma^{2}}\left(y-X\beta\right)^{\prime}\left(y-X\beta\right)\\
+\frac{\partial\ell}{\partial\beta} & = & \frac{1}{2\sigma^{2}}\frac{\partial}{\partial\beta}\left(y-X\beta\right)^{\prime}\left(y-X\beta\right)\\
+0 & = & \frac{1}{2\sigma^{2}}\left[-2X^{\prime}y-2\left(X^{\prime}X\right)\hat{\beta}\right]\\
+\hat{\beta} & = & \left(X^{\prime}X\right)^{^{-1}}X^{\prime}y\\
+\frac{\partial\ell}{\partial\sigma} & = & -\frac{n}{\sigma}+\frac{\left(y-X\beta\right)^{\prime}\left(y-X\beta\right)}{\sigma^{3}}\\
+0 & = & -\frac{n}{\sigma}+\frac{\left(y-X\beta\right)^{\prime}\left(y-X\beta\right)}{\sigma^{3}}\\
+\frac{n}{\sigma} & = & \frac{\left(y-X\beta\right)^{\prime}\left(y-X\beta\right)}{\sigma^{3}}\\
+\hat{\sigma}^{2} & = & \frac{\left(y-X\hat{\beta}\right)^{\prime}\left(y-X\hat{\beta}\right)}{n}
+\end{eqnarray*}
+
+\end_inset
+
+Second-order conditions require that the matrix
+\begin_inset Formula 
+\[
+\left[\begin{array}{cc}
+\frac{\partial^{2}\ell}{\partial\beta\partial\beta^{\prime}} & \frac{\partial^{2}\ell}{\partial\beta\partial\sigma}\\
+\frac{\partial^{2}\ell}{\partial\sigma\partial\beta^{\prime}} & \frac{\partial^{2}\ell}{\left(\partial\sigma\right)^{2}}
+\end{array}\right]=\left[\begin{array}{cc}
+-\frac{X'X}{\sigma^{2}} & \frac{\left(X'X\beta-X'Y\right)}{\sigma^{3}}\\
+\frac{\left(\hat{\beta}'X'X-Y'X\right)}{\sigma^{3}} & \frac{n}{\sigma^{2}}-\frac{3\left(Y-X\hat{\beta}\right)'\left(Y-X\hat{\beta}\right)}{\sigma^{4}}
+\end{array}\right]
+\]
+
+\end_inset
+
+be negative definite.
+ This is satisfied, but we won't go through it today.
+\end_layout
+
+\begin_layout Subsection*
+Logit
+\end_layout
+
+\begin_layout Standard
+Now, instead of being continuous, our dependent variable 
+\begin_inset Formula $y$
+\end_inset
+
+ only takes on two values: 0 and 1.
+ We can think of 
+\begin_inset Formula $y$
+\end_inset
+
+ as being distributed Bernoulli with probability 
+\begin_inset Formula $p$
+\end_inset
+
+, where 
+\begin_inset Formula $p=\Pr\left(y=1\right)$
+\end_inset
+
+.
+ The pdf of the Bernoulli distribution is 
+\begin_inset Formula $f\left(y;p\right)=p^{y}\left(1-p\right)^{1-y}$
+\end_inset
+
+.
+ Fitting this to our model above, we get
+\begin_inset Formula 
+\begin{eqnarray*}
+\Pr\left(y=1\right) & = & \Pr\left(y>0\right)\\
+ & = & \Pr\left(X\beta+\varepsilon>0\right)\\
+ & = & \Pr\left(X\beta>-\varepsilon\right)\\
+ & = & \Pr\left(-\varepsilon<X\beta\right)\\
+ & = & \Pr\left(\varepsilon<X\beta\right)\,\,\,\textrm{if \ensuremath{\varepsilon}has a symmetric distribution}\\
+ & = & F\left(X\beta\right)
+\end{eqnarray*}
+
+\end_inset
+
+When we assume 
+\begin_inset Formula $\varepsilon\sim Logistic$
+\end_inset
+
+, then we get 
+\begin_inset Formula $F\left(x\right)=\frac{1}{1+e^{-x}}=\frac{e^{x}}{1+e^{x}}$
+\end_inset
+
+.
+ So 
+\begin_inset Formula $p=\Pr\left(y=1\right)=\frac{\exp\left(X\beta\right)}{1+\exp\left(X\beta\right)}$
+\end_inset
+
+.
+ Plugging this into our likelihood function, we get
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathcal{L}\left(y,X;\beta\right) & = & \prod_{i}p_{i}^{y_{i}}\left(1-p_{i}\right)^{1-y_{i}}\\
+ & = & \prod_{i}\left(\frac{\exp\left(X\beta\right)}{1+\exp\left(X\beta\right)}\right)^{y_{i}}\left(\frac{1}{1+\exp\left(X\beta\right)}\right)^{1-y_{i}}\\
+\ell & = & \sum_{i}y_{i}\ln\left(\frac{\exp\left(X\beta\right)}{1+\exp\left(X\beta\right)}\right)+\left(1-y_{i}\right)\ln\left(\frac{1}{1+\exp\left(X\beta\right)}\right)
+\end{eqnarray*}
+
+\end_inset
+
+The first order conditions are
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\ell}{\partial\beta} & = & \frac{\partial\ell}{\partial\beta}y\left[X\beta-\ln\left(1+\exp\left(X\beta\right)\right)\right]-\left(1-y\right)\left[\ln\left(1+\exp\left(X\beta\right)\right)\right]\\
+0 & = & \frac{\partial\ell}{\partial\beta}y\left[X\beta\right]-\ln\left(1+\exp\left(X\beta\right)\right)\\
+0 & = & X^{\prime}y-\left[\frac{1}{1+\exp\left(X\beta\right)}X\exp\left(X\beta\right)\right]\\
+0 & = & X^{\prime}y-\left[X\frac{\exp\left(X\beta\right)}{1+\exp\left(X\beta\right)}\right]\\
+0 & = & X^{\prime}y-X^{\prime}p\\
+0 & = & X^{\prime}\left(y-p\right)\\
+0 & = & X^{\prime}\left(y-\frac{\exp\left(X\beta\right)}{1+\exp\left(X\beta\right)}\right)
+\end{eqnarray*}
+
+\end_inset
+
+Now we need to solve for 
+\begin_inset Formula $\beta$
+\end_inset
+
+: 
+\begin_inset Formula 
+\begin{eqnarray*}
+X^{\prime}y & = & X^{\prime}\left(\frac{\exp\left(X\beta\right)}{1+\exp\left(X\beta\right)}\right)
+\end{eqnarray*}
+
+\end_inset
+
+But this, unfortunately, does not have a closed-form solution.
+ Hence, we need to use numerical methods.
+\end_layout
+
+\begin_layout Subsection*
+Probit
+\end_layout
+
+\begin_layout Standard
+For probit, we maintain the assumption that 
+\begin_inset Formula $y$
+\end_inset
+
+ can only take on two values and is hence distributed Bernoulli.
+ The only difference comes in the fact that now we assume 
+\begin_inset Formula $\varepsilon\sim N\left(0,1\right)$
+\end_inset
+
+, so we get 
+\begin_inset Formula $F\left(x\right)=\Phi\left(x\right)$
+\end_inset
+
+.
+ The likelihood is then
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathcal{L}\left(y,X;\beta\right) & = & \prod_{i}p_{i}^{y_{i}}\left(1-p_{i}\right)^{1-y_{i}}\\
+ & = & \prod_{i}\Phi\left(X\beta\right)^{y_{i}}\left(1-\Phi\left(X\beta\right)\right)^{1-y_{i}}\\
+\ell & = & \sum_{i}y_{i}\ln\left(\Phi\left(X\beta\right)\right)+\left(1-y_{i}\right)\ln\left(1-\Phi\left(X\beta\right)\right)
+\end{eqnarray*}
+
+\end_inset
+
+The first order conditions are
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial\ell}{\partial\beta} & = & \frac{\partial\ell}{\partial\beta}\left[y\ln\left(\Phi\left(X\beta\right)\right)+\left(1-y\right)\ln\left(1-\Phi\left(X\beta\right)\right)\right]\\
+0 & = & y\left(\frac{X\phi\left(X\beta\right)}{\Phi\left(X\beta\right)}\right)-\left(1-y\right)\left(\frac{X\phi\left(X\beta\right)}{1-\Phi\left(X\beta\right)}\right)\\
+0 & = & X^{\prime}y\left(\frac{\phi\left(X\beta\right)}{\Phi\left(X\beta\right)}\right)-X^{\prime}\left(1-y\right)\left(\frac{\phi\left(X\beta\right)}{1-\Phi\left(X\beta\right)}\right)
+\end{eqnarray*}
+
+\end_inset
+
+So the solution we seek is
+\begin_inset Formula 
+\[
+X^{\prime}y\left(\frac{\phi\left(X\beta\right)}{\Phi\left(X\beta\right)}\right)=X^{\prime}\left(1-y\right)\left(\frac{\phi\left(X\beta\right)}{1-\Phi\left(X\beta\right)}\right)
+\]
+
+\end_inset
+
+where we need to solve for 
+\begin_inset Formula $\beta$
+\end_inset
+
+.
+ Again, no closed-form solution.
+\end_layout
+
+\end_body
+\end_document

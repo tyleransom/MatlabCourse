@@ -1,0 +1,145 @@
+%% LyX 2.2.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{babel}
+\usepackage[authoryear]{natbib}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},pdfborderstyle={},backref=false,colorlinks=false]
+ {hyperref}
+\usepackage{breakurl}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{}
+
+\makeatother
+
+\begin{document}
+
+\title{\textbf{Foundations of Matlab: Summer II.1 2012}}
+
+\maketitle
+\vspace{-0.85in}
+
+\begin{center}
+\begin{tabular}{ll}
+Course: & Foundations of Matlab (half Summer module for rising second-year PhD
+students)\tabularnewline
+Instructor: & Tyler Ransom\tabularnewline
+Time: & Tue/Thu 10 a.m. - 12:30 p.m.; Friday 11 a.m. - 12 p.m.\tabularnewline
+Location: & Social Sciences 113\tabularnewline
+Office: & 2106 Campus Dr \#201A\tabularnewline
+Email: & \href{mailto:tyler.ransom@duke.edu}{tyler.ransom@duke.edu}\tabularnewline
+Office Hours: & By appointment\tabularnewline
+\end{tabular}
+\par\end{center}
+
+\subsubsection*{About this course}
+
+This course will build students' fundamental skills in Matlab in preparation
+for 2nd-year PhD modules. Another name for it could be ``What I wish
+I had learned before starting my second year of the PhD program.''
+Students will become familiar with the Matlab's features and language
+structure; learn general programming skills, data management techniques,
+and how to describe data; and code a variety of extremum and maximum
+likelihood estimators introduced in the first year of the PhD program
+using Matlab's different functional optimizers. 
+
+\subsubsection*{Prerequisites}
+
+I am going to assume that all students are comfortable with OLS, logit
+and probit models. These models will be discussed in lectures as if
+students already have a working knowledge of them.
+
+\subsubsection*{Textbooks}
+
+There is no formal textbook for the course, but students may find
+the following resources helpful: \emph{Econometrics} (Hayashi), \emph{Time
+Series Analysis} (Hamilton), \emph{Econometric Analysis} (Greene),
+\emph{Numerical Methods in Economics} (Judd), and \emph{Econometric
+Analysis of Cross Section and Panel Data} (Wooldridge).
+
+\subsubsection*{Registration, Enrollment and Overall Class Grades}
+
+In order to get credit for this course, you need to first enroll in
+Econ 360 or Econ 370 in ACES. Because each module is not listed separately
+in ACES, I can only determine your enrollment in this course through
+your completion of problem sets. In order to get credit for Econ 360
+or Econ 370 in ACES, each student must enroll in at least two modules.
+Grades from those two modules will be averaged into a final grade
+for Econ 360/370. If you enroll in more than two modules, your final
+grade will be an average of your two highest module grades. Because
+of this favorable grading policy, you are invited to take more than
+two modules.
+
+\subsubsection*{Grades for this Module}
+
+Grades will be determined by the average score from three problem
+sets, due each week by 11:59 p.m. on Thursday. Late problem sets will
+not be accepted. Submit problem set materials to your ``dropbox''
+folder on Sakai. You are allowed to work on problem sets in groups
+(no larger than 3, please), but each student must turn in his/her
+own copy of the problem set. In particular, each student should avoid
+copying/pasting code and instead type the code out on his/her own.
+(This is the only way to learn how to program.) Put your name and
+the names of those in your group at the top of your code file(s) and/or
+writeup. Each Friday morning I will post solutions at 8 A.M. We will
+then spend the Friday lecture time going through the code together.
+Problem sets will be graded on the following scale (some convex combination
+of effort and accuracy):
+
+\medskip{}
+\begin{center}
+\begin{tabular}{cl}
+4: & Problem set is complete and mostly correct\tabularnewline
+3: & Problem set is complete with errors; or mostly complete and mostly
+correct\tabularnewline
+2: & Problem set is complete with many errors; or barely complete and mostly
+correct\tabularnewline
+1: & Problem set is barely attempted or completely incorrect\tabularnewline
+0: & Problem set turned in late or not at all\tabularnewline
+\end{tabular}\\
+\par\end{center}
+
+Problem set grades will be combined to an unweighted average to determine
+course grade.
+
+\subsubsection*{Schedule of Topics (subject to change)}
+\begin{center}
+\begin{tabular}{ccll}
+\hline 
+Class & Date & ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Topics & Lecture Notes\tabularnewline
+\hline 
+1 & Tue 7/3 & Intro to Matlab interface; program structure; & Lec1.1.pdf\tabularnewline
+ &  & loops; matrix operations; & \tabularnewline
+ &  & introduction to functions/syntax & \tabularnewline
+2 & Thu 7/5 & Functional optimizers; debugging; & MLEIntroNotes.pdf\tabularnewline
+ &  & Data management; fminunc; fminsearch & Lec1.2.pdf\tabularnewline
+ &  & \emph{PS1 due by 11:59 p.m.} & \tabularnewline
+3 & Fri 7/6 & Go over code for Problem Set 1 & \tabularnewline
+4 & Tue 7/10 & \LaTeX & OptimizerNotes.pdf\tabularnewline
+ &  & \LaTeX Lab & \LaTeX{}.pdf; \LaTeX{}Lab.pdf\tabularnewline
+5 & Thu 7/12 & Good programming practices & LecCluster.pdf\tabularnewline
+ &  & Accessing cluster resources & ProgrammingPractices.pdf\tabularnewline
+ &  & \emph{PS2 due by 11:59 p.m.} & \tabularnewline
+6 & Fri 7/13 & Go over code for Problem Set 2 & \tabularnewline
+7 & Tue 7/17 & Graphics in Matlab; & LectureGraphics.pdf\tabularnewline
+ &  & Inference & LectureStandardErrors.pdf\tabularnewline
+8 & Thu 7/19 & Exporting estimation results & LectureGraphics.pdf\tabularnewline
+ &  & \emph{PS3 due by 11:59 p.m.} & ExportationLab.pdf\tabularnewline
+9 & Fri 7/20 & Go over code for Problem Set 3 & \tabularnewline
+\hline 
+\end{tabular}
+\par\end{center}
+\end{document}

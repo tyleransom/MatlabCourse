@@ -1,0 +1,355 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{animate}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTE: With Ilmenau style, to get the bullets %
+% looking right, do one section and one sub-   %
+% section for each set of bullets              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{frame}
+\title{Numerical Integration and Simulation}
+\author{
+	Tyler Ransom\\
+	\emph{Duke University}\\
+%    \today \\
+%    \vspace{10cm}
+}
+\titlepage
+\end{frame}
+
+\begin{frame}{Plan}
+\begin{itemize}
+	\item Discuss numerical integration
+	\item Examples of when you would need to know how to numerically integrate
+	\item Numerical integration in Matlab
+	\item Monte Carlo
+	\item Simulation
+	\item Relationship between Monte Carlo, simulation and integration
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Numerical Integration}
+\begin{itemize}
+	\item Generally speaking, numerical integration refers to a way of evaluating integrals that don't have a closed form solution
+	\item Simplest example: CDF of the normal distribution
+  \item Requires integration of the normal pdf, which doesn't have a closed-form antiderivative
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Integration in Economics}
+In structural applied micro, you'll find a few situations in which you will need to use integration to recover correct parameter estimates:
+\begin{itemize}
+	\item Unobserved Heterogeneity in a non-linear model
+	\item Dynamic models where forward-looking agents aren't able to see future shocks 
+	\item Games in IO where opponents' epsilons are unknown to players
+	\item Random utility models where epsilon is assumed to be Normal
+	\item Basically, whenever you need to take an expectation over something unknown (either to the agent or the econometrician), you'll need to integrate
+\end{itemize}
+\end{frame}
+
+\begin{frame}{You've already done numerical integration}
+You may not have recognized so, but you have already estimated models with numerical integration (Matlab just did it for you)
+\begin{itemize}
+	\item Simple probit model: $P_{i1}$ is a normal cdf (the integral of a normal pdf)
+  \item Logit models: $P_{i1}$ is technically an integral that has a closed form, thanks to the Gumbel distributional assumption (another reason why logit is so popular)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: Random effects in a nonlinear model}
+Recall the simple binomial probit model:
+\begin{eqnarray*}
+y_{it}&=&X_{it}\beta+\varepsilon_{it}\,\,\,\textrm{with}\\
+y_{it}&=&1\,\,\,\,\textrm{if}\,X_{it}\beta+\varepsilon_{it}>0\\
+y_{it}&=&0\,\,\,\,\textrm{else}\\
+\varepsilon_{it}&\sim&N\left(0,1\right)
+\end{eqnarray*}
+The probabilities for our likelihood are then
+\begin{eqnarray*}
+\Pr\left(y_{it}=1\,\vert\,X_{it}\right) &=&   \Phi\left(X_{it}\beta\right)\\
+\Pr\left(y_{it}=0\,\vert\,X_{it}\right) &=& 1-\Phi\left(X_{it}\beta\right)
+\end{eqnarray*}
+where $\Phi\left(\cdot\right)$ is the CDF of the standard normal
+\end{frame}
+
+\begin{frame}{Example: Random effects in a nonlinear model}
+Now let's add normally-distributed random effects to the model. i.e. $\alpha_i$ is mean-zero normal with variance $\sigma^{2}_{\alpha}$, and $\varepsilon_{it}$ is iid standard normal:
+\begin{eqnarray*}
+\Pr\left(y_{it}=1\,\vert\,X_{it},\alpha_{i}\right) &=&   \Phi\left(X_{it}\beta+\alpha_{i}\right)\\
+\Pr\left(y_{it}=0\,\vert\,X_{it},\alpha_{i}\right) &=& 1-\Phi\left(X_{it}\beta+\alpha_{i}\right)
+\end{eqnarray*}
+
+If we could observe $\alpha_i$, the log likelihood function would look like the regular probit log likelihood with the $\alpha_i$ term added in:
+\begin{equation*}
+\ell(X_{it};\beta,\alpha_{i})=\sum_{i}\sum_{t}\ln\left(\Phi\left(X_{it}\beta+\alpha_{i}\right)^{y_{it}}\right)+\ln\left(\left(1-\Phi\left(X_{it}\beta+\alpha_{i}\right)\right)^{1-y_{it}}\right)
+\end{equation*}
+\end{frame}
+
+\begin{frame}{Example: Random effects in a nonlinear model}
+However, because we can't observe $\alpha_i$, we need to integrate it out of the likelihood, so the log likelihood function looks like:
+\begin{equation*}
+\ell(X_{it};\beta,\alpha_{i})=\sum_{i}\ln\left(\int_{-\infty}^{\infty}\prod_{t}\Phi\left(X_{it}\beta+\alpha_{i}\right)^{y_{it}}\left(1-\Phi\left(X_{it}\beta+\alpha_{i}\right)\right)^{1-y_{it}}f\left(\alpha_{i}\right)d\alpha_{i}\right)
+\end{equation*}
+where now we will estimate the parameters $\beta$ and $\sigma_{\alpha}^{2}$
+\begin{itemize}
+	\item Luckily, because of the assumption that $\varepsilon_{it}\,\vert\,\alpha_{i}$ is iid standard normal, the integral is only one-dimensional and much more manageable to compute
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Numerical integration methods}
+\begin{itemize}
+	\item ``Quadrature'' and ``numerical integration'' can be used interchangeably
+	\item Examples of quadrature that you probably already know:
+	\begin{itemize}
+		\item Rectangle rule
+		\item Trapezoidal rule
+		\item Simpson's rule
+	\end{itemize}
+	\item These are very simple, but may not be most computationally efficient or accurate
+	\item There are many fancier methods that also work well when the integral is multi-dimensional
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Quadrature in Matlab}
+Matlab has a few built-in routines to approximate $\int_a^b f(x)dx$
+\begin{itemize}
+	\item 1-dimensional integrals: \texttt{quad}, \texttt{quadl}, \texttt{quadgk}
+	\item 2-dimensional integrals: \texttt{dblquad}, \texttt{quad2d}
+	\item 3-dimensional integrals: \texttt{triplequad}
+\end{itemize}
+Note: Matlab vectorizes these over the unknown ($x$), so $f$ can't take data as inputs
+\begin{itemize}
+	\item Hence, these are not very useful when integrating a likelihood function because you want to evaluate something like the random effects equation two slides ago [which would require looping over values]
+	\item \texttt{quadv} is a vectorized version of quad that would help with this
+	\item When integrating a likelihood function, I usually write my own Simpson's rule code
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Quadrature in Matlab}
+The MathWorks file exchange has a great function to approximate $\int_a^b f(x)dx$
+\begin{itemize}
+	\item \texttt{lgwt} computes Gauss-Legendre quadrature weights on a grid of points (i.e. $b-a$ divided by some step $h$)
+	\item These weights don't depend on the function $f$
+	\item To compute the integral, first generate, e.g. \texttt{f=normpdf(x,0,1);} for each grid point, then simply type \texttt{int=sum(f.*w);} where \texttt{w} is the vector of Gauss-Legendre quadrature weights
+\end{itemize}
+Note: \texttt{lgwt} works like Matlab's \texttt{quad} functions (i.e. $f$ can't take data as inputs). 
+\begin{itemize}
+	\item Need to use \texttt{bsxfun} or \texttt{arrayfun} to vectorize it for use in a likelihood function
+	\item \texttt{lgwt} can be used for multidimensional integrals (e.g. $\int_a^b \int_c^d f(x,y)dydx$) as well (see later):
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Syntax for Matlab's quadrature functions}
+The general syntax for these is
+\begin{lstlisting}
+integral_approximation = quad(@(x) f(x),a,b,tol);
+\end{lstlisting}
+where $f\left(x\right)$ is a function handle for the function of interest, $a$ is the lower bound of integration, and $b$ is the upper bound of integration. Note that $a$ and $b$ need not be finite. $Tol$ is the numerical tolerance (default is $10^{-6}$).
+\end{frame}
+
+\begin{frame}[fragile]{Syntax for \texttt{lgwt}}
+The general syntax for this is
+\begin{lstlisting}
+[x, w] = lgwt(N,a,b); %get weights and grid points
+     f = normpdf(x,0,sigma); %evaluate f(x) where f is normal pdf
+integral_approximation = sum(f.*w);
+\end{lstlisting}
+where $N$ is the desired number of grid points and everything else is the same as before. Multidimensional example:
+\begin{lstlisting}
+[nx, wx] = lgwt(N,a,b); %get weights and grid points for 1st dimension
+[ny, wy] = lgwt(N,a,b); %get weights and grid points for 2nd dimension
+[nx, ny] = ndgrid(nx, ny); %form two matrices of grid points
+[wx, wy] = ndgrid(wx, wy); %form two matrices of quadrature weights
+int = sum(sum(wx .* wy .* f(nx) .* f(ny)));
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{lgwt} vs. \texttt{dblquad} example}
+Let's compute $\int_{\pi}^{2\pi}\int_{0}^{\pi} \left[y\sin\left(x\right)+x\cos\left(y\right)\right]dydx$ using two different methods:
+\begin{lstlisting}
+Q = dblquad(@(x,y)y*sin(x)+x*cos(y),pi,2*pi,0,pi);
+\end{lstlisting}
+The answer given by Matlab is -9.8696. Now let's compare it with \texttt{lgwt}:
+\begin{lstlisting}
+[nx, wx] = lgwt(50,pi,2*pi);
+[ny, wy] = lgwt(50,0,pi);
+[nx, ny] = ndgrid(nx, ny);
+[wx, wy] = ndgrid(wx, wy);
+int = sum(sum(wx .* wy .* (ny.*sin(nx)+nx.*cos(ny))));
+\end{lstlisting}
+The answer is the same to within \texttt{3e-8} of \texttt{dblquad}
+\end{frame}
+
+\begin{frame}{Computing the binomial probit random effects estimator}
+Our log likelihood function looks like:
+\begin{equation*}
+\ell(X_{it};\beta,\alpha_{i})=\sum_{i}\ln\left(\int_{-\infty}^{\infty}\prod_{t}\Phi\left(X_{it}\beta+\alpha_{i}\right)^{y_{it}}\left(1-\Phi\left(X_{it}\beta+\alpha_{i}\right)\right)^{1-y_{it}}f\left(\alpha_{i}\right)d\alpha_{i}\right)
+\end{equation*}
+How do we evaluate this integral?
+\begin{itemize}
+	\item Could use one of Matlab's built-in quadrature routines and loop over the $i$'s
+	\item Could use \texttt{lgwt} with \texttt{arrayfun} to generate the grid and weights for each person, then add everything up in the likelihood
+	\item Could also discretize $\alpha_{i}$ and use Simpson's rule on a grid. The approximate integral is then a weighted sum over these grid values.
+	\item Could compute the integral by simulation (see last part of slides)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Simulation}
+In economics, ``simulation'' can mean a lot of different things:
+\begin{enumerate}
+	\item simulate comparative statics in a theoretical model with no closed-form solution
+	\item Monte Carlo simulation to test the asymptotic properties of an econometric estimator
+	\item counterfactual simulation of a structural model to show the effects of a hypothetical policy change
+	\item simulation of a numerical integral than doesn't have a closed-form solution
+\end{enumerate}
+We'll focus on numbers 2 and 4 today
+\end{frame}
+
+\begin{frame}{Monte Carlo: background}
+\begin{itemize}
+	\item Monte Carlo is a phrase coined by John von Neumann while working on the Manhattan Project. (Monte Carlo is the name of the casino in Monaco where the uncle of von Neumann's co-worker, Stanis{\l}aw Ulam, would borrow money to gamble) It was a code name for Ulam and von Neumann's early use of what we now call the Monte Carlo method
+	\item The method in general refers to the repetition of random processes to approximate the probability of certain outcomes
+	\item Example: What are the odds of being dealt a flush in 5-card poker? Could use combinatorics to figure it out, or you could shuffle the deck, deal the cards and repeat this process (many times!), counting the number of times a flush happens. This is what is known as the ``Monte Carlo method.''
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Monte Carlos in theoretical econometrics}
+\begin{itemize}
+	\item In theoretical econometrics, Monte Carlo simulation is used to assess the asymptotic properties of estimators when the data generating process (DGP) is known
+	\item The DGP is known because the researcher created it
+	\item The researcher can then compare how the estimator performs when the sample size increases. She can also repeat the estimation many times with the same $n$ to see what the distribution of estimates looks like. This informs her whether of the degree to which the estimation procedure is biased and/or inefficient
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Monte Carlos in applied micro}
+In applied micro, Monte Carlo simulations can be useful in a variety of ways:
+\begin{itemize}
+	\item Researcher can create simulated (``fake'') data on which to test her code
+  \item This is a good way to check for bugs in the code
+  \item It's also a good way to figure out the properties of a novel estimation algorithm
+	\item In this way, the Monte Carlo acts like a laboratory
+	\item If a researcher is implementing a new estimation algorithm, Monte Carlo results are usually required for it to get published (i.e. proof that the algorithm actually works)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Approximating an integral with simulation}
+How can we use simulation (or the Monte Carlo method) to approximate an integral? Let's look at an example (from Wikipedia)
+\begin{itemize}
+	\item Suppose we want to find the area under the unit circle from $x=0$ to $x=1$
+	\item The function being integrated is $f\left(x\right)=\sqrt{1-x^{2}}$
+	\item We can approximate the area under the curve by generating thousands of random points in the area $(0,1)\times(0,1)$
+	\item Then we can count the proportion of points below the curve $f\left(x\right)$. This is an estimate of the integral.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Approximating an integral with simulation}
+Visually, we can see how well the integral performs under different numbers of points:
+\begin{center}
+\animategraphics[scale=.3]{2}{MCexample}{1}{10}
+\end{center}
+\end{frame}
+
+\begin{frame}{General steps for simulating an integral}
+\begin{enumerate}
+	\item Calculate function bounds over the bounds of integration (e.g. $\overline{y}=\max_{x}\,:\,\underline{x}\leq x\leq\overline{x})$ where $\overline{x}$ is the upper bound of integration)
+	\item Set up an $N\times 2$ grid matrix of random draws: $\left[U(\underline{x},\overline{x})\,\,U(\underline{y},\overline{y})\right]$
+	\item Calculate the area of the grid: $\left(\overline{x}-\underline{x}\right)\times\left(\overline{y}-\underline{y}\right)$
+	\item Create an indicator for whether or not a point is below $f\left(x\right)$ and above $0$
+	\item Create an indicator for whether or not a point is above $f\left(x\right)$ and below $0$
+	\item integral\_estimate $= \left(\textrm{area}*\left(\sum_{i}\textrm{below}-\sum_{i}\textrm{above}\right)\right)/N$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Simulated MLE (Greene, pp. 593, 799)}
+Recall the ugly expression for the log likelihood of the simple probit with random effects:
+\begin{equation*}
+\ell(X_{it};\beta,\alpha_{i})=\sum_{i}\ln\left(\int_{-\infty}^{\infty}\prod_{t}\Phi\left(X_{it}\beta+\alpha_{i}\right)^{y_{it}}\left(1-\Phi\left(X_{it}\beta+\alpha_{i}\right)\right)^{1-y_{it}}f\left(\alpha_{i}\right)d\alpha_{i}\right)
+\end{equation*}
+Another way to compute this integral is to notice that  
+\begin{eqnarray*}
+ & & \int_{-\infty}^{\infty}\prod_{t}\Phi\left(X_{it}\beta+\alpha_{i}\right)^{y_{it}}\left(1-\Phi\left(X_{it}\beta+\alpha_{i}\right)\right)^{1-y_{it}}f\left(\alpha_{i}\right)d\alpha_{i}\\
+&=&\int_{-\infty}^{\infty}g\left(\alpha_{i}\right)f\left(\alpha_{i}\right)d\alpha_{i}
+\end{eqnarray*}
+is an expectation over $\alpha_{i}$, so can be re-written as
+\[
+\mathbb{E}_{\alpha_{i}}\left[\prod_{t}\Phi\left(X_{it}\beta+\alpha_{i}\right)^{y_{it}}\left(1-\Phi\left(X_{it}\beta+\alpha_{i}\right)\right)^{1-y_{it}}\right] = \mathbb{E}_{\alpha_{i}}\left[g\left(\alpha_{i}\right)\right]
+\]
+\end{frame}
+
+\begin{frame}{Simulated MLE}
+If this expectation exists, we can think of it in a different way:
+\begin{equation*}
+\frac{1}{R}\sum_{r=1}^{R}g\left(\alpha_{ir}\right) \overset{p}{\rightarrow} \mathbb{E}_{\alpha_{i}}\left[g\left(\alpha_{i}\right)\right]
+\end{equation*}
+where the researcher takes $R$ draws from a random number generator for each person. We can plug this in to our original likelihood to get
+\begin{equation*}
+\ell(X_{it};\beta,\alpha_{ir})=\sum_{i}\ln\left(\frac{1}{R}\sum_{r=1}^{R}\left[\prod_{t}\Phi\left(X_{it}\beta+\sigma_{\alpha}\alpha_{ir}\right)^{y_{it}}\left(1-\Phi\left(X_{it}\beta+\sigma_{\alpha}\alpha_{ir}\right)\right)^{1-y_{it}}\right]\right)
+\end{equation*}
+where $\alpha_{ir}$ is a draw from a standard normal random number generator
+\end{frame}
+
+\begin{frame}{Pros and Cons of simulation methods}
+\textbf{Pros}:
+\begin{itemize}
+	\item Doesn't require strict assumptions on the distribution of the heterogeneity (e.g. random effects can be distributed uniform, logistic, etc.)
+	\item Very intuitive and easy to compute --- it's just counting!
+\end{itemize}
+\textbf{Cons}:
+\begin{itemize}
+	\item Can be very computationally intensive --- need to take $R$ draws for each person
+	\item Simulation induces a bias, so $R$ needs to be of the order $N^2$ (if doing MLE --- if doing GMM, no bias)
+	\item Inference is complicated by the fact that the asymptotic variance matrix is a function of $R$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Approaching integration}
+Here are some things to think about when doing integration
+\begin{itemize}
+	\item Why do I need to integrate? Is it because of an unobserved heterogeneity assumption? If so, what is this assumption buying me 	above and beyond a closed-form integral assumption?
+	\item Do I have to integrate because part of my model doesn't have a closed-form solution for an expectation?
+	\item Can I get around the nasty computations and ``integrate'' by doing a discrete summation?
+	\item Would things be easier if I just used simulation methods?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Take-home message}
+We got started with numerical integration because there are a few instances in economics when integration is necessary to estimate a model
+\begin{itemize}
+	\item Most of the time, integration is done to correct for unobserved heterogeneity
+	\item There are other instances, such as dynamic models (where agents can't see the future) and games (where opponents don't have full information on each other), where integration comes into play
+	\item Multinomial probit models also require integration because the normal distribution doesn't have a closed-form solution
+\end{itemize}
+Whatever the reason for the numerical integration, make sure that you always have in mind why the integration is happening so you don't get confused or intimidated
+\end{frame}
+
+\end{document}

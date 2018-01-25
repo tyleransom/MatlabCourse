@@ -1,0 +1,456 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\date{}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Problem Set 3
+\end_layout
+
+\begin_layout Standard
+Directions: Answer all questions.
+ Clearly label all answers.
+ Show all of your code.
+ Turn in the following to me via your dropbox (in a folder labeled 'MatlabPS1.3')
+ in Sakai by 11:59 p.m.
+ on Thursday, July 19, 2012: 
+\end_layout
+
+\begin_layout Itemize
+m-file(s)
+\end_layout
+
+\begin_layout Itemize
+a log file (from off the cluster)
+\end_layout
+
+\begin_layout Itemize
+matsub.oXXXXX file
+\end_layout
+
+\begin_layout Itemize
+pdf version of your writeup with its 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+LaTeX
+\end_layout
+
+\end_inset
+
+ source code
+\end_layout
+
+\begin_layout Standard
+Put the names of all group members at the top of your writeup (each student
+ must turn in his/her own materials).
+\end_layout
+
+\begin_layout Enumerate
+Practice with Matlab's graphics using 
+\family typewriter
+nhanes2d.mat
+\family default
+ (from PS2) --- visualizing descriptive evidence
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Generate a kernel density plot of the variable 
+\family typewriter
+hct
+\family default
+.
+ How 
+\begin_inset Quotes eld
+\end_inset
+
+normal
+\begin_inset Quotes erd
+\end_inset
+
+ does the variable look? Be sure to add axis labels and a title to your
+ graph.
+\end_layout
+
+\begin_layout Enumerate
+Now generate a histogram of 
+\family typewriter
+hct
+\family default
+ with a normal pdf overlaying it.
+ Again, label axes and assign a title appropriately.
+ Do you think 
+\family typewriter
+hct
+\family default
+ still looks 
+\begin_inset Quotes eld
+\end_inset
+
+normal
+\begin_inset Quotes erd
+\end_inset
+
+? 
+\end_layout
+
+\begin_layout Enumerate
+On the same figure, plot the empirical cdf of 
+\family typewriter
+hct
+\family default
+ by gender.
+ Plot males and females with different line styles and include a legend.
+ Does one gender stochastically dominate another?
+\end_layout
+
+\begin_layout Enumerate
+Now repeat (c) but break out the distribution by region instead of gender.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Now repeat (c) but break out the distribution by race instead of gender.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Viewing model fit graphically
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Graphing a predicted OLS plane
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Estimate the following model (from question 2(a) of Problem Set 2):
+\begin_inset Formula 
+\begin{eqnarray}
+hct_{i} & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}heartatk_{i}+\nonumber \\
+ &  & \beta_{6}female_{i}+\beta_{7}highbp_{i}+\beta_{8}northeast_{i}+\beta_{9}midwest_{i}+\nonumber \\
+ &  & \beta_{10}south_{i}+\beta_{11}non\_central\_city_{i}+\beta_{12}rural_{i}+\beta_{13}height_{i}+\\
+ &  & \beta_{14}weight_{i}+\beta_{15}houssiz_{i}+\varepsilon_{i}\nonumber 
+\end{eqnarray}
+
+\end_inset
+
+
+\emph on
+Be sure to drop observations for all variables where any of the variables
+ are missing.
+ Also, report the sum of squared residuals and/or log likelihood at convergence,
+ number of iterations to convergence, and the estimation sample size.
+\emph default
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Use 
+\family typewriter
+ezsurf
+\family default
+ to graph the 
+\begin_inset Quotes eld
+\end_inset
+
+marginal
+\begin_inset Quotes erd
+\end_inset
+
+ OLS plane for the intercept and the variables 
+\family typewriter
+height
+\family default
+ and 
+\family typewriter
+weight
+\family default
+.
+ Display the graph over the bounds 
+\begin_inset Formula $\left[\min\left(height\right),\max\left(height\right)\right]\times\left[\min\left(weight\right),\max\left(weight\right)\right]$
+\end_inset
+
+.
+ Correctly label all axes, and title your graph appropriately.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Graphing actual data vs predicted OLS plane
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Add actual data points to your graph in part (i) of question (a).
+ Make sure your dimensions are correctly lined up.
+ How well do height and weight jointly predict hematocrit percentage (conditiona
+l on all other covariates in the OLS data matrix)? 
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+Maximum likelihood estimation for a discrete dependent variable (high blood
+ pressure)
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Using 
+\family typewriter
+fminunc
+\family default
+ (with convergence tolerances at 
+\begin_inset Formula $10^{-8}$
+\end_inset
+
+), estimate the following model:
+\begin_inset Formula 
+\begin{eqnarray}
+highbp_{i} & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}heartatk_{i}+\nonumber \\
+ &  & \beta_{6}female_{i}+\beta_{7}hct_{i}+\beta_{8}northeast_{i}+\beta_{9}midwest_{i}+\nonumber \\
+ &  & \beta_{10}south_{i}+\beta_{11}non\_central\_city_{i}+\beta_{12}rural_{i}+\beta_{13}height_{i}+\\
+ &  & \beta_{14}weight_{i}+\beta_{15}houssiz_{i}+\varepsilon_{i}\nonumber 
+\end{eqnarray}
+
+\end_inset
+
+assuming 
+\begin_inset Formula $\varepsilon_{i}\sim$
+\end_inset
+
+logistic.
+ For this problem, the log likelihood looks like
+\begin_inset Formula 
+\[
+\ell\left(X_{i};\beta\right)=\sum_{i=1}^{n}\left\{ 1\left[highbp_{i}=1\right]\ln\left(P_{i}\right)+1\left[highbp_{i}=0\right]\ln\left(1-P_{i}\right)\right\} 
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $1\left[highbp_{i}=1\right]$
+\end_inset
+
+ is a dummy for whether or not 
+\begin_inset Formula $highbp_{i}$
+\end_inset
+
+ is 1, and
+\begin_inset Formula 
+\[
+P_{i}=\frac{\exp\left(X_{i}\beta\right)}{1+\exp\left(X_{i}\beta\right)}.
+\]
+
+\end_inset
+
+
+\emph on
+Be sure to drop observations for all variables where any of the variables
+ are missing.
+ Also, report the standard errors of 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+, the log likelihood at convergence, number of iterations to convergence,
+ and the estimation sample size.
+\end_layout
+
+\begin_layout Enumerate
+Repeat (a), but now assume that 
+\begin_inset Formula $\varepsilon_{i}\sim N\left(0,1\right)$
+\end_inset
+
+ (i.e., estimate the probit model).
+ In this case, the log likelihood is the same as in (a), but with
+\begin_inset Formula 
+\[
+P_{i}=\Phi\left(X_{i}\beta\right),
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\Phi$
+\end_inset
+
+ is the CDF of the standard normal distribution.
+ 
+\series bold
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Note:
+\series default
+ If you're like me and have trouble getting your probit likelihood to converge,
+ try estimating it first with 
+\family typewriter
+fminsearch
+\family default
+ (starting from your logit answers), then with 
+\family typewriter
+fminunc
+\family default
+ (starting from where 
+\family typewriter
+fminsearch
+\family default
+ ended).
+ If this is still problematic, consider modifying your likelihood function
+ so that Matlab doesn't attempt to evaluate the log of 0.
+ This can be done, e.g., by setting 
+\begin_inset Formula $P_{i}=10^{-200}$
+\end_inset
+
+ if 
+\begin_inset Formula $P_{i}=0$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Divide your logit 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ estimates by 1.6 and compare with your probit 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ estimates.
+ How different are the two vectors? Briefly discuss some of the main results
+ from this estimation.
+\end_layout
+
+\begin_layout Enumerate
+Compare the fit of the models estimated in (a) and (b) in two ways: 
+\emph on
+(i)
+\emph default
+ compare the average of 
+\begin_inset Formula $highbp$
+\end_inset
+
+ with the average 
+\begin_inset Formula $\hat{P}_{logit}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{P}_{probit}$
+\end_inset
+
+
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Formula $\hat{P}_{i}=f\left(X_{i}\hat{\beta}\right)$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+; 
+\emph on
+(ii)
+\emph default
+ compare the maximum likelihood values.
+ Which model does better at fitting the average probability? Which model
+ has a higher likelihood value?
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

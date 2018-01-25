@@ -1,0 +1,1061 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\date{}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Problem Set 2
+\end_layout
+
+\begin_layout Standard
+Directions: Answer all questions.
+ Clearly label all answers.
+ Show all of your code.
+ Turn in m-file(s), a log file (using 
+\family typewriter
+diary
+\family default
+ or from off the cluster) and a writeup to me via your dropbox in Sakai
+ (in a folder labeled 'MatlabPS1.2') by 11:59 p.m.
+ on Thursday, July 12, 2012.
+ Put the names of all group members at the top of your writeup (each student
+ must turn in his/her own materials).
+\end_layout
+
+\begin_layout Enumerate
+Practice with Matlab's functional optimizers using 
+\family typewriter
+nlsw88.mat
+\family default
+ (from PS1)
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Estimate the following model:
+\begin_inset Formula 
+\begin{eqnarray}
+\ln\left(wage_{i}\right) & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}collgrad_{i}+\varepsilon_{i}
+\end{eqnarray}
+
+\end_inset
+
+under the assumption that 
+\begin_inset Formula $\varepsilon_{i}$
+\end_inset
+
+ is mean-zero and well-behaved (i.e., use OLS).
+ Note that 
+\begin_inset Formula $black_{i}$
+\end_inset
+
+ corresponds to 
+\begin_inset Formula $race_{i}=2$
+\end_inset
+
+ and 
+\begin_inset Formula $other_{i}$
+\end_inset
+
+ corresponds to 
+\begin_inset Formula $race_{i}=3$
+\end_inset
+
+.
+ 
+\emph on
+Be sure to drop observations for all variables where any of the variables
+ are missing.
+ Also, report the sum of squared residuals at convergence, and the estimation
+ sample size.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $s^{2}$
+\end_inset
+
+ (variance of 
+\begin_inset Formula $\varepsilon_{i}$
+\end_inset
+
+) using 
+\family typewriter
+fminsearch
+\family default
+ with default convergence tolerances, and starting values of 
+\begin_inset Formula $U\left[0,1\right]$
+\end_inset
+
+.
+ Set the 
+\family typewriter
+rand
+\family default
+ seed at 1234 (just like last problem set).
+ For all optimizations in this problem set, set the maximum iterations at
+ 
+\begin_inset Formula $10^{6}$
+\end_inset
+
+ and the maximum function evaluations at 
+\begin_inset Formula $10^{12}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $s^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fminunc
+\family default
+ with default convergence tolerances and 
+\begin_inset Formula $U\left[0,1\right]$
+\end_inset
+
+ starting values
+\end_layout
+
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $s^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fmincon
+\family default
+ with default convergence tolerances and with 
+\begin_inset Formula $\beta_{3}<0$
+\end_inset
+
+ as the only restriction.
+ Use 
+\begin_inset Formula $U\left[0,1\right]$
+\end_inset
+
+ starting values.
+\end_layout
+
+\begin_layout Enumerate
+How do your answers differ when using each of the optimizers? How different
+ are your answers from the closed-form solution for OLS? (
+\begin_inset Formula $\hat{\beta}=\left(X^{\prime}X\right)^{-1}X^{\prime}y$
+\end_inset
+
+)
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Now estimate the same model from (a), but assuming 
+\begin_inset Formula $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$
+\end_inset
+
+.
+ In this case, the log likelihood function looks like
+\begin_inset Formula 
+\begin{equation}
+\ell\left(X_{i};\beta,\sigma\right)=\sum_{i=1}^{n}\left\{ -\frac{1}{2}\ln\left(2\pi\sigma^{2}\right)-\frac{1}{2\sigma^{2}}\left(\ln\left(wage_{i}\right)-X_{i}\beta\right)^{2}\right\} 
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $X_{i}\beta$
+\end_inset
+
+ is the right-hand side of equation (1) (except 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+, of course).
+ 
+\emph on
+Report the log likelihood value at convergence, and sample size.
+ Remember to take the negative of the likelihood, since Matlab's optimizers
+ are minimizers and you want the maximum likelihood estimator.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\sigma}^{2}$
+\end_inset
+
+ (variance of 
+\begin_inset Formula $\varepsilon_{i}$
+\end_inset
+
+) using 
+\family typewriter
+fminsearch
+\family default
+ with default convergence tolerances and 
+\begin_inset Formula $U\left[0,1\right]$
+\end_inset
+
+ starting values
+\end_layout
+
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\sigma}^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fminunc
+\family default
+ with default convergence tolerances and 
+\begin_inset Formula $U\left[0,1\right]$
+\end_inset
+
+ starting values
+\end_layout
+
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\sigma}^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fmincon
+\family default
+ with default convergence tolerances and with 
+\begin_inset Formula $\beta_{3}<0$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma>0$
+\end_inset
+
+ as the only restrictions.
+ Use 
+\begin_inset Formula $U[-.25,.25]$
+\end_inset
+
+ as the starting values.
+\end_layout
+
+\begin_layout Enumerate
+How do your answers differ when using each of the optimizers? How sensitive
+ is 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ to the normal distribution assumption? How close are 
+\begin_inset Formula $s^{2}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\sigma}^{2}$
+\end_inset
+
+?
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Now estimate the following model:
+\begin_inset Formula 
+\begin{eqnarray}
+\ln\left(wage_{i}\right) & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}collgrad_{i}+\nonumber \\
+ &  & \beta_{6}grade_{i}+\beta_{7}married_{i}+\beta_{8}south_{i}+\beta_{9}c\_city_{i}+\nonumber \\
+ &  & \beta_{10}union_{i}+\beta_{11}ttl\_exp_{i}+\beta_{12}tenure_{i}+\beta_{13}age_{i}^{2}+\\
+ &  & \beta_{14}hours_{i}+\beta_{15}never\_married_{i}+\varepsilon_{i}\nonumber 
+\end{eqnarray}
+
+\end_inset
+
+
+\emph on
+Again, be sure to drop observations for all variables where any of the variables
+ are missing.
+ Also, report the sum of squared residuals and/or log likelihood at convergence,
+ and the estimation sample size.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $s^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fminsearch
+\family default
+ with default convergence tolerances, assuming 
+\begin_inset Formula $\varepsilon_{i}$
+\end_inset
+
+ is mean-zero.
+ Use 
+\begin_inset Quotes eld
+\end_inset
+
+noisy but good
+\begin_inset Quotes erd
+\end_inset
+
+ starting values, i.e.
+ set the starting values equal to 
+\begin_inset Formula $\hat{\beta}_{OLS,closed\_form}+U\left[-\alpha\hat{\beta}_{OLS,closed\_form},\alpha\hat{\beta}_{OLS,closed\_form}\right]$
+\end_inset
+
+ with 
+\begin_inset Formula $\alpha=.75$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $s^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fminunc
+\family default
+ with default convergence tolerances, assuming 
+\begin_inset Formula $\varepsilon_{i}$
+\end_inset
+
+ is mean-zero.
+ Use the same starting values as in part (i).
+\end_layout
+
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\sigma}^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fminsearch
+\family default
+ with default convergence tolerances, assuming 
+\begin_inset Formula $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$
+\end_inset
+
+.
+ Use the same starting values as in part (i).
+\end_layout
+
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\sigma}^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fminunc
+\family default
+ with default convergence tolerances, assuming 
+\begin_inset Formula $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$
+\end_inset
+
+.
+ Use the same starting values as in part (i).
+\end_layout
+
+\begin_layout Enumerate
+How does 
+\family typewriter
+fminsearch
+\family default
+ compare to 
+\family typewriter
+fminunc
+\family default
+ when the dimension of the parameter vector increases?
+\end_layout
+
+\begin_layout Enumerate
+How do the estimators in (i) through (iv) perform when the starting values
+ are 0.01 for all parameters?
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+Practice with Matlab's functional optimizers using 
+\family typewriter
+nhanes2d.mat
+\family default
+ (data from the National Health and Nutritional Examination Survey---NHANES).
+ Details on the variables:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Tabular
+<lyxtabular version="3" rows="12" columns="3">
+<features tabularvalignment="middle">
+<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0">
+<column alignment="left" valignment="top" width="0">
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+ID
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+unique individual identifier
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+age
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+age (in years)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+hct
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hematocrit percentage (% of red blood cells in the blood)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+heartatk
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+binary variable indicating heart attack history
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+height
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+height (in cm)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+highbp
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+binary variable indicating history of high blood pressure 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+houssiz
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+size of household
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+race
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1 = white, 2 = black, 3 = other
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+region
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1=northeast, 2=midwest, 3=south, 4=west
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+sex
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1=male, 2=female
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+smsa
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+1=central city, 2=non central city, 4=rural
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family typewriter
+weight
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+:
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+weight (in kg)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Estimate the following model:
+\begin_inset Formula 
+\begin{eqnarray}
+hct_{i} & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}heartatk_{i}+\nonumber \\
+ &  & \beta_{6}female_{i}+\beta_{7}highbp_{i}+\beta_{8}northeast_{i}+\beta_{9}midwest_{i}+\nonumber \\
+ &  & \beta_{10}south_{i}+\beta_{11}non\_central\_city_{i}+\beta_{12}rural_{i}+\beta_{13}height_{i}+\\
+ &  & \beta_{14}weight_{i}+\beta_{15}houssiz_{i}+\varepsilon_{i}\nonumber 
+\end{eqnarray}
+
+\end_inset
+
+
+\emph on
+Be sure to drop observations for all variables where any of the variables
+ are missing.
+ Also, report the sum of squared residuals and/or log likelihood at convergence,
+ number of iterations to convergence, and the estimation sample size.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\sigma}^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fminsearch
+\family default
+ with default convergence tolerances, assuming 
+\begin_inset Formula $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$
+\end_inset
+
+.
+ Use the same starting values as in part (i) of 1(c), but now with 
+\begin_inset Formula $\alpha=1.5$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\sigma}^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fminsearch
+\family default
+ with 
+\family typewriter
+TolX
+\family default
+ and 
+\family typewriter
+TolFun
+\family default
+ each set to 
+\begin_inset Formula $10^{-8}$
+\end_inset
+
+ (instead of the default), assuming 
+\begin_inset Formula $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$
+\end_inset
+
+.
+ Use the same starting values as in part (i) of 2(a).
+\end_layout
+
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\sigma}^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fminunc
+\family default
+ with default convergence tolerances, assuming 
+\begin_inset Formula $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$
+\end_inset
+
+.
+ Use the same starting values as in part (i) of 2(a).
+\end_layout
+
+\begin_layout Enumerate
+Estimate 
+\begin_inset Formula $\hat{\beta}$
+\end_inset
+
+ and 
+\begin_inset Formula $\hat{\sigma}^{2}$
+\end_inset
+
+ using 
+\family typewriter
+fminunc
+\family default
+ with 
+\family typewriter
+TolX
+\family default
+ and 
+\family typewriter
+TolFun
+\family default
+ each set to 
+\begin_inset Formula $10^{-8}$
+\end_inset
+
+ (instead of the default), assuming 
+\begin_inset Formula $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$
+\end_inset
+
+.
+ Use the same starting values as in part (i) of 2(a).
+\end_layout
+
+\begin_layout Enumerate
+How do your answers change when the convergence tolerance changes? How many
+ more iterations did the optimization require under the stricter tolerances?
+ How different are your answers depending on the optimizer?
+\end_layout
+
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+Summarize your findings regarding Matlab's different optimizers.
+ When is 
+\family typewriter
+fminsearch
+\family default
+ the best optimizer to use? When is 
+\family typewriter
+fminunc
+\family default
+ the best to use? How important are starting values in finding a solution?
+ How important are convergence tolerances? 
+\end_layout
+
+\end_body
+\end_document

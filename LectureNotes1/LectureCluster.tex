@@ -1,0 +1,114 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[numbered,framed,autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTE: With Ilmenau style, to get the bullets %
+% looking right, do one section and one sub-   %
+% section for each set of bullets              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{frame}
+\title{Using the Linux Cluster at Duke}
+\author{
+	Tyler Ransom\\
+	\emph{Duke University}\\
+%    \today \\
+%    \vspace{10cm}
+}
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+\begin{itemize}
+	\item Linux basics
+	\item Accessing Duke resources remotely
+	\item Submitting computational jobs to the server
+	\item Utilizing text editors
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Linux Basics}
+\begin{itemize}
+	\item Most features of Linux are accessed through the terminal
+	\item This is available through ``terminal'' on the Linux machines in the Bowling Alley
+	\item On PCs in the bowling alley, use a program like X-Win 32 or SSH Secure Shell Client
+	\item Once logged in, user sees a prompt into which commands can be typed
+	\item Most file-related commands can be executed via the GUI
+	\item All Linux commands have options which are invoked with ``-''
+	\item \url{http://files.fosswire.com/2007/08/fwunixref.pdf} is a good reference for common commands
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Accessing Duke resources remotely}
+\begin{itemize}
+	\item Use a SSH client (PC) or Terminal (Mac or Linux) to remotely access the Duke servers
+	\item The Economics Computing Support (ECS) team has a website outlining how to access various resources
+	\item For help installing SSH software, see this link: \url{http://dialog.econ.duke.edu/help/?p=271}
+	\item To remotely view/edit files in your home directory, use an FTP program like FileZilla, WinFTP or Cyberduck
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Checking Server Status}
+\begin{itemize}
+	\item Duke Economics has a batch cluster that allows users to execute computational jobs without being logged in
+	\item You can check how many users are logged in by typing \texttt{w}
+	\item \texttt{uname -a} tells you which of the three servers you're logged in to (\texttt{login-02}, \texttt{login-03}, \texttt{login-05})
+	\item \texttt{qstat -u "*"} displays all active jobs on the cluster
+	\item \texttt{qstat} displays all of your active jobs on the cluster
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Submitting a Matlab script to the cluster}
+\begin{itemize}
+	\item The syntax for submitting a script m-file is \texttt{matsub myscript.m myscript.log}
+	\item Once submitted, user gets a message \texttt{Your job 12345 ("matsub") has been submitted}
+	\item User must be in the directory where the m-file is located when matsub command is issued
+	\item The system creates a file \texttt{matsub.o12345} which is a text file containing any errors encountered during execution
+	\item When a program is running perfectly, the \texttt{.o} file is useless, but it is very useful when the program encounters errors
+	\item The file \texttt{myscript.log} is a text file containing what would have been printed in the command window
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Submitting other types of scripts to the cluster}
+\begin{itemize}
+	\item The syntax for submitting other types of scripts is very similar: \texttt{statasub myfile.do} (no .log file needed)
+	\item Users can also submit more general Linux scripts (called shell scripts)
+	\item Computation of lower-level languages like C and Fortran is handled through shell scripts
+	\item Syntax for this is \texttt{qsub -q all.q myshell.sh}
+	\item Users can also submit Matlab and Stata jobs via shell scripts if more general options are desired (e.g. have server email you once a job is complete)
+	\item For a complete guide to using the cluster, see \url{http://dialog.econ.duke.edu/help/?p=926}
+\end{itemize}
+\end{frame}
+
+\end{document}

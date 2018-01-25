@@ -1,0 +1,549 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{verbatim}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTE: With Ilmenau style, to get the bullets %
+% looking right, do one section and one sub-   %
+% section for each set of bullets              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{frame}
+
+\title{Duration Analysis \& Count Data%
+\thanks{Based on Wooldridge (2003) Chapters 19-20%
+}}
+
+
+\author{Tyler Ransom}
+
+
+\institute{Duke University}
+
+\titlepage
+
+\end{frame}
+
+
+\begin{frame}{Introduction}
+\begin{itemize}
+\item Today we'll discuss how to estimate a model where the dependent variable
+takes on two irregular types: a time interval, and a positive integer
+\item When the dependent variable is a time interval, we use duration analysis
+to recover the parameters of interest
+\item When the dependent variable is a positive integer, we use count data
+methods to estimate the parameters
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{When $y$ is a time interval}
+
+When our dependent variable $y$ is a time interval, we use duration
+analysis to estimate the model, which helps us understand the cause(s)
+of the dependent variable. 
+\begin{itemize}
+\item Examples include:
+\item weeks unemployed until finding a job
+\item months married until divorce
+\item days until arrest after incarceration
+\item survey rounds until attrition
+\item weeks pregnant until delivery
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Background}
+\begin{itemize}
+\item For now, we assume that time is continuous
+\item The dependent variable is known as the {}``\textbf{initial state}''
+(e.g. marriage is the {}``initial state'' in the divorce example.
+Someone exits the initial state when they become divorced)
+\item We also assume that there is no re-entry into the initial state
+
+\begin{itemize}
+\item Therefore, we only consider spells until the first exit
+\item Thus, $y$ would be comprised of first marriages (for the divorce
+example) or first-time offenders (in the arrest example)
+\end{itemize}
+\item For now, we also assume there are no covariates, i.e. we only look
+at unconditional time to exit
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Hazard function}
+
+In order to better understand the econometrics of duration models,
+let's introduce some notation:
+\begin{itemize}
+\item Let $T$ be a random variable with outcomes $t$ and continuous distribution
+$F$ with support $\left(0,\infty\right)$
+\item $F\left(t\right)=\Pr\left(T\leq t\right),\,\, t\geq0$
+\item The \textbf{survivor function} is the probability of surviving past
+$t$ and is denoted $1-F\left(t\right)$
+\item The \textbf{hazard function} $\lambda\left(t\right)$ is the instantaneous
+rate of exiting the initial state per unit of time and is defined
+by
+\[
+\lambda\left(t\right)=\lim_{h\downarrow0}\frac{\Pr\left(t\leq T\leq t+h\,\,\vert\,\, T\geq t\right)}{h}
+\]
+
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Hazard function}
+
+Some examples of the hazard function:
+\begin{itemize}
+\item If $T$ is unemployment length (in weeks) then $\lambda\left(20\right)$
+is approximately the probability of accepting a job offer between
+weeks 20 and 21 (conditional on not having accepted a job before then)
+\item If $T$ is length of first marriage (in months) then $\lambda\left(84\right)$
+is the approximate probability of becoming divorced between months
+84 and 85
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Hazard function}
+\begin{itemize}
+\item You can use math to crank out the following using the definition of
+the hazard function given previously:
+\[
+\lambda\left(t\right)=\frac{f\left(t\right)}{1-F\left(t\right)}.
+\]
+
+\item The simplest form of a hazard function is $\lambda\left(t\right)=\gamma$
+(some constant)
+\item Thus we have
+\begin{eqnarray*}
+\gamma & = & \frac{f\left(t\right)}{1-F\left(t\right)}\\
+f\left(t\right) & = & \gamma\left(1-F\left(t\right)\right)
+\end{eqnarray*}
+which is an ordinary differential equation. The solution is
+\[
+F\left(t\right)=1-e^{-\gamma t}
+\]
+which is the CDF of the exponential distribution.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Duration dependence}
+\begin{itemize}
+\item The exponential distribution has the property of \textbf{memorylessness}
+\item This means there is no \textbf{duration dependence} (i.e. the probability
+of exiting the initial state is the same regardless of how long you've
+been in the initial state)
+\item In practice, this is usually not a realistic assumption
+\item We usually want distributions that exhibit duration dependence, meaning
+$\lambda\left(t\right)$ is actually a function of $t$ (not a constant)
+\item Common distributions that exhibit duration dependence but aren't too
+hairy to work with:
+
+\begin{itemize}
+\item Weibull distribution
+\item Log-logistic distribution
+\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Introducing covariates}
+
+If we want to study the hazard rate conditional on a matrix of covariates
+$X$, for $X$'s that do not vary over time (i.e. are measured at
+the start of the spell):
+\[
+\lambda\left(t;X\right)=\frac{f\left(t\,\vert\, X\right)}{1-F\left(t\,\vert\, X\right)}
+\]
+
+\begin{itemize}
+\item This leads us to the \textbf{proportional hazards model}:
+\[
+\lambda\left(t;X\right)=\kappa\left(X\right)\lambda_{0}\left(t\right)
+\]
+where we assume that the hazard function is separable between $X$
+and $t$. In the case, we call $\lambda_{0}$ the \textbf{baseline
+hazard}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Functional form}
+\begin{itemize}
+\item In a proportional hazards model, it is common to assume
+\[
+\kappa\left(\cdot\right)=e^{X\beta}
+\]
+
+\item Plugging this back into the conditional hazard function gives us
+\begin{equation}
+\lambda\left(t;X\right)=\lambda_{0}\left(t\right)\exp\left(X\beta\right)
+\end{equation}
+
+\item Simplifying, we have
+\[
+\ln\left(\lambda\left(t;X\right)\right)=X\beta+\ln\left(\lambda_{0}\left(t\right)\right)
+\]
+
+\item Remember, $X$ cannot be time-varying!
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Time-varying covariates}
+\begin{itemize}
+\item We can introduce time-varying covariates $X\left(t\right)$, but we
+need to be a lot more careful
+\item In particular, the $X$'s must be strictly exogenous (meaning $X\left(t\right)$
+needs to have a well defined path once an agent leaves the initial
+state)
+\item If these stricter assumptions are met, we can write the proportional
+hazard as
+\[
+\lambda\left(t;X\left(t\right)\right)=\kappa\left(X\left(t\right)\right)\lambda_{0}\left(t\right)
+\]
+with
+\[
+\kappa\left(\cdot\right)=\exp\left(X\left(t\right)\beta\right)
+\]
+
+\item If we assume $T\sim$log-logistic then
+\[
+\lambda\left(t;X\left(t\right)\right)=\frac{\alpha t^{\alpha-1}\exp\left(X\left(t\right)\beta\right)}{1+t^{\alpha}\exp\left(X\left(t\right)\beta\right)}
+\]
+and we can estimate $\alpha,\beta$ by MLE
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Estimation}
+
+Estimation of duration data depends on the sampling scheme. Let's
+suppose $T$ is the duration of unemployment for a male in the year
+1998. To get data, we can sample in one of two ways:
+\begin{enumerate}
+\item flow sampling: Randomly sample men who became unemployed in 1998
+\item stock sampling: Randomly sample men who were unemployed in the last
+week of 1998\end{enumerate}
+\begin{itemize}
+\item In both cases, we need to correct for right censoring, because there
+will be people who are still in the initial state at the time of sampling
+\item In the case of stock sampling, we also need to correct for left censoring
+\item Unobserved heterogeneity is much more difficult to correct for in
+duration analysis, so we won't cover it today
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Estimation of expected duration}
+
+Suppose we weren't interested in estimating the hazard function, just
+the effect of $X$ on the expected duration $\mathbb{E}\left[t\right]$. 
+\begin{itemize}
+\item If there were no censoring, we could just run OLS
+\[
+\ln\left(t^{\ast}\right)=X\delta+e
+\]
+where $t^{\ast}$ is a vector of actual duration times for staying
+in the initial state
+\item If we assume $T\sim$Weibull, we can still estimate the expected duration
+using OLS, but 
+\[
+\delta_{j}=\frac{-\beta_{j}}{\alpha}
+\]
+where $\delta_{j}$ is the effect of $X_{j}$ (the $j$th column of
+$X$) on expected duration and $\alpha$ is a parameter of the Weibull
+distribution
+\item If there is right censoring, need to do standard tobit to estimate
+$\delta$
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Estimation of the hazard function}
+
+When estimating parameters of the hazard function (e.g. equation 1)
+with flow sampling, need to do maximum likelihood and pay attention
+to truncation. The likelihood function looks like
+\begin{eqnarray*}
+\mathcal{L}\left(t_{i};X_{i},\theta\right) & = & \prod_{i}f\left(t_{i}\,\vert\, X_{i};\theta\right)^{d_{i}}\left[1-F\left(t_{i}\,\vert\, X_{i};\theta\right)\right]^{1-d_{i}},\\
+ &  & d_{i}=1\left[\mbox{uncensored}\right]
+\end{eqnarray*}
+
+
+
+\end{frame}
+
+
+\begin{frame}{Likelihood for stock sampling}
+\begin{itemize}
+\item With stock sampling, we need to introduce some more notation:
+\item $a_{i}$ is the starting time for person $i$
+\item $b$ is the maximum length of the spell (e.g. 52 weeks for the {}``unemployed
+in year 1998'' example)
+\item The likelihood function is then
+\[
+\mathcal{L}\left(t_{i};X_{i},\theta\right)=\prod_{i}\frac{f\left(t_{i}\,\vert\, X_{i};\theta\right)^{d_{i}}\left[1-F\left(t_{i}\,\vert\, X_{i};\theta\right)\right]^{1-d_{i}}}{1-F\left(b-a_{i}\,\vert\, X_{i};\theta\right)}
+\]
+
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Proportional hazard models in Matlab}
+\begin{itemize}
+\item The Matlab command for estimating a Cox proportional hazard model
+(the most common type of duration analysis) is \texttt{coxphfit}
+\item The full syntax is
+\item \texttt{{[}b,logl,H,stats{]} = coxphfit(X,y,'name',value)}
+\item \texttt{H} is a two-column matrix that contains $y$ values in the
+first column and cumulative hazard values in the second
+\item \texttt{'name'} is how you invoke optimization options
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Grouped data}
+
+The assumption that time is continuous can be a hard pill to swallow,
+especially when the data is measured on a weekly or monthly basis.
+For example:
+\begin{itemize}
+\item We only have weekly data on arrests
+\item but arrests could have happened any time in that week
+\item We need to account for this discreteness in our estimation
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Estimation of grouped data}
+
+We observe $y_{m},c_{m},X$ where $m$ indicates the time range (e.g.
+$y_{m}=1\left[\mbox{exited\, initial\, state\, in\, week\,\ensuremath{m}\, of\,1998}\right]$,
+$c_{m}=1\left[\mbox{censored\, in\, week\,}m\right]$, and $X$ is
+a matrix of time-invariant covariates
+\begin{itemize}
+\item If we assume a \textbf{piecewise-constant proportional hazard}, then
+\[
+\lambda\left(t;X,\theta\right)=\kappa\left(X\beta\right)\lambda_{m},\, a_{m-1}\leq t<a_{m}
+\]
+and we get the likelihood function
+\[
+\mathcal{L}\left(X;\theta\right)=\prod_{i=1}^{N}\left[\prod_{h=1}^{m_{i}-1}\alpha_{h}\left(X_{i};\theta\right)\right]\left[1-\alpha_{m_{i}}\left(X_{i};\theta\right)\right]^{d_{i}}
+\]
+where
+\[
+\alpha_{m}=\lambda_{m}\left(a_{m}-a_{m-1}\right)\exp\left(-\exp\left(X\beta\right)\right)
+\]
+and $a_{m}$ is a time period (e.g. one week); $d_{i}$ is the same
+as before
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Kaplan-Meier estimator}
+
+One of the most famous estimators in duration analysis (used frequently
+in the finance literature) is called the \textbf{Kaplan-Meier estimator
+of the survivor function}.
+\begin{itemize}
+\item No covariates
+\item Want to estimate $\lambda_{m}$ with grouped data
+\[
+\hat{s}\left(a_{m}\right)=\prod_{r=1}^{m}\frac{N_{r}-E_{r}}{N_{r}}
+\]
+
+\item where $N_{r}$ is the number of people who have neither left the initial
+state nor been censored at $a_{r-1}$\\
+$E_{r}$ is the number of people leaving the initial state between
+$a_{r-1}$ and $a_{r}$
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Time-varying covariates in grouped data}
+
+If we want to estimate grouped data with time-varying covariates,
+then the covariates $X_{m}$ must not change within each $a_{m}$
+\begin{itemize}
+\item If this is the case, then we can rewrite the likelihood function from
+before, but add an $m$ subscript to the $X$ matrix:
+\[
+\mathcal{L}\left(X;\theta\right)=\mathcal{L}\left(X;\theta\right)=\prod_{i=1}^{N}\left[\prod_{h=1}^{m_{i}-1}\alpha_{h}\left(X_{im};\theta\right)\right]\left[1-\alpha_{m_{i}}\left(X_{im};\theta\right)\right]^{d_{i}}
+\]
+where
+\[
+\alpha_{m}=\lambda_{m}\left(a_{m}-a_{m-1}\right)\exp\left(-\exp\left(X_{m}\beta\right)\right)
+\]
+
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Competing risks models}
+
+If we want to generalize our duration analysis to having more than
+one exit state, this is called a \textbf{competing risks model}
+\begin{itemize}
+\item In our employment example, we considered employment as the {}``exit
+state''
+\item We could consider a model in which the individual can move either
+from unemployment to employment, or from unemployment to out of the
+labor force
+\item In a competing risks model, each of the {}``risks'' is assumed to
+be independent of one another
+\item The econometrics get a lot more hairy, so we won't cover it today
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Models with count data}
+
+\textbf{Count data} is a set of data where the dependent variable
+takes on values that are nonnegative integers. In this case, $y$
+is called a \textbf{count variable}. Examples include
+\begin{itemize}
+\item Number of cigarettes smoked in a day
+\item Number of plane crashes experienced by an airline over a certain period
+of time
+\item Number of days spent in a hospital last year
+\item Number of times visited a recreational site
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Count data}
+
+Just like with binary models (where $y$ only takes on values in $\left\{ 0,1\right\} $),
+we need to estimate the model differently
+\begin{itemize}
+\item The main reason is that if we performed OLS on $y=X\beta+\varepsilon$,
+we would find that $\hat{y}$ would be negative for some values of
+$X$
+
+\begin{itemize}
+\item This is the same reason we do a logit or probit model for binary data
+\end{itemize}
+\item In order to ensure that $\hat{y}$ is always positive, we make our
+favorite transformation: $\exp\left(X\beta\right)$
+\item We also need to assume a better distribution for $\varepsilon$
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Poisson regression}
+
+Let's assume $y\vert X\sim$Poisson with mean parameter $\mu=\exp\left(X\beta\right)$
+\begin{itemize}
+\item The pdf of this distribution is
+\[
+f\left(y\vert X\right)=\frac{\exp\left(-\mu\left(X\beta\right)\right)\left[\mu\left(X\beta\right)\right]^{y}}{y!}
+\]
+
+\item Our quasi MLE (QMLE) likelihood function is then
+\[
+\ell=\sum_{i}y_{i}X_{i}\beta-\exp\left(X_{i}\beta\right)-\ln\left(y!\right)
+\]
+
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Interpretation}
+
+Interpretation of Poisson regression coefficients is unlike typical
+regression models:
+\[
+\beta_{j}=\frac{\partial\ln\left(\mathbb{E}\left[y\vert X\right]\right)}{\partial X_{j}}
+\]
+Turning this into a differential and rearranging terms, we get
+\[
+\Delta\mathbb{E}\left[y\vert X\right]\approx100\beta_{j}\Delta X_{j}
+\]
+Thus $\beta_{j}$ is a semielasticity
+
+
+\end{frame}
+
+
+\begin{frame}{Other count distributions}
+
+Besides the Poisson distribution, we can also use the following distributions
+to fit our count data:
+\begin{itemize}
+\item Negative binomial
+\item Binomial
+\item Exponential
+\item Fractional logit
+\end{itemize}
+See Wooldridge for more information regarding these. Also be aware
+that inference is slightly more complicated with count models.
+
+
+\end{frame}
+
+
+\begin{frame}{Conclusion}
+\begin{itemize}
+\item Today we discussed how to estimate models where the dependent variable
+takes a specific form that is different than what we're used to
+\item You will likely come across duration analysis in the future
+\item You may not come across count data, but if you do, you know where
+to look for more information
+\end{itemize}
+
+\end{frame}
+\end{document}

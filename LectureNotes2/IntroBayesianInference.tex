@@ -1,0 +1,157 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{verbatim}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTE: With Ilmenau style, to get the bullets %
+% looking right, do one section and one sub-   %
+% section for each set of bullets              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{frame}
+\title{Intro to Bayesian Inference\thanks{Based on Greene Chapter 18}}
+\author{
+	Tyler Ransom\\
+	\emph{Duke University}\\
+%    \today \\
+%    \vspace{10cm}
+}
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+\begin{itemize}
+	\item Introduce Bayesian approach
+	\item Compare/Contrast Bayesian vs. Frequentist approaches
+	\item Discuss Random Coefficients
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bayesian Approach}
+\begin{itemize}
+	\item Consider a simple problem, viewed through the lens of both classical statistics and Bayesian statistics (adapted from Wikipedia):
+	\item There are two bags of marbles. Bag \#1 has 10 red and 10 blue. Bag \#2 has 20 red and 10 blue.
+	\item \textbf{Classical statistics}: What is the probability that a marble drawn at random from one of the bags is blue?
+	\item \textbf{Bayesian statistics}: Given that the marble drawn is blue, what is the probability that it was drawn from Bag \#1?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bayesian Approach}
+\begin{itemize}
+	\item The classical approach would say something like ``assume each bag can be drawn from with equal probability,'' and in the end we recover a probability of drawing a blue marble 
+	\item The Bayesian approach would say something like ``assume each bag can be drawn from with equal probability,'' (a prior belief) and in the end, we recover a posterior probability that the draw came from Bag \#1
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bayesian MLE}
+Recall Bayes' rule:
+\[
+P(A\,\vert\,B) = \frac{P(B\,\vert\,A)P(A)}{P(B)}
+\]
+We can rewrite this as
+\[
+P(\textrm{parameters}\,\vert\,\textrm{data}) = \frac{P(\textrm{data}\,\vert\,\textrm{parameters}) P(\textrm{parameters})}{P(\textrm{data})}
+\]
+or, dividing out $P(\textrm{data})$ (which is uninformative for our purposes)
+\[
+P(\textrm{parameters}\,\vert\,\textrm{data}) \propto P(\textrm{data}\,\vert\,\textrm{parameters}) P(\textrm{parameters})
+\]
+or
+\[
+\textrm{posterior\,density} = \textrm{likelihood\,function}\times\textrm{prior\,density}
+\]
+\end{frame}
+
+\begin{frame}{Bayesian vs. Classical Approach}
+\begin{itemize}
+	\item Bayesian proponents say that estimation is not deducing values of fixed parameters, but rather sharpening subjective beliefs about the state of the world
+	\item But if this subjectivity is uncomfortable because a researcher prefers ``black and white'' truths, then classical method may be preferable
+	\item Basically, each approach has pros and cons
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Another Example}
+Another example to illustrate the Bayesian way of thinking: Consider the problem of predicting the temperature on a certain day of the year
+\begin{itemize}
+	\item Classical statistics would possibly estimate an OLS model of temperature on a variety of covariates and then generate a prediction
+	\item Bayesian statistics would create a prior distribution based on (e.g. the historical average of the temperatures on that day) and then estimate a posterior distribution
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pros and Cons of Bayesian Approach}
+Pros
+\begin{itemize}
+	\item Can find efficient solutions to complex estimation problems (e.g. MCMC, which is quite popular)
+	\item Doesn't tie the researcher to a single ``black and white'' result
+	\item Recognizes that research process is sharpening of beliefs, not finding the one right answer
+\end{itemize}
+Cons
+\begin{itemize}
+	\item More difficult to interpret results
+	\item Requires more parameterization than classical MLE
+	\item Posterior is influenced by the prior (so if your prior is bad, posterior may also be bad)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Random coefficients}
+\begin{itemize}
+	\item Random coefficients refers to a modeling technique where each individual is assumed to have a different $\beta$, e.g. $\beta_{i} \sim N(\beta,\Sigma)$
+	\item Since the Bayesian approach assumes a distribution of the parameter vector, it is tempting to equate the posterior distribution with the distribution of random coefficients
+	\item The two methods are quite different, and although both involve a distribution, they should not be confused
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Random Coefficients vs. Unobserved Heterogeneity}
+When should I use cluster-corrected standard errors, and when should I use robust standard errors?
+\begin{itemize}
+	\item We previously talked about heterogeneity in unobservables, which allows us to recover ``correct'' theta estimates
+	\item Introducing heterogeneity into the parameter estimates is another method of allowing for ``correct'' estimates; it's just harder to interpret when you get a different coefficient vector for each person
+	\item Now need to make distributional assumptions on theta AND the error term
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Random Coefficients: Example}
+This example comes from Train (pp. 137-138)
+\begin{itemize}
+	\item Suppose the utility for individual $i$ for choice $j$ is $u_{ij} = X_{ij}\beta_{i}+\varepsilon_{ij}$
+	\item The choice probability $P_{ij}$ is now an integral over the (continuous) distribution of $\beta$:
+	\[
+	P_{ij} = \int \left(\frac{\exp(X_{ij}\beta)}{\sum_{k} \exp(X_{ik}\beta)}\right) f(\beta) d\beta
+	\]
+	\item So our likelihood function is now
+	\[
+	\ell = \sum_{i} \sum_{j} y_{ij}\ln \left(P_{ij}\right)
+	\]
+	where the maximization goes over the parameters of the distribution (e.g. $\beta$ and $\Sigma$)
+\end{itemize}
+\end{frame}
+
+
+\end{document}

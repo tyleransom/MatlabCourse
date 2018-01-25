@@ -1,0 +1,291 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+\usepackage[autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bq}{\begin{quote}}
+\newcommand{\eq}{\end{quote}}
+\newcommand{\bd}{\begin{description}}
+\newcommand{\ed}{\end{description}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+
+\title[]{Improving Computational Efficiency}
+\author{Tyler Ransom}
+\institute{Duke University}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+   \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Plan}
+Discuss how to improve computational efficiency in the following ways:
+      \bi 
+      \item shell scripts
+      \item providing analytical gradient
+      \item saving results along the way
+      \item compiled routines
+      \item mex files
+      \item Matlab coder
+      \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Shell scripts}
+
+   \bi 
+   \item By now you should be comfortable with doing batch submission on the Duke econ cluster (with the \texttt{matsub} command)
+   \item We'll discuss how to automate this process using shell scripts
+   \item Shell scripts are analogous to do-files or m-files
+      \bi 
+      \item They just execute linux commands instead of Stata or Matlab commands
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Anatomy of a Shell Script}
+
+   \bi 
+   \item First set of lines is like a \LaTeX\,  preamble
+      \bi 
+      \item Sets up options and gives the system some context
+      \ei
+   \item Last set of lines is where user inputs commands
+   \item Comments in shell scripts are done with \#
+   \item ``Preamble'' options are initialized with ``\#!'' or ``\#\$'' so comments shouldn't start with those characters
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Why use a shell script?}
+
+   \bi 
+   \item Allows a user to automate processes, minimizing typographical errors
+   \item Users can have the Duke cluster send an email message when the job is finished
+   \item Users can create custom names for their scripts (instead of ``matsub'' or ``statasub'')
+   \item If users are performing computations via other languages like C++ or Fortran, shell scripts are the only way to submit those types of jobs to the cluster
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Shell script example: Matlab}
+\texttt{
+\hspace{-.25cm}\#!/bin/sh\\
+\#\$ -S /bin/sh\\
+\#\$ -N ``my shell script name'' [default is shell script filename]\\
+\#\$ -cwd -j y\\
+\#\$ -V\\
+\#\$ -M my\_net\_id@duke.edu -m e\\
+/usr/local/bin/matlab -nodesktop -nodisplay -nosplash -nojvm < my\_m\_file.m > my\_m\_file.log
+}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Options you should know about}
+
+   \bi 
+   \item ``\texttt{\#\$ -N}'' tells the system what name you want
+   \item ``\texttt{\#\$ -M my\_net\_id@duke.edu -m e}'' tells the system you would like to email your duke address (``\texttt{-m e}'' indicates it should only send email upon completion and not at the start)
+   \item NOTE: you can specify multiple email addresses, but they all must be duke econ usernames
+   \item I don't touch the other options, but you can find out more about what they do at \url{https://help.econ.duke.edu/wiki/help:batchcluster}
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Shell script example: Stata}
+\texttt{
+\hspace{-.25cm}\#!/bin/sh\\
+\#\$ -S /bin/sh\\
+\#\$ -N ``job name''\\
+\#\$ -cwd -j y\\
+\#\$ -V\\
+\#\$ -M my\_net\_id@duke.edu --m \\
+/usr/local/stata11/stata-se -b do my\_do\_file.do
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Shell script example: Fortran/C++}
+\texttt{
+\hspace{-.25cm}\#!/bin/sh\\
+\#\$ -S /bin/sh\\
+\#\$ -N ``job name''\\
+\#\$ -cwd -j y\\
+\#\$ -V\
+\#\$ -M my\_net\_id@duke.edu --m \\
+path\_to\_my\_fortran\_or\_C++\_exectuable
+}
+\end{frame}
+
+\begin{frame}
+\frametitle{Providing Analytical Gradient}
+   \bi 
+   \item Often, you will need to estimate a large-scale problem that takes an extremely long time to solve with \texttt{fminunc}
+   \item Fminunc runs much more quickly when the user supplies the analytical gradient of the objective function
+   \item Matlab doesn't have to numerically approximate the gradient, which speeds things up
+   \ei
+\end{frame}
+
+\begin{frame}[fragile]{Syntax for providing analytical gradient}
+   \bi 
+   \item The analytical gradient is defined in the objective function and passed to \texttt{fminunc} as a second output of the function, e.g.
+   \ei
+\begin{lstlisting}
+function [like, grad] = mylikelihood(b,X,y);
+like = ...;
+grad = ...;
+end
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Syntax for providing analytical hessian}
+   \bi 
+   \item Users may also provide the analytical hessian to \texttt{fminunc}. The syntax for this is very similar to that of the gradient:
+   \ei
+\begin{lstlisting}
+function [like, grad,hess] = mylikelihood(b,X,y);
+like = ...;
+grad = ...;
+hess = ...;
+end
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Analytical gradient/hessian}
+   \bi 
+   \item As with starting values, the more information a user provides fminunc, the better/more quickly the optimizer will operate
+   \item It takes a lot of ``programming time'' to formulate the gradient and/or hessian, but it could have huge payoffs in terms of ``computational time''
+   \item Tradeoff between spending more time coding and spending more time waiting for code to run
+   \item Matlab has the optimization option \texttt{'DerivativeCheck'} which allows the user to check how close her analytical gradient is to Matlab's numerical approximation
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Saving results along the way}
+   \bi 
+   \item One huge headache saver when you're doing a computationally intensive problem is to save your results along the way
+   \item E.g. every 50 iterations, update the results matrix
+   \item Then, if you encounter an unforeseen problem down the line, you still have the estimates within the past 50 iterations, which will allow you to pick up where you left off
+   \item This can be implemented in a number of ways. I prefer generating a global variable that keeps track of the iteration count
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Compiled Routines}
+Matlab has a number of built-in estimation functions, e.g.
+      \bi 
+      \item \texttt{regress} : OLS regression
+      \item \texttt{glmfit} : GLS regression with a variety of models
+         \bi 
+         \item Logit/Probit
+         \item Poisson
+         \ei
+      \item \texttt{mnrfit} : multinomial regression (for multinomial choice models)
+         \bi 
+         \item Logit/Probit
+         \ei
+      \item \texttt{nlinfit} : nonlinear least squares
+      \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Compiled Routines}
+Advantages
+      \bi 
+      \item Much faster than \texttt{fminunc} (or any other optimizer)
+      \item Includes helpful output like standard errors, sum of squared residuals, F-test for joint significance, etc.
+      \item Works well with other compiled routines to get predicted residuals, confidence intervals, etc.
+      \ei
+No sense in reinventing the wheel
+      \bi 
+      \item Unless your instructor/professor tells you to (so you'll learn what's actually going on)
+      \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Compiled Routines}
+   \bi 
+   \item If you need to estimate a certain type of model, chances are there is a compiled routine in Matlab already
+   \item However, most work in structural applied micro requires you to come up with your own model, which may not be compatible with a compiled routine
+   \item You should still try to use compiled routines whenever possible, because they provide a huge bang for your buck
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Mex files}
+   \bi 
+   \item Matlab has the ability to link with compiled languages like C and Fortran
+   \item A Matlab function that calls a C/Fortran function is called a mex file (Make EXecutable)
+   \item The mex file acts exactly like a Matlab function, except it is written in a compiled language so it gets evaluated much more quickly and efficiently
+   \item There is really no limit to how you can use Mex files with Matlab
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Mex files}
+   What you need to run a mex file:
+      \bi 
+      \item C/Fotran compiler that is compatible with Matlab
+      \item Knowledge of C/Fortran (since the bulk of the mex file is written in this language)
+      \item Gateway Routine (interfaces C/C++ and MATLAB)
+      \item Computational Routine (written in C/C++/Fortran that performs the computations you want executed at faster speeds)
+      \item Preprocessor Macros (for building platform-independent code)
+      \ei
+   Note: the first element of an array in C/Fortran is 0 but in Matlab it is 1
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Compiled Languages}
+   \bi 
+   \item If code runs so much more quickly and efficiently in compiled languages like C and Fortran, why not always use them for computationally burdensome jobs?
+   \item Just as there is a tradeoff between ``programming time'' and ``computation time'' there is also a tradeoff between ``computational efficiency'' and ``user friendliness''
+   \item It is much more difficult to debug code and interactively work with data in compiled languages
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Matlab Coder}
+   \bi 
+   \item Mathworks has a program called Matlab Coder which coverts matlab scripts in to C++ files.
+   \item This allows users to completely test and debug code in Matlab, then port that code over into C++ in a form that can be run on multiple platforms
+   \item This resource is currently unavailable in the Duke Econ cluster, but it will become available sometime soon
+   \item This is perhaps the best way to speed up Matlab code, and doesn't require an extensive knowledge of C++ to do it
+   \ei
+\end{frame}
+\end{document}

@@ -1,0 +1,442 @@
+%% LyX 2.0.0 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{babel}
+\usepackage{float}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
+ {hyperref}
+\usepackage{breakurl}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{}
+
+\@ifundefined{showcaptionsetup}{}{%
+ \PassOptionsToPackage{caption=false}{subfig}}
+\usepackage{subfig}
+\makeatother
+
+\begin{document}
+
+\title{Problem Set 2 Solutions}
+
+
+\author{Tyler Ransom}
+
+\maketitle
+Directions: Answer all questions. Clearly label all answers. Show
+all of your code. Compute standard errors for all parameter estimates.
+Turn in the following to me via your dropbox (in a folder labeled
+'MatlabPS2.2') in Sakai by 11:59 p.m. on Thursday, August 2, 2012: 
+\begin{itemize}
+\item m-file(s)
+\item .sh shell script file that executes your m-file(s)
+\item a log file (from off the cluster)
+\item matsub.oXXXXX file
+\item pdf version of your writeup with its \LaTeX source code
+\end{itemize}
+Put the names of all group members at the top of your writeup (each
+student must turn in his/her own materials).
+\begin{enumerate}
+\item Gradient of Multinomial Logit.
+
+\begin{enumerate}
+\item Following Train (p. 63), but adapting his derivation for the partial
+with respect to $\beta_{j}$ instead of the whole vector $\beta$:
+\begin{eqnarray*}
+\frac{\partial\ell}{\partial\beta_{j}} & = & \frac{\partial}{\partial\beta_{j}}\sum_{i}\sum_{j}\sum_{t}d_{ijt}\ln\left(\frac{\exp\left(X_{ijt}\beta_{j}\right)}{\sum_{k}\exp\left(X_{ikt}\beta_{k}\right)}\right)\\
+ & = & \frac{\partial\sum_{i}\sum_{j}\sum_{t}d_{ijt}\left(X_{ijt}\beta_{j}\right)}{\partial\beta_{j}}-\frac{\partial\sum_{i}\sum_{j}\sum_{t}d_{ijt}\ln\left(\sum_{k}\exp\left(X_{ikt}\beta_{k}\right)\right)}{\partial\beta_{j}}\\
+ & = & \sum_{i}\sum_{t}d_{ijt}X_{ijt}-\frac{\partial}{\partial\beta_{j}}\sum_{i}\sum_{j}\sum_{t}d_{ijt}\ln\left(\sum_{k}\exp\left(X_{ikt}\beta_{k}\right)\right)\\
+ & = & \sum_{i}\sum_{t}d_{ijt}X_{ijt}-\frac{\partial}{\partial\theta_{j}}\sum_{i}\sum_{t}\ln\left(\sum_{k}\exp\left(X_{ikt}\theta_{k}\right)\right)\left[\sum_{j}d_{ijt}\right]\\
+ & = & \sum_{i}\sum_{t}d_{ijt}X_{ijt}-\sum_{i}\sum_{t}\frac{\partial}{\partial\beta_{j}}\ln\left(\sum_{k}\exp\left(X_{ikt}\beta_{k}\right)\right)\left[1\right]\\
+ & = & \sum_{i}\sum_{t}d_{ijt}X_{ijt}-\sum_{i}\sum_{t}\frac{1}{\sum_{k}\exp\left(X_{ikt}\beta_{k}\right)}\frac{\partial}{\partial\beta_{j}}\left(\sum_{k}\exp\left(X_{ikt}\beta_{k}\right)\right)\\
+ & = & \sum_{i}\sum_{t}d_{ijt}X_{ijt}-\sum_{i}\sum_{t}\frac{X_{ijt}\exp\left(X_{ijt}\beta_{j}\right)}{\sum_{k}\exp\left(X_{ikt}\beta_{k}\right)}\\
+ & = & \sum_{i}\sum_{t}d_{ijt}X_{ijt}-\sum_{i}\sum_{t}P_{ijt}X_{ikt}\\
+ & = & \sum_{i}\sum_{t}\left(d_{ijt}-P_{ijt}\right)X_{ijt}
+\end{eqnarray*}
+In matrix form, this is
+\[
+\frac{\partial\ell}{\partial\beta_{j}}=X_{j}^{\prime}\left(d_{j}-P_{j}\right)
+\]
+where $X_{j}$ is a matrix of dimension $\left(N*T\right)\times K_{j}$,
+$\beta_{j}$ is a column vector of dimension $K_{j}\times1$, and
+$d_{j}$ and $P_{j}$ are column vectors of dimension $\left(N*T\right)\times1$.
+\end{enumerate}
+\item Estimation of Multinomial Logit with and without gradient.
+
+\begin{enumerate}
+\item See Table 1.
+\item See Table 2.
+\item See m-file code and Table 3. Results are very similar with and without
+user-supplied gradient. However, starting from the same values, the
+gradient version took 29 seconds, whereas the non-gradient version
+took over 8 minutes.
+\end{enumerate}
+\item Constrained optimization within \texttt{fminunc}. 
+
+\begin{enumerate}
+\item See m-file code and Table 4.
+\end{enumerate}
+\item Estimation of normal MLE with and without gradient and hessian.
+
+\begin{enumerate}
+\item The objective function I chose to work with is $\ell=-\left(n/2\right)\ln\left(\sigma^{2}\right)-\left(1/2\sigma^{2}\right)\left(y-X\beta\right)^{\prime}\left(y-X\beta\right)$.
+If you transformed the objective function aside from taking the log,
+this will affect the hessian, and hence your standard errors. I chose
+to estimate $\sigma$ rather than $\sigma^{2}$. Hence, for my problem,
+the (negative) gradient vector is slightly different from what is
+reported in Hayashi or Greene:
+\[
+-\left[\begin{array}{c}
+\frac{\partial\ell}{\partial\beta}\\
+\frac{\partial\ell}{\partial\sigma}
+\end{array}\right]=\left[\begin{array}{c}
+\frac{-X^{\prime}\left(y-X\beta\right)}{\sigma^{2}}\\
+\frac{n}{\sigma}-\frac{\left(y-X\beta\right)^{\prime}\left(y-X\beta\right)}{\sigma^{3}}
+\end{array}\right].
+\]
+See my m-file code, as well as Table 5, for how this performed.
+\item Following part (a), the hessian for my problem is
+\[
+\left[\begin{array}{cc}
+\frac{\partial^{2}\ell}{\partial\beta\partial\beta^{\prime}} & \frac{\partial^{2}\ell}{\partial\beta\partial\sigma}\\
+\frac{\partial^{2}\ell}{\partial\sigma\partial\beta^{\prime}} & \frac{\partial^{2}\ell}{\partial\left(\sigma\right)^{2}}
+\end{array}\right]=\left[\begin{array}{cc}
+\frac{X^{\prime}X}{\sigma^{2}} & \frac{4X^{\prime}\left(y-X\beta\right)}{\sigma^{3}}\\
+\frac{4\left(y-X\beta\right)^{\prime}X}{\sigma^{3}} & -\frac{2n}{\sigma^{2}}+\frac{6\left(y-X\beta\right)^{\prime}\left(y-X\beta\right)}{\sigma^{4}}
+\end{array}\right].
+\]
+See my m-file code, as well as Table 6, for how this performed. The
+results are very similar regardless of how much analytical detail
+I provided \texttt{fminunc}. The main difference was convergence time.
+The hessian converged fastest, followed by gradient, followed by neither.
+Looking at 2(c), it is clear that once the model becomes more non-linear
+and/or increases in parameters, there are significant computational
+gains to be had from providing \texttt{fminunc} with more analytical
+information.
+\end{enumerate}
+\end{enumerate}
+\pagebreak{}
+
+\begin{table}[H]
+\caption{Tabulation of Choice Set}
+
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{ccc}
+\hline 
+Choice & Frequency & Percentage\tabularnewline
+\hline 
+School only & 2,833 & 8.75\%\tabularnewline
+Work in school & 6,591 & 20.36\%\tabularnewline
+Work PT (no school) & 4,520 & 13.96\%\tabularnewline
+Work FT (no school) & 11,584 & 35.79\%\tabularnewline
+Military & 846 & 2.61\%\tabularnewline
+Other & 5,996 & 18.52\%\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\caption{Multinomial Logit Estimation---No User-Supplied Gradient}
+
+
+\begin{centering}
+\subfloat[Multinomial Logit Point Estimates]{
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{cccccc}
+\hline 
+ & (school) & (schoolWrk) & (workPT) & (workFT) & (military)\tabularnewline
+\hline 
+constant & -2.071 & -2.110 & -0.741 & -1.368 & -0.764\tabularnewline
+male & 0.373 & -0.096 & -0.105 & 0.453 & 1.524\tabularnewline
+AFQT & 0.518 & 0.570 & 0.143 & 0.217 & 0.734\tabularnewline
+Mhgc & 0.067 & 0.015 & 0.021 & 0.000 & 0.005\tabularnewline
+hgc & 0.027 & 0.116 & -0.107 & -0.044 & -0.474\tabularnewline
+exper & -0.943 & -0.827 & 0.281 & 0.437 & 0.237\tabularnewline
+Diploma & 1.571 & 2.035 & 1.021 & 1.225 & 3.617\tabularnewline
+AA & 0.441 & 0.703 & 1.151 & 1.290 & 0.783\tabularnewline
+BA & -0.514 & -0.528 & 1.277 & 1.922 & 1.000\tabularnewline
+\hline 
+log likelihood & \multicolumn{5}{c}{-33,947.3}\tabularnewline
+iterations & \multicolumn{5}{c}{386}\tabularnewline
+\hline 
+\end{tabular}}
+\par\end{centering}
+
+\vfill{}
+
+
+\centering{}\subfloat[Multinomial Logit Standard Errors]{
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{cccccc}
+\hline 
+ & school SE & schoolWrk SE & work PT SE & work FT SE & military SE\tabularnewline
+\hline 
+constant & 0.268 & 0.227 & 0.210 & 0.177 & 0.479\tabularnewline
+male & 0.052 & 0.044 & 0.041 & 0.035 & 0.092\tabularnewline
+AFQT & 0.032 & 0.026 & 0.026 & 0.022 & 0.046\tabularnewline
+Mhgc & 0.010 & 0.008 & 0.008 & 0.007 & 0.015\tabularnewline
+hgc & 0.019 & 0.016 & 0.017 & 0.014 & 0.040\tabularnewline
+exper & 0.025 & 0.019 & 0.012 & 0.011 & 0.024\tabularnewline
+Diploma & 0.101 & 0.089 & 0.061 & 0.051 & 0.183\tabularnewline
+AA & 0.147 & 0.124 & 0.133 & 0.119 & 0.260\tabularnewline
+BA & 0.118 & 0.099 & 0.109 & 0.093 & 0.244\tabularnewline
+\hline 
+\end{tabular}}
+\end{table}
+
+
+\begin{table}[H]
+\caption{Multinomial Logit Estimation---User-Supplied Gradient}
+
+
+\begin{centering}
+\subfloat[Multinomial Logit Point Estimates]{
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{cccccc}
+\hline 
+ & (school) & (schoolWrk) & (workPT) & (workFT) & (military)\tabularnewline
+\hline 
+constant & -2.030 & -2.071 & -0.710 & -1.338 & -0.717\tabularnewline
+male & 0.372 & -0.097 & -0.105 & 0.452 & 1.523\tabularnewline
+AFQT & 0.520 & 0.571 & 0.145 & 0.219 & 0.737\tabularnewline
+Mhgc & 0.067 & 0.015 & 0.021 & 0.000 & 0.005\tabularnewline
+hgc & 0.024 & 0.113 & -0.109 & -0.046 & -0.477\tabularnewline
+exper & -0.945 & -0.828 & 0.281 & 0.436 & 0.236\tabularnewline
+Diploma & 1.577 & 2.039 & 1.024 & 1.229 & 3.618\tabularnewline
+AA & 0.444 & 0.705 & 1.152 & 1.292 & 0.785\tabularnewline
+BA & -0.508 & -0.523 & 1.282 & 1.927 & 1.007\tabularnewline
+\hline 
+log likelihood & \multicolumn{5}{c}{-33,947.3}\tabularnewline
+iterations & \multicolumn{5}{c}{24}\tabularnewline
+\hline 
+\end{tabular}}
+\par\end{centering}
+
+\vfill{}
+
+
+\centering{}\subfloat[Multinomial Logit Standard Errors]{
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{cccccc}
+\hline 
+ & school SE & schoolWrk SE & work PT SE & work FT SE & military SE\tabularnewline
+\hline 
+constant & 0.268 & 0.227 & 0.209 & 0.177 & 0.478\tabularnewline
+male & 0.052 & 0.044 & 0.041 & 0.035 & 0.092\tabularnewline
+AFQT & 0.032 & 0.026 & 0.026 & 0.022 & 0.046\tabularnewline
+Mhgc & 0.010 & 0.008 & 0.008 & 0.007 & 0.016\tabularnewline
+hgc & 0.020 & 0.016 & 0.017 & 0.014 & 0.040\tabularnewline
+exper & 0.025 & 0.019 & 0.012 & 0.011 & 0.024\tabularnewline
+Diploma & 0.101 & 0.089 & 0.061 & 0.051 & 0.182\tabularnewline
+AA & 0.147 & 0.124 & 0.133 & 0.119 & 0.260\tabularnewline
+BA & 0.118 & 0.099 & 0.109 & 0.093 & 0.244\tabularnewline
+\hline 
+\end{tabular}}
+\end{table}
+
+
+\begin{table}[H]
+\caption{Normal MLE Parameter Estimates}
+
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{ccc}
+\hline 
+Variable & Coefficient & Standard Error\tabularnewline
+\hline 
+constant & 1.440 & 0.037\tabularnewline
+male & 0.116 & 0.008\tabularnewline
+AFQT & 0.034 & 0.004\tabularnewline
+Mhgc & -0.003 & 0.001\tabularnewline
+hgc & 0.040 & 0.003\tabularnewline
+exper & 0.052 & 0.002\tabularnewline
+Diploma & -0.002 & 0.011\tabularnewline
+AA & 0.134 & 0.015\tabularnewline
+BA & 0.168 & 0.013\tabularnewline
+workSch & -0.014 & 0.001\tabularnewline
+workPT & -0.056 & 0.009\tabularnewline
+sigma & 0.486 & 0.007\tabularnewline
+\hline 
+log likelihood & \multicolumn{2}{c}{-17,167.2}\tabularnewline
+\hline 
+\end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\caption{Normal MLE Parameter Estimates with and without Gradient}
+
+
+\bigskip{}
+
+
+\begin{centering}
+\subfloat[No User-Supplied Gradient]{
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{ccc}
+\hline 
+Variable & Coefficient & Standard Error\tabularnewline
+\hline 
+constant & 1.427 & 0.037\tabularnewline
+male & 0.116 & 0.006\tabularnewline
+AFQT & 0.034 & 0.004\tabularnewline
+Mhgc & -0.003 & 0.001\tabularnewline
+hgc & 0.041 & 0.003\tabularnewline
+exper & 0.052 & 0.002\tabularnewline
+Diploma & -0.004 & 0.011\tabularnewline
+AA & 0.131 & 0.015\tabularnewline
+BA & 0.167 & 0.013\tabularnewline
+workSch & -0.014 & 0.009\tabularnewline
+workPT & -0.056 & 0.009\tabularnewline
+sigma & 0.486 & 0.002\tabularnewline
+\hline 
+log likelihood & \multicolumn{2}{c}{-17,167.32}\tabularnewline
+iterations & \multicolumn{2}{c}{133}\tabularnewline
+\hline 
+\end{tabular}}
+\par\end{centering}
+
+\vfill{}
+
+
+\centering{}\subfloat[User-Supplied Gradient]{
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{ccc}
+\hline 
+Variable & Coefficient & Standard Error\tabularnewline
+\hline 
+constant & 1.428 & 0.037\tabularnewline
+male & 0.116 & 0.006\tabularnewline
+AFQT & 0.034 & 0.004\tabularnewline
+Mhgc & -0.003 & 0.001\tabularnewline
+hgc & 0.041 & 0.003\tabularnewline
+exper & 0.052 & 0.002\tabularnewline
+Diploma & -0.003 & 0.011\tabularnewline
+AA & 0.134 & 0.015\tabularnewline
+BA & 0.166 & 0.013\tabularnewline
+workSch & -0.014 & 0.009\tabularnewline
+workPT & -0.056 & 0.009\tabularnewline
+sigma & 0.486 & 0.002\tabularnewline
+\hline 
+log likelihood & \multicolumn{2}{c}{-17,167.27}\tabularnewline
+iterations & \multicolumn{2}{c}{49}\tabularnewline
+\hline 
+\end{tabular}}
+\end{table}
+
+
+\begin{table}[H]
+\caption{Normal MLE Parameter Estimates with and without Hessian}
+
+
+\bigskip{}
+
+
+\begin{centering}
+\subfloat[No User-Supplied Gradient or Hessian]{
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{ccc}
+\hline 
+Variable & Coefficient & Standard Error\tabularnewline
+\hline 
+constant & 1.427 & 0.037\tabularnewline
+male & 0.116 & 0.006\tabularnewline
+AFQT & 0.034 & 0.004\tabularnewline
+Mhgc & -0.003 & 0.001\tabularnewline
+hgc & 0.041 & 0.003\tabularnewline
+exper & 0.052 & 0.002\tabularnewline
+Diploma & -0.004 & 0.011\tabularnewline
+AA & 0.131 & 0.015\tabularnewline
+BA & 0.167 & 0.013\tabularnewline
+workSch & -0.014 & 0.009\tabularnewline
+workPT & -0.056 & 0.009\tabularnewline
+sigma & 0.486 & 0.002\tabularnewline
+\hline 
+log likelihood & \multicolumn{2}{c}{-17,167.32}\tabularnewline
+iterations & \multicolumn{2}{c}{133}\tabularnewline
+\hline 
+\end{tabular}}
+\par\end{centering}
+
+\vfill{}
+
+
+\centering{}\subfloat[User-Supplied Gradient and Hessian]{
+
+\bigskip{}
+
+
+\centering{}%
+\begin{tabular}{ccc}
+\hline 
+Variable & Coefficient & Standard Error\tabularnewline
+\hline 
+constant & 1.428 & 0.037\tabularnewline
+male & 0.116 & 0.006\tabularnewline
+AFQT & 0.034 & 0.004\tabularnewline
+Mhgc & -0.003 & 0.001\tabularnewline
+hgc & 0.040 & 0.003\tabularnewline
+exper & 0.052 & 0.002\tabularnewline
+Diploma & -0.003 & 0.011\tabularnewline
+AA & 0.134 & 0.015\tabularnewline
+BA & 0.166 & 0.013\tabularnewline
+workSch & -0.014 & 0.009\tabularnewline
+workPT & -0.055 & 0.009\tabularnewline
+sigma & 0.486 & 0.002\tabularnewline
+\hline 
+log likelihood & \multicolumn{2}{c}{-17,167.27}\tabularnewline
+iterations & \multicolumn{2}{c}{45}\tabularnewline
+\hline 
+\end{tabular}}
+\end{table}
+
+\end{document}

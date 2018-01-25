@@ -1,0 +1,153 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{verbatim}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTE: With Ilmenau style, to get the bullets %
+% looking right, do one section and one sub-   %
+% section for each set of bullets              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{frame}
+\title{Standard Errors in Matlab}
+\author{
+	Tyler Ransom\\
+	\emph{Duke University}\\
+%    \today \\
+%    \vspace{10cm}
+}
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+\begin{itemize}
+	\item Importance of Standard Errors
+	\item Recovering SEs in GMM models
+	\item Recovering SEs in MLE models
+	\item Recovering SEs in other models 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why all the fuss over standard errors?}
+\begin{itemize}
+	\item Empiricists are in the business of estimating models and assigning meaning to those model estimates
+	\item Coupled with point estimates, standard errors are the most crucial piece of an empiricist’s findings
+	\item If the standard errors are wrong, then the results will be wrong, too, because false inferences will be made
+	\item This is why so much energy is spent deriving correct standard errors under a variety of assumptions (e.g. Hayashi’s textbook)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Standard errors}
+Economists prefer to have models with parameter estimates that are \emph{consistent} and \emph{asymptotically normal}, i.e.\\
+\begin{equation*}
+\sqrt{n}\left(\hat{\beta}-\beta\right) \overset{d}{\rightarrow} N\left(0,\textrm{Avar}\right)
+\end{equation*}
+(Hayashi, p. 113)
+\begin{itemize}
+	\item We want to know the variance of our parameter estimates so that we can tell whether or not we got a lucky draw, or if they are actually different from some number (typically zero) 
+	\item The standard errors of the $\hat{\beta}$ vector are embedded in the $\widehat{\textrm{Avar}}$ matrix (our estimate of the true $\textrm{Avar}$ matrix)
+	\item In the next few slides, we'll go over what the formula is for $\widehat{\textrm{Avar}}$ in various common econometric models
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Standard errors for GMM models (Hayashi pp. 125, 213)}
+$\widehat{\textrm{Avar}}=\left(\mathbf{Z^{\prime}X}\widehat{\mathbf{S}}^{-1}\mathbf{X^{\prime}Z}\right)^{-1}$\\
+where the optimal weighting matrix ($\textrm{plim}\,\mathbf{\widehat{W}=S}^{-1}$) is used, and\\
+\begin{eqnarray*}
+\mathbf{\widehat{S}} & = & \sum_{i=1}^{n}\hat{\varepsilon}_{i}^{2}\mathbf{x_{i}x_{i}^{\prime}}\\
+ & = & \mathbf{X^{\prime}BX}
+\end{eqnarray*}
+where
+\[
+\mathbf{B}=\left[\begin{array}{ccc}
+\hat{\varepsilon}_{1}^{2}\\
+ & \ddots\\
+  &  & \hat{\varepsilon}_{n}^{2}
+\end{array}\right]
+\]
+so
+\[
+\widehat{\textrm{Avar}}=\left(\mathbf{Z^{\prime}X}\left(\mathbf{X^{\prime}BX}\right)^{-1}\mathbf{X^{\prime}Z}\right)^{-1}
+\]
+\end{frame}
+
+\begin{frame}{Standard errors for GMM models}
+From the previous slide:
+\[
+\widehat{\textrm{Avar}}=\left(\mathbf{Z^{\prime}X}\left(\mathbf{X^{\prime}BX}\right)^{-1}\mathbf{X^{\prime}Z}\right)^{-1}
+\]
+where
+\begin{itemize}
+	\item $\mathbf{X}$ is a matrix of instruments
+	\item $\mathbf{Z}$ is a matrix of endogenous regressors
+	\item $\mathbf{B}_{i,i} = \left(y_{i}-x_{i}\hat{\beta}\right)^{2}$ 
+	\item Note: for simple OLS, substitute $\mathbf{X}$ for $\mathbf{Z}$ in the above formula
+\end{itemize}
+The standard errors are then
+\[
+\textrm{SE}_{\hat{\beta}_{k}} = \sqrt{\widehat{\textrm{Avar}}_{k,k}}
+\]
+\end{frame}
+
+\begin{frame}{Standard errors for MLE models (Hayashi pp. 475-476)}
+\[
+\widehat{\textrm{Avar}}=-\left\{ \sum_{i=1}^{n}\mathbf{H}\left(\mathbf{x_{i}};\mathbf{\widehat{\beta}}\right)\right\} ^{-1}
+\]
+where
+\[
+\mathbf{H}\left(\mathbf{x_{i}};\mathbf{\widehat{\beta}}\right)=\frac{\partial^{2}\ell\left(x_{i},\beta\right)}{\partial \beta \partial \beta ^{\prime}}
+\]
+where $\ell\left(x_{i},\beta\right)$ is the log likelihood function
+\end{frame}
+
+
+\begin{frame}[fragile]{Standard errors for MLE models}
+Recall in Matlab that \mcode{fminunc} and \mcode{fmincon} can return the numerical hessian of the objective function:
+\begin{lstlisting}
+[x,fval,exitflag,output,gradient,hessian] = fminunc('fun',x0,options,varargin)
+\end{lstlisting}
+\\
+Assuming that all regularity conditions are met, the standard errors of \mcode{x} are
+\begin{lstlisting}
+se = sqrt(diag(inv(hessian)));
+\end{lstlisting}
+since Matlab returns $-\left\{ \sum_{i=1}^{n}\mathbf{H}\left(\mathbf{x_{i}};\mathbf{\widehat{\beta}}\right)\right\}$ in the \mcode{hessian} output
+\end{frame}
+
+\begin{frame}[fragile]{Standard errors for other models}
+\begin{itemize}
+	\item All classical econometric models can be considered as either GMM or MLE. (Furthermore, GMM and MLE are asymptotically equivalent in some situations)
+	\item Most structural econometric models, however, incorporate simulation methods, multiple estimation stages, and/or contraction mapping/fixed point algorithms (in addition to a main GMM/MLE optimization)
+	\item In these more complex estimation algorithms, it's unclear how the standard errors of the parameter estimates are affected by the use of previous stage estimates and/or simulation draws
+	\item The solution to this problem is bootstrapping, which we will cover in the second Matlab module
+\end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,129 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{verbatim}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTE: With Ilmenau style, to get the bullets %
+% looking right, do one section and one sub-   %
+% section for each set of bullets              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{frame}
+\title{Iterative Estimation Algorithms}
+\author{
+	Tyler Ransom\\
+	\emph{Duke University}\\
+%    \today \\
+%    \vspace{10cm}
+}
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+\begin{itemize}
+	\item Introduce various commonly used estimation algorithms in empirical micro
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multistage Estimation Algorithms}
+\begin{itemize}
+	\item In advanced econometrics, complex algorithms abound
+	\item These algorithms pare down the dimensionality of a problem so that computation is much easier
+	\item Typically, these algorithms rely on certain theoretical assumptions, so they may not be generalizable to all types of problems
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multistage Estimation Algorithms}
+\begin{itemize}
+	\item Another property of these algorithms is that they typically induce estimation error between the multiple steps of estimation
+	\item Hence, inference on the final parameter estimates may require bootstrapping in order to recover (an approximation to) the true variance matrix of the parameter estimates
+	\item At the very least, some sort of correction to the standard errors is required
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Examples of Multistage Estimation Algorithms}
+\begin{itemize}
+	\item Expectation Maximization (EM) algorithm
+	\item Berry, Levinsohn and Pakes  (BLP) method for demand estimation
+	\item Bajari, Benkard and Levin (BBL) method for solving dynamic games
+	\item Iterative algorithm for multi-dimensional fixed effects
+	\item We'll go through each of these in more detail
+\end{itemize}
+\end{frame}
+
+\begin{frame}{EM Algorithm}
+\begin{itemize}
+	\item A famous algorithm for estimating models with missing data
+	\item Can be applied to finite mixture unobserved heterogeneity models
+	\item ``E'' step: given parameters $\theta$, estimate the probability that each person is of finite mixture type $R$
+	\item ``M'' step: given type probabilities, estimate the parameters $\theta$
+	\item Iterate until parameters $\theta$ converge
+	\item You will see this again if you take Peter Arcidiacono's dynamic discrete choice class (which I highly recommend)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{BLP method}
+\begin{itemize}
+	\item This is a famous method in IO for estimating demand for products, where the demand (market share) is a function of product characteristics interacted with consumer characteristics
+	\item The estimation method is quite complicated.
+	\item Involves a contraction mapping over consumer mean utilities
+	\item This contraction mapping is nested within a GMM algorithm
+	\item This is called a ``Contraction Mapping Fixed Point'' algorithm
+	\item Allows researcher to recover random coefficients for the consumers
+\end{itemize}
+\end{frame}
+
+\begin{frame}{BBL method}
+\begin{itemize}
+	\item Estimation algorithm for dynamic games where players are assumed to play Markov Perfect Equilibria
+	\item Step 1: estimate the policy functions and law of motion for state variables
+	\item Step 2: given the Step 1 estimates, estimate the structural parameters given the FOCs that are consistent with MPE
+	\item Iterate until structural parameters converge
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multidimensional Fixed Effects}
+Suppose we have an outcome equation 
+\[
+y_{ijt} = X_{ijt}\beta + \theta_{i} + \theta_{j} + \theta_{i} \theta_{j} + \varepsilon_{ijt}
+\]
+where $\theta_{i}$ and $\theta_{j}$ are fixed effects for two different agents e.g. worker and firm, student and teacher, individual and village
+\end{frame}
+
+\begin{frame}{Multidimensional Fixed Effects}
+\begin{itemize}
+	\item Arcidiacono et al. (2011) outlines a simple estimation routine that will allow the researcher to recover the fixed effects without having to use LSDV
+	\item Step 1: Given values for $\theta_{i}$, estimate $\theta_{j}$ and $\beta$ by OLS
+	\item Step 2: Given the estimates for $\theta_{j}$ and $\beta$, estimate $\theta_{i}$ by OLS
+	\item Iterate until all parameters converge
+\end{itemize}
+\end{frame}
+
+\end{document}

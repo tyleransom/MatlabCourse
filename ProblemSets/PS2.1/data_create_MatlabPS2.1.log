@@ -1,0 +1,570 @@
+---------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /afs/econ.duke.edu/home/t/tmr17/Teaching/PS2.1/data_create_MatlabPS2.1.log
+  log type:  text
+ opened on:  24 Jul 2012, 15:59:47
+
+. 
+. * Clean data from master.dta to class example
+. * variables desired:
+. * male
+. * AFQT
+. * Mhgc
+. * hgc
+. * exper
+. * Diploma
+. * AA
+. * BA
+. * wage
+. * activity
+. 
+. use "/afs/econ.duke.edu/home/t/tmr17/RA_Peter/NLSY97_Data/master.dta", clear
+
+. 
+. generat activity = 1 if Primary_activity<2
+(109832 missing values generated)
+
+. replace activity = 2 if Primary_activity>2 & Primary_activity<5
+(46384 real changes made)
+
+. replace activity = 3 if activity >=.
+(63448 real changes made)
+
+. 
+. replace Highest_Grade_Completed = . if Highest_Grade_Completed>25
+(14169 real changes made, 14169 to missing)
+
+. bys ID: gen t = _n
+
+. bys ID: ipolate Highest_Grade_Completed t, gen(hgc) epolate
+(3619 missing values generated)
+
+. 
+. replace Bio_mother_highest_educ = . if Bio_mother_highest_educ>25
+(9716 real changes made, 9716 to missing)
+
+. rename  Bio_mother_highest_educ Mhgc
+
+. 
+. drop if ASVAB>=.
+(26474 observations deleted)
+
+. drop if hgc>=.
+(1815 observations deleted)
+
+. drop if Mhgc>=.
+(6795 observations deleted)
+
+. 
+. drop BA AA Diploma GED
+
+. 
+. gen Diploma = year>=Diploma_year
+
+. gen AA      = year>=AA_year
+
+. gen BA      = year>=BA_year
+
+. 
+. replace BA = 0 if Diploma==0
+(0 real changes made)
+
+. replace AA = 0 if Diploma==0
+(71 real changes made)
+
+. 
+. zscore ASVAB
+z_ASVAB created with 0 missing values
+
+. ren    z_ASVAB AFQT
+
+. 
+. gen in_work = activity==2
+
+. bys ID: gen exper = sum(in_work)
+
+. 
+. merge 1:1 ID year using /afs/econ.duke.edu/data/vjh3/WageReturns/Data/y97/y97_master, keepusing(activityOct) nogen
+(label vlZ9083900 already defined)
+(label vlZ9063900 already defined)
+(label vlZ9063800 already defined)
+(label vlZ9063700 already defined)
+(label vlZ9063600 already defined)
+(label vlZ9063500 already defined)
+(label vlZ9063400 already defined)
+(label vlZ9063300 already defined)
+(label vlZ9063200 already defined)
+(label vlZ9063100 already defined)
+(label vlZ9063000 already defined)
+(label vlZ9062900 already defined)
+(label vlZ9062800 already defined)
+(label vlZ9062700 already defined)
+(label vlZ9062600 already defined)
+(label vlZ9062500 already defined)
+(label vlZ9062400 already defined)
+(label vlZ9062300 already defined)
+(label vlZ9062200 already defined)
+(label vlZ9062100 already defined)
+(label vlZ9062000 already defined)
+(label vlZ9061900 already defined)
+(label vlZ9061800 already defined)
+(label vlZ9061700 already defined)
+(label vlZ9061600 already defined)
+(label vlZ9061500 already defined)
+(label vlZ9061400 already defined)
+(label vlZ9061300 already defined)
+(label vlZ9061200 already defined)
+(label vlZ9061100 already defined)
+(label vlZ9061000 already defined)
+(label vlT2022500 already defined)
+(label vlT2021200 already defined)
+(label vlT2020900 already defined)
+(label vlT2020400 already defined)
+(label vlS1541501 already defined)
+(label vlR9829600 already defined)
+(label vlR6469600 already defined)
+(label vlR5828100 already defined)
+(label vlR5821400 already defined)
+(label vlR3788101 already defined)
+(label vlR2480900 already defined)
+(label vlR2480800 already defined)
+(label vlR2480700 already defined)
+(label vlR2480600 already defined)
+(label vlR2480500 already defined)
+(label vlR2479800 already defined)
+(label vlR2479700 already defined)
+(label vlR2479600 already defined)
+(label vlR2479500 already defined)
+(label vlR2479400 already defined)
+(label vlR1487600 already defined)
+(label vlR1487500 already defined)
+(label vlR1487400 already defined)
+(label vlR1487300 already defined)
+(label vlR1487200 already defined)
+(label vlR1487100 already defined)
+(label vlR1486900 already defined)
+(label vlR1302700 already defined)
+(label vlR1302600 already defined)
+(label vlR1302500 already defined)
+(label vlR1302400 already defined)
+(label vlR1205400 already defined)
+(label vlR1205200 already defined)
+(label vlR1205100 already defined)
+(label vlR1205000 already defined)
+(label vlR1204600 already defined)
+(label vlR1201400 already defined)
+(label vlR1201300 already defined)
+(label vlR1200200 already defined)
+(label vlR1200100 already defined)
+(label vlR1193300 already defined)
+(label vlR1193000 already defined)
+(label vlR0735700 already defined)
+(label vlR0689100 already defined)
+(label vlR0689000 already defined)
+(label vlR0688900 already defined)
+(label vlR0688800 already defined)
+(label vlR0688700 already defined)
+(label vlR0688600 already defined)
+(label vlR0688500 already defined)
+(label vlR0681200 already defined)
+(label vlR0649100 already defined)
+(label vlR0648900 already defined)
+(label vlR0609100 already defined)
+(label vlR0609000 already defined)
+(label vlR0608900 already defined)
+(label vlR0608700 already defined)
+(label vlR0608600 already defined)
+(label vlR0608500 already defined)
+(label vlR0539700 already defined)
+(label vlR0539600 already defined)
+(label vlR0538600 already defined)
+(label vlR0538200 already defined)
+(label vlR0537200 already defined)
+(label vlR0534300 already defined)
+(label vlR0533800 already defined)
+(label vlR0529701 already defined)
+(label vlR0254700 already defined)
+(label vlR0058700 already defined)
+(label vlR0057700 already defined)
+(label vlE5111808 already defined)
+(label vlcensus_region already defined)
+(label vlCollTypeAll already defined)
+(label vlR0000100 already defined)
+(label vlR0536300 already defined)
+(label vlR1235800 already defined)
+(label vlR1482600 already defined)
+(label vlZ9065800 already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       178,828
+        from master                         0  
+        from using                    178,828  
+
+    matched                            90,692  
+    -----------------------------------------
+
+. 
+. keep if age_now>=20 & age_now<=24
+(237145 observations deleted)
+
+. 
+. keep ID age_now male t AFQT Mhgc hgc exper Diploma AA BA log_wage activity activityOct
+
+. ren age_now age
+
+. drop t
+
+. bys ID: gen t = _n
+
+. xtset ID t
+       panel variable:  ID (unbalanced)
+        time variable:  t, 1 to 5
+                delta:  1 unit
+
+. drop if ID==3082 | ID==3234 | ID==4530 | ID==6574 | ID==7353
+(5 observations deleted)
+
+. xtset
+       panel variable:  ID (strongly balanced)
+        time variable:  t, 1 to 5
+                delta:  1 unit
+
+. 
+. *** Analysis quickly
+. mlogit activity male AFQT Mhgc hgc exper Diploma AA BA, base(3)
+
+Iteration 0:   log likelihood = -24949.812  
+Iteration 1:   log likelihood = -16438.222  
+Iteration 2:   log likelihood = -15951.506  
+Iteration 3:   log likelihood = -15940.309  
+Iteration 4:   log likelihood = -15940.263  
+Iteration 5:   log likelihood = -15940.263  
+
+Multinomial logistic regression                   Number of obs   =      32370
+                                                  LR chi2(16)     =   18019.10
+                                                  Prob > chi2     =     0.0000
+Log likelihood = -15940.263                       Pseudo R2       =     0.3611
+
+------------------------------------------------------------------------------
+    activity |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+1            |
+        male |   .3430778   .0715048     4.80   0.000      .202931    .4832246
+        AFQT |  -.2341097   .0425187    -5.51   0.000    -.3174447   -.1507746
+        Mhgc |   .0378394   .0138859     2.73   0.006     .0106236    .0650552
+         hgc |   .0105311   .0256253     0.41   0.681    -.0396935    .0607557
+       exper |  -.4186622   .0421939    -9.92   0.000    -.5013607   -.3359637
+     Diploma |    .347055   .1362818     2.55   0.011     .0799476    .6141624
+          AA |  -.2772794   .1905869    -1.45   0.146    -.6508229    .0962641
+          BA |  -.0188789    .156039    -0.12   0.904    -.3247098     .286952
+       _cons |  -3.368843   .3572789    -9.43   0.000    -4.069097   -2.668589
+-------------+----------------------------------------------------------------
+2            |
+        male |   .2222283   .0318285     6.98   0.000     .1598457     .284611
+        AFQT |  -.2080059   .0193623   -10.74   0.000    -.2459553   -.1700566
+        Mhgc |  -.0116143   .0060861    -1.91   0.056    -.0235428    .0003143
+         hgc |  -.1776385   .0126798   -14.01   0.000    -.2024904   -.1527865
+       exper |   1.033889   .0129725    79.70   0.000     1.008463    1.059314
+     Diploma |   1.017512   .0532723    19.10   0.000     .9131005    1.121924
+          AA |   .7358578   .0709784    10.37   0.000     .5967428    .8749728
+          BA |   2.253341   .0608968    37.00   0.000     2.133985    2.372696
+       _cons |  -.4365915   .1646182    -2.65   0.008    -.7592372   -.1139457
+-------------+----------------------------------------------------------------
+3            |  (base outcome)
+------------------------------------------------------------------------------
+
+. mlogit activityOct male AFQT Mhgc hgc exper Diploma AA BA, base(6)
+
+Iteration 0:   log likelihood = -51386.376  
+Iteration 1:   log likelihood = -41470.022  
+Iteration 2:   log likelihood =  -40059.88  
+Iteration 3:   log likelihood = -39948.369  
+Iteration 4:   log likelihood = -39947.462  
+Iteration 5:   log likelihood = -39947.461  
+
+Multinomial logistic regression                   Number of obs   =      32370
+                                                  LR chi2(40)     =   22877.83
+                                                  Prob > chi2     =     0.0000
+Log likelihood = -39947.461                       Pseudo R2       =     0.2226
+
+------------------------------------------------------------------------------
+ activityOct |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+1            |
+        male |   .3697992    .051934     7.12   0.000     .2680104     .471588
+        AFQT |   .5244476    .031508    16.64   0.000      .462693    .5862022
+        Mhgc |   .0680875   .0100832     6.75   0.000     .0483248    .0878501
+         hgc |     .01339   .0192415     0.70   0.486    -.0243227    .0511027
+       exper |   -.947774   .0251813   -37.64   0.000    -.9971284   -.8984195
+     Diploma |   1.601139   .1010221    15.85   0.000     1.403139    1.799138
+          AA |   .4565066   .1470887     3.10   0.002     .1682181    .7447951
+          BA |  -.4836566   .1173058    -4.12   0.000    -.7135719   -.2537414
+       _cons |  -1.919069   .2658974    -7.22   0.000    -2.440219    -1.39792
+-------------+----------------------------------------------------------------
+2            |
+        male |  -.0993139   .0435655    -2.28   0.023    -.1847008    -.013927
+        AFQT |   .5767168   .0263727    21.87   0.000     .5250272    .6284064
+        Mhgc |   .0159168   .0082044     1.94   0.052    -.0001634    .0319971
+         hgc |   .0999537   .0158968     6.29   0.000     .0687966    .1311108
+       exper |  -.8318493    .018622   -44.67   0.000    -.8683477   -.7953509
+     Diploma |   2.067155   .0885189    23.35   0.000     1.893661    2.240648
+          AA |   .7204713   .1238869     5.82   0.000     .4776573    .9632852
+          BA |  -.4934152   .0987427    -5.00   0.000    -.6869474    -.299883
+       _cons |     -1.933   .2244617    -8.61   0.000    -2.372937   -1.493063
+-------------+----------------------------------------------------------------
+3            |
+        male |  -.1053389   .0409911    -2.57   0.010      -.18568   -.0249978
+        AFQT |   .1462364   .0262171     5.58   0.000     .0948517     .197621
+        Mhgc |   .0215698   .0080679     2.67   0.008      .005757    .0373826
+         hgc |  -.1130409   .0164464    -6.87   0.000    -.1452753   -.0808066
+       exper |   .2798385   .0122999    22.75   0.000     .2557313    .3039458
+     Diploma |   1.033969    .060744    17.02   0.000     .9149134    1.153025
+          AA |   1.158122   .1331928     8.70   0.000     .8970692    1.419175
+          BA |     1.2905   .1087943    11.86   0.000     1.077267    1.503733
+       _cons |  -.6795719   .2089078    -3.25   0.001    -1.089024     -.27012
+-------------+----------------------------------------------------------------
+4            |
+        male |   .4516954   .0348399    12.96   0.000     .3834105    .5199803
+        AFQT |   .2200213   .0221598     9.93   0.000     .1765888    .2634537
+        Mhgc |   .0004465   .0067649     0.07   0.947    -.0128124    .0137054
+         hgc |  -.0488907   .0135878    -3.60   0.000    -.0755224    -.022259
+       exper |   .4355071   .0107089    40.67   0.000     .4145181    .4564961
+     Diploma |   1.236782   .0505296    24.48   0.000     1.137746    1.335818
+          AA |   1.296427    .119431    10.86   0.000     1.062346    1.530507
+          BA |   1.934187   .0927454    20.85   0.000     1.752409    2.115964
+       _cons |   -1.31095   .1763256    -7.43   0.000    -1.656542   -.9653582
+-------------+----------------------------------------------------------------
+5            |
+        male |   1.522907   .0920872    16.54   0.000     1.342419    1.703394
+        AFQT |   .7374972   .0460371    16.02   0.000     .6472661    .8277282
+        Mhgc |   .0057562   .0155176     0.37   0.711    -.0246576    .0361701
+         hgc |  -.4802532   .0400684   -11.99   0.000    -.5587859   -.4017205
+       exper |   .2351528   .0237737     9.89   0.000     .1885572    .2817483
+     Diploma |   3.632067   .1825349    19.90   0.000     3.274306    3.989829
+          AA |   .7907373     .26038     3.04   0.002      .280402    1.301073
+          BA |   1.014112   .2437802     4.16   0.000     .5363115    1.491912
+       _cons |  -.6955741   .4783679    -1.45   0.146    -1.633158    .2420097
+-------------+----------------------------------------------------------------
+6            |  (base outcome)
+------------------------------------------------------------------------------
+
+. reg    log_wage male hgc exper Diploma AA BA
+
+      Source |       SS       df       MS              Number of obs =   24602
+-------------+------------------------------           F(  6, 24595) =  327.42
+       Model |  466.869092     6  77.8115154           Prob > F      =  0.0000
+    Residual |  5844.96329 24595  .237648436           R-squared     =  0.0740
+-------------+------------------------------           Adj R-squared =  0.0737
+       Total |  6311.83238 24601  .256568123           Root MSE      =  .48749
+
+------------------------------------------------------------------------------
+    log_wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        male |   .1204375   .0062767    19.19   0.000     .1081349    .1327402
+         hgc |   .0465915     .00274    17.00   0.000     .0412209     .051962
+       exper |   .0513634   .0018574    27.65   0.000     .0477229     .055004
+     Diploma |   .0000509   .0111438     0.00   0.996    -.0217917    .0218934
+          AA |   .1290107   .0148496     8.69   0.000     .0999047    .1581168
+          BA |   .1733736   .0128208    13.52   0.000     .1482441     .198503
+       _cons |   1.296958   .0331335    39.14   0.000     1.232014    1.361902
+------------------------------------------------------------------------------
+
+. reg    log_wage male AFQT Mhgc hgc exper Diploma AA BA
+
+      Source |       SS       df       MS              Number of obs =   24602
+-------------+------------------------------           F(  8, 24593) =  256.76
+       Model |  486.548432     8   60.818554           Prob > F      =  0.0000
+    Residual |  5825.28395 24593  .236867562           R-squared     =  0.0771
+-------------+------------------------------           Adj R-squared =  0.0768
+       Total |  6311.83238 24601  .256568123           Root MSE      =  .48669
+
+------------------------------------------------------------------------------
+    log_wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        male |   .1189977   .0062799    18.95   0.000     .1066888    .1313066
+        AFQT |   .0350957   .0038512     9.11   0.000      .027547    .0426443
+        Mhgc |   -.003164   .0012099    -2.62   0.009    -.0055354   -.0007926
+         hgc |   .0399924   .0028659    13.95   0.000     .0343751    .0456096
+       exper |    .052314   .0018626    28.09   0.000     .0486632    .0559649
+     Diploma |  -.0010248   .0111263    -0.09   0.927     -.022833    .0207835
+          AA |   .1337708   .0148496     9.01   0.000     .1046647    .1628768
+          BA |   .1701721    .012817    13.28   0.000     .1450501    .1952941
+       _cons |   1.419904   .0368323    38.55   0.000      1.34771    1.492097
+------------------------------------------------------------------------------
+
+. xtreg  log_wage male AFQT Mhgc hgc exper Diploma AA BA, fe
+note: male omitted because of collinearity
+note: AFQT omitted because of collinearity
+note: Mhgc omitted because of collinearity
+
+Fixed-effects (within) regression               Number of obs      =     24602
+Group variable: ID                              Number of groups   =      6084
+
+R-sq:  within  = 0.0722                         Obs per group: min =         1
+       between = 0.0486                                        avg =       4.0
+       overall = 0.0590                                        max =         5
+
+                                                F(5,18513)         =    287.93
+corr(u_i, Xb)  = -0.0296                        Prob > F           =    0.0000
+
+------------------------------------------------------------------------------
+    log_wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        male |  (omitted)
+        AFQT |  (omitted)
+        Mhgc |  (omitted)
+         hgc |   .0496305   .0051079     9.72   0.000     .0396186    .0596425
+       exper |   .0514062   .0025167    20.43   0.000     .0464732    .0563392
+     Diploma |   .0147193   .0753909     0.20   0.845    -.1330538    .1624924
+          AA |   .1133154   .0246993     4.59   0.000     .0649025    .1617283
+          BA |   .1799341   .0152425    11.80   0.000     .1500574    .2098108
+       _cons |    1.30479   .0868073    15.03   0.000      1.13464     1.47494
+-------------+----------------------------------------------------------------
+     sigma_u |  .36859767
+     sigma_e |  .40304524
+         rho |  .45544693   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0:     F(6083, 18513) =     2.85         Prob > F = 0.0000
+
+. xtreg  log_wage male AFQT Mhgc hgc exper Diploma AA BA, re
+
+Random-effects GLS regression                   Number of obs      =     24602
+Group variable: ID                              Number of groups   =      6084
+
+R-sq:  within  = 0.0720                         Obs per group: min =         1
+       between = 0.0771                                        avg =       4.0
+       overall = 0.0769                                        max =         5
+
+                                                Wald chi2(8)       =   1963.25
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2        =    0.0000
+
+------------------------------------------------------------------------------
+    log_wage |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        male |   .1166755   .0091688    12.73   0.000     .0987051     .134646
+        AFQT |   .0317923   .0055338     5.75   0.000     .0209462    .0426385
+        Mhgc |  -.0028432     .00177    -1.61   0.108    -.0063122    .0006259
+         hgc |   .0419354   .0032791    12.79   0.000     .0355084    .0483624
+       exper |   .0524445   .0019264    27.22   0.000     .0486689    .0562201
+     Diploma |  -.0100938   .0149376    -0.68   0.499    -.0393709    .0191832
+          AA |   .1280676   .0176181     7.27   0.000     .0935368    .1625984
+          BA |   .1836734   .0129138    14.22   0.000     .1583628    .2089841
+       _cons |   1.397341    .042961    32.53   0.000     1.313139    1.481543
+-------------+----------------------------------------------------------------
+     sigma_u |  .28656746
+     sigma_e |  .40304524
+         rho |  .33578169   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. 
+. gen schwrk = (activityOct==2)
+
+. gen workPT = (activityOct==3)
+
+. 
+. program normal
+  1. version 11.0
+  2. args lnf Xb sigma
+  3. quietly replace `lnf'=ln(normalden($ML_y1, `Xb', `sigma'))
+  4. end
+
+. 
+. ml model lf normal (log_wage=male AFQT Mhgc hgc exper Diploma AA BA schwrk workPT) /sigma
+
+. ml max
+
+initial:       log likelihood =     -<inf>  (could not be evaluated)
+feasible:      log likelihood =  -147129.3
+rescale:       log likelihood = -40492.964
+rescale eq:    log likelihood = -18873.827
+Iteration 0:   log likelihood = -18873.827  
+Iteration 1:   log likelihood = -17495.528  
+Iteration 2:   log likelihood = -17170.591  
+Iteration 3:   log likelihood = -17167.255  
+Iteration 4:   log likelihood = -17167.254  
+
+                                                  Number of obs   =      24602
+                                                  Wald chi2(10)   =    2099.10
+Log likelihood = -17167.254                       Prob > chi2     =     0.0000
+
+------------------------------------------------------------------------------
+    log_wage |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+        male |   .1156512   .0063063    18.34   0.000     .1032912    .1280113
+        AFQT |   .0344652   .0038644     8.92   0.000      .026891    .0420394
+        Mhgc |  -.0031246   .0012087    -2.59   0.010    -.0054936   -.0007557
+         hgc |   .0395479   .0028993    13.64   0.000     .0338654    .0452305
+       exper |   .0519373    .002022    25.69   0.000     .0479742    .0559005
+     Diploma |  -.0014722   .0111432    -0.13   0.895    -.0233125    .0203681
+          AA |   .1343138   .0148547     9.04   0.000     .1051991    .1634285
+          BA |   .1686776   .0132015    12.78   0.000     .1428031     .194552
+      schwrk |  -.0140563   .0089987    -1.56   0.118    -.0316935     .003581
+      workPT |  -.0556633   .0087195    -6.38   0.000    -.0727532   -.0385734
+       _cons |   1.440929    .036946    39.00   0.000     1.368516    1.513342
+-------------+----------------------------------------------------------------
+sigma        |
+       _cons |   .4861979   .0021919   221.82   0.000     .4819019    .4904939
+------------------------------------------------------------------------------
+
+. 
+. reg log_wage male AFQT Mhgc hgc exper Diploma AA BA schwrk workPT
+
+      Source |       SS       df       MS              Number of obs =   24602
+-------------+------------------------------           F( 10, 24591) =  209.82
+       Model |  496.203777    10  49.6203777           Prob > F      =  0.0000
+    Residual |  5815.62861 24591  .236494189           R-squared     =  0.0786
+-------------+------------------------------           Adj R-squared =  0.0782
+       Total |  6311.83238 24601  .256568123           Root MSE      =  .48631
+
+------------------------------------------------------------------------------
+    log_wage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        male |   .1156512   .0063077    18.34   0.000     .1032878    .1280146
+        AFQT |   .0344652   .0038653     8.92   0.000      .026889    .0420414
+        Mhgc |  -.0031246   .0012089    -2.58   0.010    -.0054942   -.0007551
+         hgc |   .0395479      .0029    13.64   0.000     .0338638     .045232
+       exper |   .0519373   .0020225    25.68   0.000     .0479731    .0559015
+     Diploma |  -.0014722   .0111457    -0.13   0.895    -.0233185    .0203741
+          AA |   .1343138    .014858     9.04   0.000     .1051911    .1634365
+          BA |   .1686776   .0132044    12.77   0.000      .142796    .1945591
+      schwrk |  -.0140563   .0090008    -1.56   0.118    -.0316983    .0035858
+      workPT |  -.0556633   .0087214    -6.38   0.000    -.0727579   -.0385688
+       _cons |   1.440929   .0369543    38.99   0.000     1.368497    1.513362
+------------------------------------------------------------------------------
+
+. 
+. drop schwrk workPT
+
+. reshape wide age log_wage activity activityOct hgc exper Diploma AA BA, i(ID) j(t)
+(note: j = 1 2 3 4 5)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                    32370   ->    6474
+Number of variables                  14   ->      49
+j variable (5 values)                 t   ->   (dropped)
+xij variables:
+                                    age   ->   age1 age2 ... age5
+                               log_wage   ->   log_wage1 log_wage2 ... log_wage5
+                               activity   ->   activity1 activity2 ... activity5
+                            activityOct   ->   activityOct1 activityOct2 ... activityOct5
+                                    hgc   ->   hgc1 hgc2 ... hgc5
+                                  exper   ->   exper1 exper2 ... exper5
+                                Diploma   ->   Diploma1 Diploma2 ... Diploma5
+                                     AA   ->   AA1 AA2 ... AA5
+                                     BA   ->   BA1 BA2 ... BA5
+-----------------------------------------------------------------------------
+
+. outsheet ID male AFQT Mhgc hgc? exper? Diploma? AA? BA? log_wage? activity? using nlsy97.csv, comma nol replace
+
+. outsheet ID male AFQT Mhgc hgc? exper? Diploma? AA? BA? log_wage? activityOct? using nlsy97m.csv, comma nol replace
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /afs/econ.duke.edu/home/t/tmr17/Teaching/PS2.1/data_create_MatlabPS2.1.log
+  log type:  text
+ closed on:  24 Jul 2012, 16:01:22
+---------------------------------------------------------------------------------------------------------------------

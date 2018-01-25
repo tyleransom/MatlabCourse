@@ -1,0 +1,412 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' option.
+\usepackage[framed,autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bq}{\begin{quote}}
+\newcommand{\eq}{\end{quote}}
+\newcommand{\bd}{\begin{description}}
+\newcommand{\ed}{\end{description}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+
+\title[]{Programming Practices}
+\author{Tyler Ransom\thanks{Taken from Justin Trogdon}}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+   \titlepage
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Steps to good programming}
+
+   \bi 
+   \item Plan
+   \item Develop
+   \item Test
+   \item Time should be spent equally on all three steps
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Plan}
+
+   \bi 
+   \item Make a road map
+      \bi 
+      \item What is the desired output?
+      \item What variables will be needed?
+      \item Are there components that will be used again?
+      \ei
+   \item Keep components small and manageable
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Develop}
+
+   \bi 
+   \item Take advantage of existing routines (e.g. \mcode{regress})
+   \item Be efficient
+      \bi 
+      \item Vectorize code in Matlab
+      \ei
+   \item Include detailed comments (see below)
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Test}
+
+   \bi 
+   \item Test each component of a program separately
+   \item Use small subset of data
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Reproducibility}
+
+   \bi 
+   \item All work should be reproducible
+      \bi 
+      \item Accidental deletion of results
+      \item Computer/hard drive crashes
+      \item Referee wants a slightly different specification but you can't find the .log file with the results
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Master file}
+
+   \bi 
+   \item In Stata, create a master .do file ('master.do') that contains:
+      \bi 
+      \item Descriptions of each step in analysis
+      \item Calls to each .do file in order
+      \ei
+   \item Could run this file and reproduce all files and results
+   \item Useful for documentation
+      \bi 
+      \item File structure
+      \item History of analysis decisions
+      \ei
+   \item Can do something similar in Matlab, but Matlab's treatment of functions makes this a bit unnatural
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Organization of files}
+
+   \bi 
+   \item Rule 1: One directory, and one directory only, for a project
+      \bi 
+      \item Some people use separate subdirectories for:
+         \bi 
+         \item Data files
+         \item Program files (e.g., .sas, .m and .do files)
+         \item Log files
+         \ei
+      \item I tend to keep them all in the same directory
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Organization of files}
+
+   \bi 
+   \item Rule 2: No interactive exploratory analysis is official until it's in a .do (.sas, .m) file
+      \bi 
+      \item Explore the data interactively, but anything that you really want to remember should be in a .do (.m) file
+      \item The record of previously used commands makes this easy
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Organization of files}
+
+   \bi 
+   \item Rule 3: All .do (.sas, .m) files create logs
+      \bi 
+      \item The standard preamble always checks that any open logs are closed and a new log is started
+      \item Do not have to be as protective of .log files as they can always be re-generated
+         \bi 
+         \item Unless of course the program takes awhile
+         \ei
+      \item In Matlab, use \mcode{diary} to create a log file
+      	\bi
+      	\item Downside: \texttt{diary} only appends and does not ever replace
+      	\item As a result, I prefer to create Matlab log files through the \texttt{matsub} command
+      	\ei
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Organization of files}
+
+   \bi 
+   \item Rule 4: Naming conventions can help in locating files
+      \bi 
+      \item Prefixes indicating purpose
+         \bi 
+         \item Creating data sets ('cr \emph{filename}.  \emph{ext}')
+         \item Analysis files ('an \emph{filename}. \emph{ext}')
+         \ei
+      \item Use same name for log files as for program files (.m or.do)
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{File naming conventions}
+
+   \bi 
+   \item Creating data sets
+      \bi 
+      \item When creating datasets, use the same name of the data for the program and log files
+      \item Make sure to compress (pack) the data before storing to the server
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{File naming conventions}
+
+   \bi 
+   \item Analysis files
+      \bi 
+      \item No creation of permanent datasets
+      \item an*.ext files can be run in any order and will either:
+         \bi 
+         \item Produce the same results
+         \item Not work at all
+         \ei
+      \item All datasets created within an*.ext files should be temporary
+         \bi 
+         \item Stata: tmpfile  \emph{lclname} [ \emph{lclname} [...]]
+         \ei
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{File naming conventions}
+
+   \bi 
+   \item Use suffixes that indicate order files
+      \bi 
+      \item Version number (\_v1)
+      \item Date (\_20120708)
+      \ei
+   \item Common to have several files doing very similar things with slight changes
+      \bi 
+      \item Different estimation samples
+      \item Different variable definitions
+      \item Sensitivity analysis for different specifications
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Organization of files}
+
+   \bi 
+   \item Rule 5: Once a .do file is added to the master.do file, it is  \emph{never} edited again.
+   \item If a change is necessary (e.g., add a variable to a specification), write a new .do (.sas, .m) file
+   \item .do (.sas, .m) files are typically very small --> low memory cost to store many of them
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Reproducibility}
+
+   \bi 
+   \item Side note: make sure that commands that are random are reproducible
+      \bi 
+      \item Set the random number seed before generating random number or drawing random samples (e.g., bootstrapping)
+      \item In Stata, 'sort' will randomly break ties.
+         \bi 
+         \item Use 'isid  \emph{varlist}, sort' if existing variables uniquely identify an observation
+         \item Create a unique identifier otherwise and include it in sort
+         \ei
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Reproducibility}
+
+   \bi 
+   \item There are significant lags in publication process. You will likely have to return to code that is months old and understand it.
+   \item Keep all programs (.sas, .m and .do) and .log files (these are small)
+   \item Make sure all programs are well documented
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Documenting Code}
+
+   \bi 
+   \item Why document? 
+      \bi 
+      \item Because you may write code and have to return to it 1 year later and alter it. 
+      \item Those who do not document suffer a harsh punishment later...
+      \ei
+   \item The holy trinity of documentation in coding computer programs:
+      \bi 
+      \item Comments
+      \item Meaningful Identifiers
+      \item White Space
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Comments}
+
+   \bi 
+   \item Comment in such a way that someone else could understand what you're doing, including yourself months from now.
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Commenting in Matlab}
+
+   \bi 
+   \item Begin with a \% and then write whatever you want 
+   \item Multi-line comments can be offset with '\%\{' and '\%\}'
+   		\bi
+   		\item These are only useful when you are inside a continued line (see \url{http://blogs.mathworks.com/loren/2006/08/30/commenting-code/})
+   		\ei
+   \item Matlab's text editor will color these comments green
+   \item Comments falling just beneath a function's header, i.e., [FunctionName]([Arguments]), are printed when one types: 
+      \bi 
+      \item help [FunctionName]
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Meaningful Identifiers}
+
+   \bi 
+   \item Variable names should clearly indicate what the variable does or is for
+   \item One convention:
+      \bi 
+      \item GradSchoolIsFun
+      \ei
+   \item In Stata, variable and value labels make it easier to understand and data set
+   \item Matlab doesn't have such utilities, so variable names are that much more important
+   \ei
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{White Space}
+
+   \bi 
+   \item Use blank lines to separate your code into the appropriate (commented) blocks, e.g.
+   \begin{lstlisting}
+   %%%%%%%%%%%%%%%%%%%%%%%%
+   % Initializing Variables
+   %%%%%%%%%%%%%%%%%%%%%%%%
+   \end{lstlisting}
+   \item Use indentation of command nests (e.g., if-else-end, while-end, switch-case-end) 
+      \bi 
+      \item Matlab's text editor will perform these indentations automatically
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{White Space}
+\bi
+   \item Separate your code blocks into cells, e.g.
+\begin{lstlisting}
+%% Variable Initialization
+educ = data(:,1);
+...
+%% OLS Estimation
+...
+\end{lstlisting}
+   \item These cells can then be ``folded'' so that the structure of your program is immediately visible
+   \item Whatever you put after the \%\% is automatically bolded
+\ei
+\end{frame}
+
+\begin{frame}
+\frametitle{White Space}
+
+   \bi 
+   \item Finally, wrap long command lines to ensure readability
+      \bi 
+      \item Matlab:  \mcode{...[enter]}
+      \item Stata: 
+         \bi 
+         \item /* [enter]
+         \item   */ 
+         \item Can also reset delimiter (for a line) from 'enter' (default): ``\#delimit ;''
+         \item /// [enter] will also do the trick
+         \ei
+      \ei
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Network manners: Memory}
+
+   \bi 
+   \item Work with subsets when developing
+   \item Compress data when saving
+   \item Delete intermediary data files (you can always reproduce them exactly!)
+   \item Zip files that are not in use
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Network manners: CPU}
+
+   \bi 
+   \item Check server status before beginning long jobs
+   \item Avoid looping over observations (i.e., vectorize code)
+   \item Background jobs in batch mode
+   \item 'nice' option in unix
+   \ei
+\end{frame}
+\end{document}

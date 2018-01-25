@@ -1,0 +1,199 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[numbered,framed,autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bq}{\begin{quote}}
+\newcommand{\eq}{\end{quote}}
+\newcommand{\bd}{\begin{description}}
+\newcommand{\ed}{\end{description}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+
+\begin{document}
+\begin{frame}
+\title{Graphics and Exportation in Matlab}
+\author{
+	Tyler Ransom\\
+	\emph{Duke University}\\
+%    \today \\
+%    \vspace{10cm}
+}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Why use graphics?}
+   \bi 
+   \item Helps readers internalize large amounts of data
+   \item Helps you better understand your data and where variation (and hence, identification) is coming from
+   \item Allows easier identification of outliers that may impact estimation results
+   \item ``A picture is worth 1,000 words''
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Graphics in Matlab}
+   \bi 
+   \item Matlab can create plots of data or graphs of mathematical equations
+   \item Easiest way to create figures is on the workspace dropdown menu right above variable names (help comes up when you hover over a command)
+   \item Can also access a similar menu from the main Matlab menu bar (``Graphics'' next to ``View'')
+%   \item See \url{http://www.mathworks.com/help/techdoc/creating\_plots/f9-53405.html\#bqui8wp} for an overall guide on major plotting functions
+   \ei
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Commands for plotting mathematical functions (2D)}
+\begin{lstlisting}
+%plot:      a simple plot of elements of a vector (basically, it connects the dots)
+%ezplot:    Plots a function f(x) over range [a,b]
+%fplot:     Plots a function f(x) over range [a,b]
+%contour:   graphs contour lines of a matrix
+%ezcontour: graphs contour lines of a function f(x,y) over range [ax,bx] x [ay,by]
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Commands for visualizing data (2D)}
+\begin{lstlisting}
+%scatter: classic scatter plot of X on Y
+%hist:    histogram
+%bar:     bar graph
+%barh:    horizontal bar graph
+%stem:    stem graph
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Commands for plotting mathematical functions (3D)}
+\begin{lstlisting}
+%plot3:   same as plot, but with 3rd dimension
+%ezplot3: same as ezplot, but with 3rd dimension
+%mesh:    wireframe 3D mesh plot of a matrix
+%ezmesh:  wireframe 3D mesh plot of f(x,y) over range [ax,bx] x [ay,by]
+%surf:    3D shaded surface plot of a matrix
+%ezsurf:  3D shaded surface plot of f(x,y) over range [ax,bx] x [ay,by]
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Commands for visualizing data (3D)}
+\begin{lstlisting}
+%scatter3
+%hist3
+%bar3
+%bar3h
+\end{lstlisting}
+\bi
+\item These do exactly what their 2D counterparts do, except they require one additional input vector
+\ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Adding bells and whistles}
+   \bi 
+   \item The drop-down menu in the workspace only allows for the most basic plot output
+   \item Once a graph is generated, users can interactively add more features to it
+   \item Useful features include: legend, axis labels, axis tick marks, title
+   \item Can also add data summary statistics to plots quite easily
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Reproducibility}
+   \bi 
+   \item Since you will almost always need to change a plot after creating it, reproducibility is the name of the game
+   \item Even though you can edit graphs interactively, you can still produce source code from the finished product so you won't have to manually change the graph each time you produce it
+   \item This is done interactively in the figure window under (File-> Generate M-file)
+   \item Matlab then generates a function m-file which you can call in your script, or paste directly into your script with slight modifications
+   \ei
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Overlaying graphs}
+   \bi 
+   \item Matlab allows users to overlay multiple different plots
+   \item The hold command does this
+   \item Syntax is
+   \ei
+\begin{lstlisting}
+[plot1]
+hold on
+[plot2]
+hold off
+[plot3]
+\end{lstlisting}
+   \bi
+   \item This plots Plot1 and Plot2 on the same graph and Plot3 on a separate graph
+   \item See help hold for more details---this command is very versatile
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Multiple graphs}
+   \bi 
+   \item If a user wants to display a ``matrix'' of separate graphs, she should use the subplot command
+   \item \mcode{subplot(m,n,p)} or \mcode{subplot(mnp)} breaks the figure window into an m-by-n grid and creates an axes object in the pth location for the current plot
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Saving and exporting figures}
+   \bi
+   \item Figures will likely go into a set of presentation slides or a paper
+   \item Matlab can easily save figures in a variety of formats 
+   \item Most publishers prefer .eps (Encapsulated PostScript) files because they can easily be re-sized without losing resolution
+   \item Once a figure has been exported, it can easily be placed in a .tex document
+   \item Since reproducibility is so important, exporting graphs is a simple and effective way to streamline the updating process
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Syntax of exporting}
+   \bi
+   \item Matlab's print command can print and export figures
+   \item I find this command to be highly unwieldy, so I instead downloaded a user-written command called exportfig
+   \item Syntax for this is:
+   \item \mcode{exportfig(figname, 'myfig.eps')}
+   \item Note that \mcode{figname} needs to have been defined prior to a plot command with \mcode{figname = figure;}
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Conclusion}
+   \bi 
+   \item Reproducibility is the name of the game
+   \item You should always be searching for ways to automate your tasks
+   \item There's pretty much always a user-written utility out there somewhere that can accomplish what you're looking for
+   \ei
+\end{frame}
+\end{document}

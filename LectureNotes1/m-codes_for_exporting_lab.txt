@@ -1,0 +1,43 @@
+clear; clc; load carbig
+X = [ones(size(Weight)) Weight Displacement Cylinders];
+y = Acceleration;
+X\y
+varnames = cellstr(char('Variable','Intercept','Weight','Displacement','Cylinders'));
+varnames{1,2}='Coefficient';
+varnames{1,3}='Standard Error';
+varnames{1,4}='T-statistic';
+varnames{1,5}='p-value';
+b  = X\y;
+se = sqrt(diag(((y-X*(X\y))'*(y-X*(X\y)))/(size(X,1)-size(X,2))*((X'*X)\eye(size(X,2)))));
+t  = b./se;
+p  = 2*(1-tcdf(abs(t),size(X,1)-size(X,2)))
+xlswrite('estimation_results.xlsx',varnames,1)
+xlswrite('estimation_results.xlsx',[b se t p],1,'B2')
+
+
+OR
+
+clear; clc; load carbig
+X = [ones(size(Weight)) Weight Displacement Cylinders];
+y = Acceleration;
+X\y
+headers = cellstr(char('Variable','Coefficient'))';
+varnames = cellstr(char('Intercept','Weight','Displacement','Cylinders'));
+estimate = num2cell(X\y);
+result = cat(1,headers,cat(2,varnames,estimate));
+xlswrite('estimation_results1.xlsx',result,1)
+or
+matrix2latex(result, 'output.tex', 'rowLabels', rowLabels, 'columnLabels', columnLabels, 'alignment', 'c', 'format', '%-6.2f', 'size', 'tiny')
+
+
+OR
+
+clear; clc; load carbig
+X = [ones(size(Weight)) Weight Displacement Cylinders];
+y = Acceleration;
+X\y
+headers = cellstr(char('Variable','Coefficient'))';
+varnames = cellstr(char('Intercept','Weight','Displacement','Cylinders'));
+estimate = X\y;
+matrix2latex(result, 'output.tex', 'rowLabels', varnames, 'columnLabels', headers, 'alignment', 'c', 'format', '%-6.2f', 'size', 'tiny')
+

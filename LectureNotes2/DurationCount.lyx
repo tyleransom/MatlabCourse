@@ -1,0 +1,1375 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass beamer
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Duration Analysis & Count Data
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Based on Wooldridge (2003) Chapters 19-20
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+Tyler Ransom
+\end_layout
+
+\begin_layout Institute
+Duke University
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Introduction
+\end_layout
+
+\begin_layout Itemize
+Today we'll discuss how to estimate a model where the dependent variable
+ takes on two irregular types: a time interval, and a positive integer
+\end_layout
+
+\begin_layout Itemize
+When the dependent variable is a time interval, we use duration analysis
+ to recover the parameters of interest
+\end_layout
+
+\begin_layout Itemize
+When the dependent variable is a positive integer, we use count data methods
+ to estimate the parameters
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+When 
+\begin_inset Formula $y$
+\end_inset
+
+ is a time interval
+\end_layout
+
+\begin_layout Standard
+When our dependent variable 
+\begin_inset Formula $y$
+\end_inset
+
+ is a time interval, we use duration analysis to estimate the model, which
+ helps us understand the cause(s) of the dependent variable.
+ 
+\end_layout
+
+\begin_layout Itemize
+Examples include:
+\end_layout
+
+\begin_layout Itemize
+weeks unemployed until finding a job
+\end_layout
+
+\begin_layout Itemize
+months married until divorce
+\end_layout
+
+\begin_layout Itemize
+days until arrest after incarceration
+\end_layout
+
+\begin_layout Itemize
+survey rounds until attrition
+\end_layout
+
+\begin_layout Itemize
+weeks pregnant until delivery
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Background
+\end_layout
+
+\begin_layout Itemize
+For now, we assume that time is continuous
+\end_layout
+
+\begin_layout Itemize
+The dependent variable is known as the 
+\begin_inset Quotes eld
+\end_inset
+
+
+\series bold
+initial state
+\series default
+
+\begin_inset Quotes erd
+\end_inset
+
+ (e.g.
+ marriage is the 
+\begin_inset Quotes eld
+\end_inset
+
+initial state
+\begin_inset Quotes erd
+\end_inset
+
+ in the divorce example.
+ Someone exits the initial state when they become divorced)
+\end_layout
+
+\begin_layout Itemize
+We also assume that there is no re-entry into the initial state
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Therefore, we only consider spells until the first exit
+\end_layout
+
+\begin_layout Itemize
+Thus, 
+\begin_inset Formula $y$
+\end_inset
+
+ would be comprised of first marriages (for the divorce example) or first-time
+ offenders (in the arrest example)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+For now, we also assume there are no covariates, i.e.
+ we only look at unconditional time to exit
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Hazard function
+\end_layout
+
+\begin_layout Standard
+In order to better understand the econometrics of duration models, let's
+ introduce some notation:
+\end_layout
+
+\begin_layout Itemize
+Let 
+\begin_inset Formula $T$
+\end_inset
+
+ be a random variable with outcomes 
+\begin_inset Formula $t$
+\end_inset
+
+ and continuous distribution 
+\begin_inset Formula $F$
+\end_inset
+
+ with support 
+\begin_inset Formula $\left(0,\infty\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $F\left(t\right)=\Pr\left(T\leq t\right),\,\, t\geq0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The 
+\series bold
+survivor function
+\series default
+ is the probability of surviving past 
+\begin_inset Formula $t$
+\end_inset
+
+ and is denoted 
+\begin_inset Formula $1-F\left(t\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The 
+\series bold
+hazard function
+\series default
+ 
+\begin_inset Formula $\lambda\left(t\right)$
+\end_inset
+
+ is the instantaneous rate of exiting the initial state per unit of time
+ and is defined by
+\begin_inset Formula 
+\[
+\lambda\left(t\right)=\lim_{h\downarrow0}\frac{\Pr\left(t\leq T\leq t+h\,\,\vert\,\, T\geq t\right)}{h}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Hazard function
+\end_layout
+
+\begin_layout Standard
+Some examples of the hazard function:
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $T$
+\end_inset
+
+ is unemployment length (in weeks) then 
+\begin_inset Formula $\lambda\left(20\right)$
+\end_inset
+
+ is approximately the probability of accepting a job offer between weeks
+ 20 and 21 (conditional on not having accepted a job before then)
+\end_layout
+
+\begin_layout Itemize
+If 
+\begin_inset Formula $T$
+\end_inset
+
+ is length of first marriage (in months) then 
+\begin_inset Formula $\lambda\left(84\right)$
+\end_inset
+
+ is the approximate probability of becoming divorced between months 84 and
+ 85
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Hazard function
+\end_layout
+
+\begin_layout Itemize
+You can use math to crank out the following using the definition of the
+ hazard function given previously:
+\begin_inset Formula 
+\[
+\lambda\left(t\right)=\frac{f\left(t\right)}{1-F\left(t\right)}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The simplest form of a hazard function is 
+\begin_inset Formula $\lambda\left(t\right)=\gamma$
+\end_inset
+
+ (some constant)
+\end_layout
+
+\begin_layout Itemize
+Thus we have
+\begin_inset Formula 
+\begin{eqnarray*}
+\gamma & = & \frac{f\left(t\right)}{1-F\left(t\right)}\\
+f\left(t\right) & = & \gamma\left(1-F\left(t\right)\right)
+\end{eqnarray*}
+
+\end_inset
+
+which is an ordinary differential equation.
+ The solution is
+\begin_inset Formula 
+\[
+F\left(t\right)=1-e^{-\gamma t}
+\]
+
+\end_inset
+
+which is the CDF of the exponential distribution.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Duration dependence
+\end_layout
+
+\begin_layout Itemize
+The exponential distribution has the property of 
+\series bold
+memorylessness
+\end_layout
+
+\begin_layout Itemize
+This means there is no 
+\series bold
+duration dependence
+\series default
+ (i.e.
+ the probability of exiting the initial state is the same regardless of
+ how long you've been in the initial state)
+\end_layout
+
+\begin_layout Itemize
+In practice, this is usually not a realistic assumption
+\end_layout
+
+\begin_layout Itemize
+We usually want distributions that exhibit duration dependence, meaning
+ 
+\begin_inset Formula $\lambda\left(t\right)$
+\end_inset
+
+ is actually a function of 
+\begin_inset Formula $t$
+\end_inset
+
+ (not a constant)
+\end_layout
+
+\begin_layout Itemize
+Common distributions that exhibit duration dependence but aren't too hairy
+ to work with:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Weibull distribution
+\end_layout
+
+\begin_layout Itemize
+Log-logistic distribution
+\end_layout
+
+\end_deeper
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Introducing covariates
+\end_layout
+
+\begin_layout Standard
+If we want to study the hazard rate conditional on a matrix of covariates
+ 
+\begin_inset Formula $X$
+\end_inset
+
+, for 
+\begin_inset Formula $X$
+\end_inset
+
+'s that do not vary over time (i.e.
+ are measured at the start of the spell):
+\begin_inset Formula 
+\[
+\lambda\left(t;x\right)=\frac{f\left(t\,\vert\, X\right)}{1-F\left(t\,\vert\, X\right)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+This leads us to the 
+\series bold
+proportional hazards model
+\series default
+:
+\begin_inset Formula 
+\[
+\lambda\left(t;X\right)=\kappa\left(X\right)\lambda_{0}\left(t\right)
+\]
+
+\end_inset
+
+where we assume that the hazard function is separable between 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $t$
+\end_inset
+
+.
+ In the case, we call 
+\begin_inset Formula $\lambda_{0}$
+\end_inset
+
+ the 
+\series bold
+baseline hazard
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Functional form
+\end_layout
+
+\begin_layout Itemize
+In a proportional hazards model, it is common to assume
+\begin_inset Formula 
+\[
+\kappa\left(\cdot\right)=e^{X\beta}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Plugging this back into the conditional hazard function gives us
+\begin_inset Formula 
+\begin{equation}
+\lambda\left(t;X\right)=\lambda_{0}\left(t\right)\exp\left(X\beta\right)
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Simplifying, we have
+\begin_inset Formula 
+\[
+\ln\left(\lambda\left(t;X\right)\right)=X\beta+\ln\left(\lambda_{0}\left(t\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Remember, 
+\begin_inset Formula $X$
+\end_inset
+
+ cannot be time-varying!
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Time-varying covariates
+\end_layout
+
+\begin_layout Itemize
+We can introduce time-varying covariates 
+\begin_inset Formula $X\left(t\right)$
+\end_inset
+
+, but we need to be a lot more careful
+\end_layout
+
+\begin_layout Itemize
+In particular, the 
+\begin_inset Formula $X$
+\end_inset
+
+'s must be strictly exogenous (meaning 
+\begin_inset Formula $X\left(t\right)$
+\end_inset
+
+ needs to have a well defined path once an agent leaves the initial state)
+\end_layout
+
+\begin_layout Itemize
+If these stricter assumptions are met, we can write the proportional hazard
+ as
+\begin_inset Formula 
+\[
+\lambda\left(t;X\left(t\right)\right)=\kappa\left(X\left(t\right)\right)\lambda_{0}\left(t\right)
+\]
+
+\end_inset
+
+with
+\begin_inset Formula 
+\[
+\kappa\left(\cdot\right)=\exp\left(X\left(t\right)\beta\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If we assume 
+\begin_inset Formula $T\sim$
+\end_inset
+
+log-logistic then
+\begin_inset Formula 
+\[
+\lambda\left(t;X\left(t\right)\right)=\frac{\alpha t^{\alpha-1}\exp\left(X\left(t\right)\beta\right)}{1+t^{\alpha}\exp\left(X\left(t\right)\beta\right)}
+\]
+
+\end_inset
+
+and we can estimate 
+\begin_inset Formula $\alpha,\beta$
+\end_inset
+
+ by MLE
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Estimation
+\end_layout
+
+\begin_layout Standard
+Estimation of duration data depends on the sampling scheme.
+ Let's suppose 
+\begin_inset Formula $T$
+\end_inset
+
+ is the duration of unemployment for a male in the year 1998.
+ To get data, we can sample in one of two ways:
+\end_layout
+
+\begin_layout Enumerate
+flow sampling: Randomly sample men who became unemployed in 1998
+\end_layout
+
+\begin_layout Enumerate
+stock sampling: Randomly sample men who were unemployed in the last week
+ of 1998
+\end_layout
+
+\begin_layout Itemize
+In both cases, we need to correct for right censoring, because there will
+ be people who are still in the initial state at the time of sampling
+\end_layout
+
+\begin_layout Itemize
+In the case of stock sampling, we also need to correct for left censoring
+\end_layout
+
+\begin_layout Itemize
+Unobserved heterogeneity is much more difficult to correct for in duration
+ analysis, so we won't cover it today
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Estimation of expected duration
+\end_layout
+
+\begin_layout Standard
+Suppose we weren't interested in estimating the hazard function, just the
+ effect of 
+\begin_inset Formula $X$
+\end_inset
+
+ on the expected duration 
+\begin_inset Formula $\mathbb{E}\left[t\right]$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Itemize
+If there were no censoring, we could just run OLS
+\begin_inset Formula 
+\[
+\ln\left(t^{\ast}\right)=X\delta+e
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $t^{\ast}$
+\end_inset
+
+ is a vector of actual duration times for staying in the initial state
+\end_layout
+
+\begin_layout Itemize
+If we assume 
+\begin_inset Formula $T\sim$
+\end_inset
+
+Weibull, we can still estimate the expected duration using OLS, but 
+\begin_inset Formula 
+\[
+\delta_{j}=\frac{-\beta_{j}}{\alpha}
+\]
+
+\end_inset
+
+where 
+\begin_inset Formula $\delta_{j}$
+\end_inset
+
+ is the effect of 
+\begin_inset Formula $X_{j}$
+\end_inset
+
+ (the 
+\begin_inset Formula $j$
+\end_inset
+
+th column of 
+\begin_inset Formula $X$
+\end_inset
+
+) on expected duration and 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is a parameter of the Weibull distribution
+\end_layout
+
+\begin_layout Itemize
+If there is right censoring, need to do standard tobit to estimate 
+\begin_inset Formula $\delta$
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Estimation of the hazard function
+\end_layout
+
+\begin_layout Standard
+When estimating parameters of the hazard function (e.g.
+ equation 1) with flow sampling, need to do maximum likelihood and pay attention
+ to truncation.
+ The likelihood function looks like
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathcal{L}\left(t_{i};X_{i},\theta\right) & = & \prod_{i}f\left(t_{i}\,\vert\, X_{i};\theta\right)^{d_{i}}\left[1-F\left(t_{i}\,\vert\, X_{i};\theta\right)\right]^{1-d_{i}},\\
+ &  & d_{i}=1\left[\mbox{uncensored}\right]
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Likelihood for stock sampling
+\end_layout
+
+\begin_layout Itemize
+With stock sampling, we need to introduce some more notation:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $a_{i}$
+\end_inset
+
+ is the starting time for person 
+\begin_inset Formula $i$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $b$
+\end_inset
+
+ is the maximum length of the spell (e.g.
+ 52 weeks for the 
+\begin_inset Quotes eld
+\end_inset
+
+unemployed in year 1998
+\begin_inset Quotes erd
+\end_inset
+
+ example)
+\end_layout
+
+\begin_layout Itemize
+The likelihood function is then
+\begin_inset Formula 
+\[
+\mathcal{L}\left(t_{i};X_{i},\theta\right)=\prod_{i}\frac{f\left(t_{i}\,\vert\, X_{i};\theta\right)^{d_{i}}\left[1-F\left(t_{i}\,\vert\, X_{i};\theta\right)\right]^{1-d_{i}}}{1-F\left(b-a_{i}\,\vert\, X_{i};\theta\right)}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Proportional hazard models in Matlab
+\end_layout
+
+\begin_layout Itemize
+The Matlab command for estimating a Cox proportional hazard model (the most
+ common type of duration analysis) is 
+\family typewriter
+coxphfit
+\end_layout
+
+\begin_layout Itemize
+The full syntax is
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+[b,logl,H,stats] = coxphfit(X,y,'name',value)
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+H
+\family default
+ is a two-column matrix that contains 
+\begin_inset Formula $y$
+\end_inset
+
+ values in the first column and cumulative hazard values in the second
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+'name'
+\family default
+ is how you invoke optimization options
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Grouped data
+\end_layout
+
+\begin_layout Standard
+The assumption that time is continuous can be a hard pill to swallow, especially
+ when the data is measured on a weekly or monthly basis.
+ For example:
+\end_layout
+
+\begin_layout Itemize
+We only have weekly data on arrests
+\end_layout
+
+\begin_layout Itemize
+but arrests could have happened any time in that week
+\end_layout
+
+\begin_layout Itemize
+We need to account for this discreteness in our estimation
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Estimation of grouped data
+\end_layout
+
+\begin_layout Standard
+We observe 
+\begin_inset Formula $y_{m},c_{m},X$
+\end_inset
+
+ where 
+\begin_inset Formula $m$
+\end_inset
+
+ indicates the time range (e.g.
+ 
+\begin_inset Formula $y_{m}=1\left[\mbox{exited\, initial\, state\, in\, week\,\ensuremath{m}\, of\,1998}\right]$
+\end_inset
+
+, 
+\begin_inset Formula $c_{m}=1\left[\mbox{censored\, in\, week\,}m\right]$
+\end_inset
+
+, and 
+\begin_inset Formula $X$
+\end_inset
+
+ is a matrix of time-invariant covariates
+\end_layout
+
+\begin_layout Itemize
+If we assume a 
+\series bold
+piecewise-constant proportional hazard
+\series default
+, then
+\begin_inset Formula 
+\[
+\lambda\left(t;X,\theta\right)=\kappa\left(X\beta\right)\lambda_{m},\, a_{m-1}\leq t<a_{m}
+\]
+
+\end_inset
+
+and we get the likelihood function
+\begin_inset Formula 
+\[
+\mathcal{L}\left(X;\theta\right)=\prod_{i=1}^{N}\left[\prod_{h=1}^{m_{i}-1}\alpha_{h}\left(X_{i};\theta\right)\right]\left[1-\alpha_{m_{i}}\left(X_{i};\theta\right)\right]^{d_{i}}
+\]
+
+\end_inset
+
+where
+\begin_inset Formula 
+\[
+\alpha_{m}=\lambda_{m}\left(a_{m}-a_{m-1}\right)\exp\left(-\exp\left(X\beta\right)\right)
+\]
+
+\end_inset
+
+and 
+\begin_inset Formula $a_{m}$
+\end_inset
+
+ is a time period (e.g.
+ one week); 
+\begin_inset Formula $d_{i}$
+\end_inset
+
+ is the same as before
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Kaplan-Meier estimator
+\end_layout
+
+\begin_layout Standard
+One of the most famous estimators in duration analysis (used frequently
+ in the finance literature) is called the 
+\series bold
+Kaplan-Meier estimator of the survivor function
+\series default
+.
+\end_layout
+
+\begin_layout Itemize
+No covariates
+\end_layout
+
+\begin_layout Itemize
+Want to estimate 
+\begin_inset Formula $\lambda_{m}$
+\end_inset
+
+ with grouped data
+\begin_inset Formula 
+\[
+\hat{s}\left(a_{m}\right)=\prod_{r=1}^{m}\frac{N_{r}-E_{r}}{N_{r}}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+where 
+\begin_inset Formula $N_{r}$
+\end_inset
+
+ is the number of people who have neither left the initial state nor been
+ censored at 
+\begin_inset Formula $a_{r-1}$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Formula $E_{r}$
+\end_inset
+
+ is the number of people leaving the initial state between 
+\begin_inset Formula $a_{r-1}$
+\end_inset
+
+ and 
+\begin_inset Formula $a_{r}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Time-varying covariates in grouped data
+\end_layout
+
+\begin_layout Standard
+If we want to estimate grouped data with time-varying covariates, then the
+ covariates 
+\begin_inset Formula $X_{m}$
+\end_inset
+
+ must not change within each 
+\begin_inset Formula $a_{m}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If this is the case, then we can rewrite the likelihood function from before,
+ but add an 
+\begin_inset Formula $m$
+\end_inset
+
+ subscript to the 
+\begin_inset Formula $X$
+\end_inset
+
+ matrix:
+\begin_inset Formula 
+\[
+\mathcal{L}\left(X;\theta\right)=\mathcal{L}\left(X;\theta\right)=\prod_{i=1}^{N}\left[\prod_{h=1}^{m_{i}-1}\alpha_{h}\left(X_{im};\theta\right)\right]\left[1-\alpha_{m_{i}}\left(X_{im};\theta\right)\right]^{d_{i}}
+\]
+
+\end_inset
+
+where
+\begin_inset Formula 
+\[
+\alpha_{m}=\lambda_{m}\left(a_{m}-a_{m-1}\right)\exp\left(-\exp\left(X_{m}\beta\right)\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Competing risks models
+\end_layout
+
+\begin_layout Standard
+If we want to generalize our duration analysis to having more than one exit
+ state, this is called a 
+\series bold
+competing risks model
+\end_layout
+
+\begin_layout Itemize
+In our employment example, we considered employment as the 
+\begin_inset Quotes eld
+\end_inset
+
+exit state
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We could consider a model in which the individual can move either from unemploym
+ent to employment, or from unemployment to out of the labor force
+\end_layout
+
+\begin_layout Itemize
+In a competing risks model, each of the 
+\begin_inset Quotes eld
+\end_inset
+
+risks
+\begin_inset Quotes erd
+\end_inset
+
+ is assumed to be independent of one another
+\end_layout
+
+\begin_layout Itemize
+The econometrics get a lot more hairy, so we won't cover it today
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Models with count data
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Count data
+\series default
+ is a set of data where the dependent variable takes on values that are
+ nonnegative integers.
+ In this case, 
+\begin_inset Formula $y$
+\end_inset
+
+ is called a 
+\series bold
+count variable
+\series default
+.
+ Examples include
+\end_layout
+
+\begin_layout Itemize
+Number of cigarettes smoked in a day
+\end_layout
+
+\begin_layout Itemize
+Number of plane crashes experienced by an airline over a certain period
+ of time
+\end_layout
+
+\begin_layout Itemize
+Number of days spent in a hospital last year
+\end_layout
+
+\begin_layout Itemize
+Number of times visited a recreational site
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Count data
+\end_layout
+
+\begin_layout Standard
+Just like with binary models (where 
+\begin_inset Formula $y$
+\end_inset
+
+ only takes on values in 
+\begin_inset Formula $\left\{ 0,1\right\} $
+\end_inset
+
+), we need to estimate the model differently
+\end_layout
+
+\begin_layout Itemize
+The main reason is that if we performed OLS on 
+\begin_inset Formula $y=X\beta+\varepsilon$
+\end_inset
+
+, we would find that 
+\begin_inset Formula $\hat{y}$
+\end_inset
+
+ would be negative for some values of 
+\begin_inset Formula $X$
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+This is the same reason we do a logit or probit model for binary data
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+In order to ensure that 
+\begin_inset Formula $\hat{y}$
+\end_inset
+
+ is always positive, we make our favorite transformation: 
+\begin_inset Formula $\exp\left(X\beta\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+We also need to assume a better distribution for 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Poisson regression
+\end_layout
+
+\begin_layout Standard
+Let's assume 
+\begin_inset Formula $y\vert X\sim$
+\end_inset
+
+Poisson with mean parameter 
+\begin_inset Formula $\mu=\exp\left(X\beta\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The pdf of this distribution is
+\begin_inset Formula 
+\[
+f\left(y\vert X\right)=\frac{\exp\left(-\mu\left(X\beta\right)\right)\left[\mu\left(X\beta\right)\right]^{y}}{y!}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Our quasi MLE (QMLE) likelihood function is then
+\begin_inset Formula 
+\[
+\ell=\sum_{i}y_{i}X_{i}\beta-\exp\left(X_{i}\beta\right)-\ln\left(y!\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Interpretation
+\end_layout
+
+\begin_layout Standard
+Interpretation of Poisson regression coefficients is unlike typical regression
+ models:
+\begin_inset Formula 
+\[
+\beta_{j}=\frac{\partial\ln\left(\mathbb{E}\left[y\vert X\right]\right)}{\partial X_{j}}
+\]
+
+\end_inset
+
+Turning this into a differential and rearranging terms, we get
+\begin_inset Formula 
+\[
+\Delta\mathbb{E}\left[y\vert X\right]\approx100\beta_{j}\Delta X_{j}
+\]
+
+\end_inset
+
+Thus 
+\begin_inset Formula $\beta_{j}$
+\end_inset
+
+ is a semielasticity
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Other count distributions
+\end_layout
+
+\begin_layout Standard
+Besides the Poisson distribution, we can also use the following distributions
+ to fit our count data:
+\end_layout
+
+\begin_layout Itemize
+Negative binomial
+\end_layout
+
+\begin_layout Itemize
+Binomial
+\end_layout
+
+\begin_layout Itemize
+Exponential
+\end_layout
+
+\begin_layout Itemize
+Fractional logit
+\end_layout
+
+\begin_layout Standard
+See Wooldridge for more information regarding these.
+ Also be aware that inference is slightly more complicated with count models.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Conclusion
+\end_layout
+
+\begin_layout Itemize
+Today we discussed how to estimate models where the dependent variable takes
+ a specific form that is different than what we're used to
+\end_layout
+
+\begin_layout Itemize
+You will likely come across duration analysis in the future
+\end_layout
+
+\begin_layout Itemize
+You may not come across count data, but if you do, you know where to look
+ for more information
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\end_body
+\end_document

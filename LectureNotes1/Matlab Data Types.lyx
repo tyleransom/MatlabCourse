@@ -1,0 +1,693 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass beamer
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Data in Matlab
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Data Types in Matlab
+\end_layout
+
+\begin_layout Itemize
+Numeric Classes
+\end_layout
+
+\begin_layout Itemize
+The Logical Class
+\end_layout
+
+\begin_layout Itemize
+Characters and Strings
+\end_layout
+
+\begin_layout Itemize
+Structures
+\end_layout
+
+\begin_layout Itemize
+Cell Arrays
+\end_layout
+
+\begin_layout Itemize
+Function Handles
+\end_layout
+
+\begin_layout Itemize
+Map Containers
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Why worry about data types?
+\end_layout
+
+\begin_layout Itemize
+Matlab makes it difficult to combine different data types
+\end_layout
+
+\begin_layout Itemize
+For numeric classes, data types may affect accuracy
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+e.g.
+ rounding error
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+It's important to know about data types when working with data in any program,
+ because different data types take up different amounts of disk space
+\end_layout
+
+\begin_layout Itemize
+Don't waste disk space by saving a dummy variable in a format that has precision
+ to 15 decimal points
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Numeric Classes
+\end_layout
+
+\begin_layout Standard
+Integers
+\end_layout
+
+\begin_layout Itemize
+can take 8, 16, 32, or 64 bits
+\end_layout
+
+\begin_layout Itemize
+can be signed or unsigned
+\end_layout
+
+\begin_layout Itemize
+if unsigned, user can get twice as long of integers per byte
+\end_layout
+
+\begin_layout Standard
+Double Floating-Point Numbers
+\end_layout
+
+\begin_layout Itemize
+always take up 64 bits
+\end_layout
+
+\begin_layout Itemize
+most precise numerical format (16 digits of accuracy)
+\end_layout
+
+\begin_layout Standard
+Single Floating-Point Numbers
+\end_layout
+
+\begin_layout Itemize
+always take up 32 bits
+\end_layout
+
+\begin_layout Itemize
+only 8 digits of accuracy
+\end_layout
+
+\begin_layout Standard
+Complex Numbers
+\end_layout
+
+\begin_layout Itemize
+can be formatted in any fashion above, but Matlab has an additional flag
+ to denote complexity
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+Inf
+\family default
+ and 
+\family typewriter
+NaN
+\end_layout
+
+\begin_layout Itemize
+stored as 64-bit double
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Working with Numeric Classes
+\end_layout
+
+\begin_layout Itemize
+Viewing which variables are which type
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+At the command line, type 
+\family typewriter
+whos
+\end_layout
+
+\begin_layout Itemize
+User can see a list of variables and which class they are formatted
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Generating a variable of a certain type:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+y = int64(-589324077574); % Create a 64-bit integer
+\end_layout
+
+\begin_layout Plain Layout
+
+x = double(y) % Convert to double
+\end_layout
+
+\begin_layout Plain Layout
+
+%
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+How can I optimize my data storage?
+\end_layout
+
+\begin_layout Itemize
+Suppose a user has data she wants to save in a mat-file
+\end_layout
+
+\begin_layout Itemize
+Suppose also that she has a number of variables that are stored in 
+\begin_inset Quotes eld
+\end_inset
+
+too big
+\begin_inset Quotes erd
+\end_inset
+
+ of numeric classes
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+e.g.
+ she has a dummy variable stored as a 32-bit integer and a 16-bit integer
+ stored as a 64-bit double
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+How can she quickly and easily convert her numerical variables to the most
+ efficient numerical class?
+\end_layout
+
+\begin_layout Itemize
+The easiest way is the 
+\family typewriter
+save
+\family default
+ command
+\end_layout
+
+\begin_layout Itemize
+Matlab's 
+\family typewriter
+save
+\family default
+ command is streamlined to automatically convert variables to the optimal
+ format
+\end_layout
+
+\begin_layout Itemize
+Beyond this, there are user-written scripts that store data even more efficientl
+y than Matlab's 
+\family typewriter
+save
+\family default
+ command
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Logical Class
+\end_layout
+
+\begin_layout Itemize
+Any variable that is a logical (e.g.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+Z=(x<5);
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+) is stored as an 8-bit 
+\emph on
+logical
+\emph default
+.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Characters and Strings
+\end_layout
+
+\begin_layout Itemize
+Strings in Matlab are stored as 16-bits per character
+\end_layout
+
+\begin_layout Itemize
+Character arrays must have all elements be the same length, so spaces are
+ automatically inserted to make the dimensions match
+\end_layout
+
+\begin_layout Itemize
+Thus, if you tried 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+mcode{data = ['Allison Jones';'Development';'Phoenix'];}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+you would get an error because the dimensions don't match up
+\end_layout
+
+\begin_layout Itemize
+Instead, use the 
+\family typewriter
+char
+\family default
+ function:
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+%
+\backslash
+mcode{data = char('Allison Jones','Development','Phoenix')}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Can convert strings to cell arrays (see below)
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Structures
+\end_layout
+
+\begin_layout Standard
+Structures are invoked with a period, e.g.
+ (
+\family typewriter
+A.data
+\family default
+).
+ 
+\family typewriter
+A
+\family default
+ is a structure with substructure 
+\family typewriter
+data
+\family default
+.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Cell Arrays
+\end_layout
+
+\begin_layout Standard
+Cell arrays are the only way to store data of two different types in the
+ same array, side-by-side.
+\end_layout
+
+\begin_layout Itemize
+Cell arrays contain multiple data containers called cells
+\end_layout
+
+\begin_layout Itemize
+Each cell can contain any type of data
+\end_layout
+
+\begin_layout Itemize
+When referencing elements, use 
+\family typewriter
+()
+\family default
+ to reference cells (data containers) and use 
+\family typewriter
+{}
+\family default
+ to reference individual elements within a cell
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Operations with Cell Arrays
+\end_layout
+
+\begin_layout Itemize
+Generate a blank cell array 
+\family typewriter
+A
+\family default
+ with the command 
+\family typewriter
+A=cell(3,4,2);
+\end_layout
+
+\begin_layout Itemize
+concatenate cell arrays along dimension 
+\begin_inset Formula $k$
+\end_inset
+
+ with the command 
+\family typewriter
+cat(k,array1,array2,...arrayN);
+\end_layout
+
+\begin_layout Itemize
+delete the 
+\begin_inset Formula $(i,j)$
+\end_inset
+
+ observation of cell array 
+\family typewriter
+myarray
+\family default
+ with the command 
+\family typewriter
+myarray{i,j}=[];
+\end_layout
+
+\begin_layout Itemize
+create a nested cell array called super_array with the command 
+\family typewriter
+super_array = {array1; array2;};
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+super_array is now a 2x1 cell array with array1 in the first cell and array2
+ in the second cell
+\end_layout
+
+\end_deeper
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Operations with Cell Arrays
+\end_layout
+
+\begin_layout Itemize
+In order to turn a string into a cell array, use the command 
+\family typewriter
+cellstr
+\end_layout
+
+\begin_layout Itemize
+In order to turn a numerical array into a cell array, use 
+\family typewriter
+num2cell
+\end_layout
+
+\begin_layout Itemize
+Once this formatting is taken care of, the string and numerical cells can
+ be concatenated together with the 
+\family typewriter
+cat
+\family default
+ command
+\end_layout
+
+\begin_layout Itemize
+Example: want to list variable names next to their point estimates in a
+ regression output table:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{lstlisting}
+\end_layout
+
+\begin_layout Plain Layout
+
+varnames = cellstr(char('Var1','Var2',...,'VarK'));
+\end_layout
+
+\begin_layout Plain Layout
+
+estimate = num2cell(X
+\backslash
+y);
+\end_layout
+
+\begin_layout Plain Layout
+
+result   = cat(2,varnames,estimate);
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Function Handles
+\end_layout
+
+\begin_layout Standard
+From the Mathworks website:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes eld
+\end_inset
+
+A function handle is a callable association to a MATLAB function.
+ It contains an association to that function that enables you to invoke
+ the function regardless of where you call it from.
+ This means that, even if you are outside the normal scope of a function,
+ you can still call it if you use its handle.
+\end_layout
+
+\begin_layout Standard
+With function handles, you can:
+\end_layout
+
+\begin_layout Itemize
+Pass a function to another function
+\end_layout
+
+\begin_layout Itemize
+Capture data values for later use by a function
+\end_layout
+
+\begin_layout Itemize
+Call functions outside of their normal scope
+\end_layout
+
+\begin_layout Itemize
+Save the handle in a MAT-file to be used in a later MATLAB session
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Map Containers
+\end_layout
+
+\begin_layout Itemize
+Map containers are data structures that are organized by a key and a data
+ value
+\end_layout
+
+\begin_layout Itemize
+In regular arrays, the key is a number (corresponding to the element of
+ the matrix)
+\end_layout
+
+\begin_layout Itemize
+The advantage to map containers is that the key can be a string
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,586 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[numbered,framed,autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bookmark}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTE: With Ilmenau style, to get the bullets %
+% looking right, do one section and one sub-   %
+% section for each set of bullets              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{frame}
+\title{Introduction to Matlab}
+\author{
+	Tyler Ransom\thanks{Slides adapted with permission from Justin Trogdon.}\\
+	\emph{Duke University}\\
+%    \today \\
+%    \vspace{10cm}
+}
+\titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+\begin{itemize}
+	\item Matlab user interface
+	\item Accessing Matlab at Duke
+	\item How Matlab works
+	\item Operators
+	\item Elementary Matrices
+	\item Flow Control
+	\item Loops
+	\item Working with Data
+	\item Help in Matlab
+	\item Functions
+\end{itemize}
+\end{frame}
+
+\begin{frame}{User Interface}
+There are five main windows on the user interface:
+	\begin{enumerate}
+		\item \textbf{Command Window}: Interactive command line where user can create matrices, perform calculations, etc.
+		\item \textbf{Workspace}: List of variables that are available to the user
+		\item \textbf{Command History}: Lists recent commands issued by the user
+		\item \textbf{Current Folder}: Gives a directory listing of the current directory (User can change the directory at the top of the screen, or by typing ``cd '' in the command window)
+		\item \textbf{Variable Editor}: Allows user to view specific observations of a variable
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Accessing Matlab at Duke}
+Four ways:
+	\begin{enumerate}
+		\item Windows machines in the Bowling Alley
+		\begin{itemize}
+			\item Log in and double-click on Matlab icon (make sure to change directory to H:\textbackslash)
+		\end{itemize}
+		\item Linux machines in the Bowling Alley
+		\begin{itemize}
+			\item Log in, open the terminal and type ``\texttt{matlab \&}'' or ``\texttt{matlab -nodisplay}'' (batch mode)
+		\end{itemize}
+		\item SSH terminal from a laptop or non-Duke desktop
+		\begin{itemize}
+			\item Log in, type ``\texttt{matlab}'' (interactive) or ``\texttt{matlab -nodisplay}'' (batch)
+			\item Interactive mode typically runs very slowly when not on the Duke network
+			\item Batch mode runs very quickly but only has the command prompt, so the user can't see the workspace or command history
+		\end{itemize}
+		\item Personal license
+		\begin{itemize}
+			\item Students can purchase a license of Matlab (Student Version) from MathWorks for \$100. The license is valid so long as it's being used for coursework. Non-student personal licenses are also available for purchase, but can be quite expensive.
+		\end{itemize}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{How Matlab Works}
+\begin{itemize}
+	\item User gives it a text file (.m), which the program interprets line-by-line
+	\item This is equivalent to evaluating each line at the Command Line
+\end{itemize}
+\vspace{1cm}
+There are two types of m-files in Matlab:
+\begin{enumerate}
+	\item \textbf{Script files}: Series of command line commands (read line-by-line)
+	\item \textbf{Function files}: Take arguments as inputs and give outputs
+\end{enumerate}
+\vspace{1cm}
+Remember that nothing a user does is reproducible unless it is contained in a .m file.
+\end{frame}
+
+\begin{frame}[fragile]{Operators}
+\begin{lstlisting}
+%          %in-line comment
+;          %suppresses output
+A(:,1)     %references the first column and all rows of A
+A(1,:)     %references the first row and all columns of A
+A = []     %creates an empty matrix named A
+A(index,:) %subsets the rows of A by some logical vector (index)
+[A; B]     %vertically concatenates matrices A and B
+[A B]      %horizontally concatenates matrices A and B
+A.B        %creates a structure A with sub-matrix B
+A'         %transpose of A
+A+B        %matrix addition of A and B
+A-B        %matrix subtraction of B from A
+A*B        %matrix multiplication of A and B
+\end{lstlisting}
+Always use brackets to concatenate matrices and parentheses to reference matrix elements
+\end{frame}
+
+\begin{frame}[fragile]{Operators}
+\begin{lstlisting}
+A^B       %matrix exponentiation; B must be a scalar and A must be square
+A.*B      %element-by-element multiplication of A and B (must be same size)
+A\B       %postmultiplies A inverse by B
+A/B       %postmultiplies A by B inverse
+kron(A,B) %Kronecker product of A and B
+A.^B      %element-by-element exponentiation of A by B
+(A <= B)   %creates a logical array that is 1 if A<=B, 0 otherwise
+(A == B)  %creates a logical array that is 1 if A=B, 0 otherwise
+(A >= B)   %creates a logical array that is 1 if A>=B, 0 otherwise
+A & B     %creates a logical array that is 1 if both A and B have non-zero elements at that location
+A | B     %creates a logical array that is 1 if either A or B have non-zero elements at that location
+~A        %same as A==0
+\end{lstlisting}
+Note that parentheses can also be used to create logical variables
+\end{frame}
+
+\begin{frame}[fragile]{Elementary Matrices}
+\scriptsize{Matlab has commands to create ``common'' matrices so that users don't have to hand-code them}
+%\vspace{-.2cm}
+\begin{lstlisting}
+eye(n)     %n-by-n identity matrix
+ones(n,m)  %n-by-m matrix with the number 1 in every element
+zeros(n,m) %n-by-m matrix with the number 0 in every element
+m:step:n   %row vector from m to n increasing (or decreasing) by step each time
+rand(n,m)  %n-by-m matrix of Uniform[0,1] random numbers
+randn(n,m) %n-by-m matrix of Normal(0,1) random numbers
+mvnrnd(mu,sigma) %matrix of multivariate Normal(mu,sigma) random numbers (dimension is same as mu)
+length(A)  %lists number of elements of the longest dimension of A
+size(A,d)  %gives the number of elements of the dth dimension of A
+diag(A)    %captures diagonal elements of A if A is square. If A is a vector, creates a diagonal matrix from the elements of A
+triu       %replaces lower triangular elements of A with zeros
+tril       %replaces upper triangular elements of A with zeros
+find(A>1)  %finds, e.g. elements of A that are larger than 1
+\end{lstlisting}
+\scriptsize{Note that all ``(n,m)'' commands can be generalized to more than two dimensions by using ``(n,m,p,...,z)''}
+\end{frame}
+
+\begin{frame}[fragile]{Matrix Relations}
+Commands that help users know the properties of matrices in the workspace
+\begin{lstlisting}
+isreal(A)   %returns a 1 if all elements of A are real numbers
+isempty(A)  %returns a 0 if A has at least one element
+issparse(A) %returns a 1 if A is sparse (has many zeros)
+isnan(A)    %returns a matrix of 0s or 1s corresponding to the elements of A that are not a number (NaN)
+isfinite(A) %returns a matrix of 0s or 1s corresponding to the elements of A that are infinite
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Special Variables}
+Special variables reserved by Matlab
+\begin{lstlisting}
+ans     %the value (answer) of the most recent command line input
+inf     %positive infinity
+-inf    %negative infinity
+NaN     %missing value (Not a Number) -- this is case sensitive
+eps     %machine epsilon; equal to 2^-52
+realmax %largest number Matlab can recognize; equal to 10^308
+realmin %smallest number Matlab can recognize; equal to 10^-308
+\end{lstlisting}
+Note also that Matlab can do other mathematical functions on matrices (e.g. $\log(A)$ takes the $\log$ of all elements of A)
+\end{frame}
+
+\begin{frame}[fragile]{Flow Control}
+\begin{itemize}
+	\item Suppose a user wants to control which part of the script is executed
+	\item This technique is referred to as \emph{flow control}
+	\item Flow control in Matlab is very similar to other languages (C, Fortran)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Flow Control - if}
+\begin{lstlisting}
+if [some condition]
+   [some code];
+elseif [some other condition]
+   [some code];
+else
+   [some code];
+end
+\end{lstlisting}
+Conditions must be logical statements.\\
+\mcode{elseif} and \mcode{else} statements are optional
+\end{frame}
+
+\begin{frame}[fragile]{Flow Control - switch}
+\begin{lstlisting}
+switch [some expression]
+case [some case]
+   [some code];
+case [some other case]
+   [some code];
+otherwise
+   [some code];
+end
+\end{lstlisting}
+Case expressions are either scalar numbers or strings (not logical statements).\\
+Matlab goes through each case expression and executes the code below it if it matches the switch expression.\\
+I have never used \mcode{switch}, but it is useful if the user needs to execute different code depending on a finite number of differing case scenarios
+\end{frame}
+
+\begin{frame}[fragile]{Flow Control - error and return}
+A user can check that code is running according to plan by forcing Matlab to give an error if something is amiss
+\begin{lstlisting}
+if [condition that should hold doesn't]
+   error('This code doesn`t work');
+end
+\end{lstlisting}
+A user can issue the \mcode{return} command to force Matlab to exit the script
+\end{frame}
+
+\begin{frame}[fragile]{Looping}
+\begin{itemize}
+	\item Matlab has two types of loops: \mcode{for} and \mcode{while} 
+	\item These loops literally execute commands repeatedly as long as the looping conditions are satisfied
+	\item Loops in Matlab are useful for mechanizing code, but very slow because they are interpreted line by line
+	\item \mcode{for} and \mcode{while} are basically the same, but have subtle differences
+	\item Loop syntax:
+\end{itemize}
+\begin{lstlisting}
+for loopvar = starting_value:stepsize:stopping_value
+    [code user would like to repeat]
+end
+
+while [looping condition]
+      [code user would like to repeat]
+end
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Looping: \texttt{for} vs. \texttt{while}}
+Use a \mcode{for} loop when
+\begin{itemize}
+	\item You know a command should be execute a certain number of times
+	\item You can't use a built-in Matlab command to accomplish your design
+\end{itemize}
+\vfill
+Use a \mcode{while} loop when
+\begin{itemize}
+	\item You don't know how many times the commands need to be repeated
+	\item You can't use a built-in Matlab command to accomplish your design
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Looping Example}
+\begin{itemize}
+	\item Suppose a user wants to ``mechanize'' how she is creating a matrix. For example, suppose she wants to create a matrix $B$ that is $2^k$ for each row $k$ in the first column, and $\ln(k)$ for each row $k$ in the second column. 
+	\item If $k$ is small, she could hand code it:
+\end{itemize}
+\begin{lstlisting}
+B(1,1) = 2^1;
+B(1,2) = log(1);
+B(2,1) = 2^2;
+B(2,2) = log(2);
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Looping Example - Continued}
+\begin{itemize}
+	\item However, if $k$ is large, hand coding is tedious and more vulnerable to user mistakes.
+	\item Instead, the user can write a \mcode{for} loop to accomplish the task:
+\end{itemize}
+\begin{lstlisting}
+B = zeros(1e5,2); %initialize the size of the matrix for speed
+for k=1:length(B) %allow the loop length to change automatically according to the size of B
+    B(k,1) = 2^k;
+    B(k,2) = log(k);
+end
+\end{lstlisting}
+\begin{itemize}
+	\item As you can see, loops are very powerful in performing repetitive tasks
+	\item Matlab, however, is slow at doing loops (since it interprets commands line-by-line), so loops should generally be avoided if at all possible
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{When not to loop}
+\begin{itemize}
+	\item Suppose a user wants to delete rows in a vector $V$ if elements of $V$ are larger than 5
+	\item Two ways to do this:
+\end{itemize}
+\begin{lstlisting}
+for i=1:length(V)
+    if V(i)>5;
+       V(i)=[];
+    end
+end
+\end{lstlisting}
+\begin{itemize}
+	\item A much easier way to do this is to make use of Matlab's logical indexing capabilities
+\end{itemize}
+\begin{lstlisting}
+V(V>5)=[];
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}[fragile]{While loops}
+Consider the \mcode{for} loop from before
+\begin{lstlisting}
+B = zeros(1e5,2); %initialize the size of the matrix for speed
+for k=1:length(B) %allow the loop length to change automatically according to the size of B
+    B(k,1) = 2^k;
+    B(k,2) = log(k);
+end
+\end{lstlisting}
+We can accomplish the same task using a \mcode{while} loop:
+\begin{lstlisting}
+B = zeros(1e5,2);
+k = 1
+while k<=length(B) %Note the use of the weak inequality
+    B(k,1) = 2^k;
+    B(k,2) = log(k);
+    k = k+1;
+end
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{While loops - continued}
+\begin{itemize}
+	\item In their simplest form, \mcode{while} loops and \mcode{for} loops look very similar and accomplish the same task
+	\item To illustrate the (subtle) difference, suppose a user wants to repeatedly execute code until some criterion is met
+	\item However, the user may not know how many times the code should be repeated
+	\item The \mcode{while} loop takes care of this in a way the \mcode{for} loop can't
+\end{itemize}
+\begin{lstlisting}
+% This code takes a matrix A and element-wise multiplies it by a matrix F, then divides by the loop counter until its norm reaches zero
+A = rand(15);
+F = eye(size(A));
+i = 1;
+while norm(F,1) > 0,
+   F = A.*F/i;
+   i = i + 1;
+end
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Looping Summary}
+\begin{itemize}
+	\item Subsetting \mcode{if} statements in Matlab should always be taken care of through logical indexing
+	\item There are some cases when looping can't be avoided (e.g. merging two datasets, creating matrices that systematically vary by element location [like the example from two slides previous])
+	\item \mcode{while} loops are useful for executing commands where the number of iterations is not known from the outset (e.g. contraction mappings)
+	\item In fact, structural economists use \mcode{while} loops often because many problems can be characterized by a two-step estimation procedure which the \mcode{while} loop is especially tailored to deal with
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Working with data in Matlab}
+\begin{itemize}
+	\item Matlab-formatted data comes in a .mat file
+	\item \mcode{load mydata.mat} loads the data onto the workspace
+	\item \mcode{load mydata.mat var1 var2 var3} loads variables \mcode{var1 var2 var3} of \mcode{mydata.mat} onto the workspace
+	\item Be careful about which directory you're in when loading data. Matlab usually opens to its default directory, which is generally not the directory a user is working in
+	\item \mcode{save} works just like load, except it saves variables in the workspace into a .mat file
+	\item e.g. \mcode{save mydata1.mat var1 var2 var3}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Loading non-Matlab-formatted data}
+\begin{itemize}
+	\item The easiest way to import non-mat files is through the import wizard (Start$\blacktriangleright$Matlab$\blacktriangleright$Import Wizard) in the lower left corner of the Matlab interface
+	\item If importing from other software (e.g. Stata or SAS), easiest way is to go from .dta$\blacktriangleright$.csv$\blacktriangleright$.mat
+	\item StatTransfer also supports Matlab, though it is unavailable on Econ department machines (but available at Perkins Library)
+	\item Matlab does not allow string components in data matrices, so make sure you don't export value labels from other software
+	\item Also, users may need to manually rename variables once the data matrices have been imported
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Reproducibly importing data}
+\begin{itemize}
+	\item The import wizard gives users the option to generate m-code that is reproducible; however, I've never been successful in re-running this reproducible code
+	\item Matlab has built-in functions to import .csv or fixed-format file types:
+	\item \mcode{csvread('xyz.csv')}
+	\item \mcode{csvwrite('xyz.csv', A)}
+  \item \mcode{dlmread('xyz.dat', 'delimiter string')}
+  \item \mcode{dlmwrite('xyz.dat', A, 'delimiter string')}
+  \item \mcode{A=importdata('xyz.csv', delimiter, nheaderlines)} is the best way to import data, because it automatically converts unreadable elements to \mcode{NaN}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dealing with missing values}
+\begin{itemize}
+	\item Most of the problems in data conversion lie in mapping missing values from one software to another
+	\item Missing values are coded as \mcode{NaN} in Matlab; in Stata or SAS they are a dot (\mcode{.})
+	\item StatTransfer automatically converts \mcode{.} to \mcode{NaN}
+	\item Without StatTransfer, need to do a find-and-replace of \mcode{.} (or blank) to \mcode{NaN} prior to importing to Matlab (unless using \mcode{importdata})
+	\item \mcode{importdata} does this automatically
+	\item Matlab 2011 has an import utility that allows the user to convert non-numeric values to NaN within the Matlab import wizard
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Describing data}
+\begin{lstlisting}
+[val,idx]=sort(A)     %sorts each column of A in ascending order
+[val,idx]=sortrows(A) %same as sort, but preserves row groupings (just like sorting in Stata or SAS)
+[val,idx]=unique(A)   %strips out unique elements of A (no repeats)
+[val,idx]=max(A)      %max element of A
+[val,idx]=min(A)      %min element of A
+mean(A)               %mean
+median(A)             %median
+var(A)                %variance
+std(A)                %standard deviation
+sum(A)                %summation
+hist(A)               %histogram
+corrcoef(A)           %correlation coefficient of A
+cov(A)                %covariance of A
+\end{lstlisting}
+Note that summary statistics can be extended to multiple dimensions\\
+e.g. \mcode{max(A,2)} is the maximum across columns of A (instead of down rows)
+\end{frame}
+
+\begin{frame}[fragile]{Describing data with missing observations}
+Summary statistics from the previous slide will return \mcode{NaN} if any element of the vector (or matrix) is \mcode{NaN}. There are two ways to get around this:
+\begin{itemize}
+	\item \mcode{mean(~isnan(A))} returns the mean ignoring missing values
+	\item A faster way is to use \mcode{nanmean(A)}, which accomplishes the same task
+	\item Most other commands listed in the previous slide have ``nan'' counterparts
+	\item Other built-in functions will explicitly mention in the help menu that they ignore \mcode{NaN} values
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Accessing Matlab's help}
+There are a number of ways to view documentation on a certain command, or find commands that accomplish something of interest:
+\begin{itemize}
+	\item Type \mcode{help commandname} in the command window if you know the name of a command , but want to learn more about its syntax or usage
+	\item Type \mcode{lookfor word} in the command window to get a list of Matlab commands that have \mcode{word} in the command description
+	\item Google ``matlab commandname'' for help on the \mcode{commandname} command (Matlab's official documentation for the command is usually the top hit)
+	\item Google something more general like ``how to sort rows in matlab.'' This will usually bring up the Matlab documentation, but may also lead to valuable discussion sites like StackOverflow
+\end{itemize}
+It is rare to come across a problem or question that no one else has already thought of or solved
+\end{frame}
+
+\begin{frame}[fragile]{Functions}
+\begin{itemize}
+	\item Functions are an integral part of Matlab and must be used when estimating some econometric models (e.g. MLE)
+	\item Functions are powerful in their own right because they allow users to replicate code in a systematic fashion
+	\item Function syntax:
+\end{itemize}
+\begin{lstlisting}
+[output1,output2,..,outputN] = function_name(input1,input2,..,inputK)
+% Comments that describe what the function does
+[code which user would like to have repeatedly executed and which uses all inputs and creates all outputs]
+end
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Using functions}
+% Define block styles
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=16em, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{block2} = [rectangle, draw, fill=red!20, 
+    text width=16em, rounded corners, minimum height=4em]
+The following diagram illustrates how functions are called in Matlab:
+\begin{tikzpicture}[node distance = .5cm, auto]
+\tikzstyle{every node}=[font=\small]
+    % Place nodes
+    \node [block] (script) {\textbf{Script m-file (\texttt{example.m})} \\ . \\ . \\ . \\ \texttt{B=my\_function(A)}};
+    \node [block2, below right = of script] (function) {\textbf{Function m-file (\texttt{my\_function.m})} \\ \texttt{out1=my\_function(inp1)}\\  \texttt{out1 = (inp1>0);} \\ \texttt{end}};
+    \node [block, below left = of function] (script2) {\textbf{Script m-file (continued)} \\ \texttt{B=my\_function(A)} \\ . \\ . \\ . };
+
+    % Draw edges
+    \path [line] (script) -- (function);
+    \path [line] (function) -- (script2);
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Using functions - Continued}
+Helpful reminders when working with functions
+\begin{itemize}
+	\item Always name a function m-file the same name as the function title
+	\item Once Matlab enters a function, only function inputs are available in the workspace
+	\begin{itemize}
+		\item The exception to this is that all \mcode{global} variables are passed to the function
+	\end{itemize}
+	\item Once Matlab re-enters the script m-file (after executing the function), only the function output is available (in addition to the original workspace that existed before the function call)
+	\item Other functions can be referenced within functions. Users may also create an arbitrary number of nested functions (i.e. functions within functions)---I typically don't do this
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Helpful function variables}
+\begin{itemize}
+	\item These are only valid inside a function m-file
+	\item Most useful for implementing flow control in a function
+\end{itemize}
+\begin{lstlisting}
+nargin    %lists the number of inputs to the function
+nargout   %lists the number of outputs from the function
+varargin  %shorthand for ''all inputs after this point''
+varargout %shorthand for ''all outputs after this point''
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Accessing function outputs}
+\begin{itemize}
+	\item Suppose a user only wants to see the first and fifth outputs of a function
+	\item Matlab 2009 and later allows the use of $\sim$ to suppress function outputs, e.g. \mcode{[x,~,~,~,z] = myfun(X,Y,Z);}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Function handles}
+\begin{itemize}
+	\item Matlab allows users to create functions ``on the fly'' (without needing to create a m-file)
+	\item A function handle is a function without a name, which usually has a simple expression (and only a few inputs)
+	\item The function handle syntax is \mcode{@(x) f(x)}
+	\item e.g. To create a function handle for $f(x)=x^2 + 2x - 8$, the correct syntax would be \mcode{@(x) x.^2+2.*x-8}
+	\item Note that function handle operators need to be vectorized (\mcode{.*}, \mcode{.^})
+	\item Can also be functions of multiple variables
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Variable scope}
+\begin{itemize}
+	\item As was mentioned previously, when Matlab enters a function it leaves behind the workspace from the file (or function) it came from
+	\item Users can make certain variables available to all functions by issuing a \mcode{global} statement at the top of each file
+	\item All variables that are not contained in the \mcode{global} statement are not transferred
+	\item Changes to a \mcode{global} variable in one function are brought into the the next function, so be careful!
+	\item This is useful in situations where a user needs to pass a large number of variables and doesn't want to create a function with a large number of inputs
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example 1: Three ways to evaluate code}
+Suppose that a user wants to calculate the product $Z$ of two matrices $X$ and $Y$. She could do this in three ways:
+\begin{enumerate}
+	\item Type into the command line
+	\item Save as a line in a script m-file
+	\item Create a function to do the product
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Example 1 -- Command Line}
+Supposing $X$ and $Y$ already exist, type \mcode{Z=X*Y;} into the command line, and press enter.
+\end{frame}
+
+\begin{frame}{Example 1 -- Script}
+Supposing $X$ and $Y$ already exist, type \mcode{Z=X*Y;} into line 1 of the editor.
+\end{frame}
+
+\begin{frame}[fragile]{Example 1 -- Function}
+Create a new script and type the following:
+\begin{lstlisting}
+Z = matrixproduct(X,Y)
+% This function calculates the product of two matrices (X and Y)
+Z=X*Y;
+end
+\end{lstlisting}
+Save the script as \mcode{matrixproduct.m}
+\vspace{1cm}
+In a new script, type \mcode{Z=matrixproduct(X,Y);}
+\end{frame}
+
+
+\end{document}

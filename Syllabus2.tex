@@ -1,0 +1,152 @@
+%% LyX 2.2.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{babel}
+\usepackage[authoryear]{natbib}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},pdfborderstyle={},backref=false,colorlinks=false]
+ {hyperref}
+\usepackage{breakurl}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\date{}
+
+\makeatother
+
+\begin{document}
+
+\title{\textbf{Matlab for Applied Micro Empiricists: }\\
+\textbf{Summer II.2 2012}}
+
+\maketitle
+\vspace{-0.85in}
+
+\begin{center}
+\begin{tabular}{ll}
+Course: & Matlab for Applied Micro Empiricists (half Summer module for rising
+second-years)\tabularnewline
+Instructor: & Tyler Ransom\tabularnewline
+Time: & Tue/Thu 10 a.m. - 12:30 p.m.; Friday 11 a.m. - 12 p.m.\tabularnewline
+Location: & Social Sciences 113\tabularnewline
+Office: & 2106 Campus Dr \#201A\tabularnewline
+Email: & \href{mailto:tyler.ransom@duke.edu}{tyler.ransom@duke.edu}\tabularnewline
+Office Hours: & By appointment\tabularnewline
+\end{tabular}
+\par\end{center}
+
+\subsubsection*{About this course}
+
+This module will build on the skills introduced in the first module
+and introduce topics covered in second-year applied micro modules.
+These topics include multinomial choice models, numerical integration,
+Monte Carlo simulation and bootstrapping. The course will cover specific
+applications of these topics in the fields of labor, education and
+industrial organization.
+
+\subsubsection*{Prerequisites}
+
+I am going to assume that all students know the material from the
+first Matlab module. This includes familiarity with Matlab basics
+(most notably Matlab's functional optimizers) as well as a working
+knowledge of \LaTeX.
+
+\subsubsection*{Textbooks}
+
+There is no formal textbook for the course, but students may find
+the following resources helpful: \emph{Discrete Choice Methods with
+Simulation} (Train)\footnote{This is available for free online at \url{http://elsa.berkeley.edu/books/choice2.html}},
+\emph{Econometric Analysis of Cross Section and Panel Data} (Wooldridge),
+\emph{Econometrics} (Hayashi), \emph{Time Series Analysis} (Hamilton),
+\emph{Econometric Analysis} (Greene), and \emph{Numerical Methods
+in Economics} (Judd).
+
+\subsubsection*{Registration, Enrollment and Overall Class Grades}
+
+In order to get credit for this course, you need to first enroll in
+Econ 360 or Econ 370 in ACES. Because each module is not listed separately
+in ACES, I can only determine your enrollment in this course through
+your completion of problem sets and/or attendance in lectures. In
+order to get credit for Econ 360 or Econ 370 in ACES, each student
+must enroll in at least two modules. Grades from those two modules
+will be averaged into a final grade for Econ 360/370. If you enroll
+in more than two modules, your two highest grades are averaged. Because
+of this favorable grading policy, you are encouraged to take more
+than two modules.
+
+\subsubsection*{Grades for this Module}
+
+Grades will be determined by the average score from three problem
+sets, due each week by 11:59 p.m. on Thursday. Late problem sets will
+not be accepted. Submit problem set materials to your ``dropbox''
+folder on Sakai. You are allowed to work on problem sets in groups
+(no larger than 3, please), but each student must turn in his/her
+own copy of the problem set. In particular, each student should avoid
+copying/pasting code and instead type the code out on his/her own.
+(This is the only way to learn how to program.) Put your name and
+the names of those in your group at the top of your code file(s).
+Each Friday morning I will post solutions at approximately 8 A.M.
+We will then spend the Friday lecture time going through the code
+together. Problem sets will be graded on the following scale (some
+convex combination of effort and accuracy):
+
+\medskip{}
+\begin{center}
+\begin{tabular}{cl}
+4: & Problem set is complete and mostly correct\tabularnewline
+3: & Problem set is complete with errors; or mostly complete and mostly
+correct\tabularnewline
+2: & Problem set is complete with many errors; or barely complete and mostly
+correct\tabularnewline
+1: & Problem set is barely attempted or completely incorrect\tabularnewline
+0: & Problem set turned in late or not at all\tabularnewline
+\end{tabular}\\
+\par\end{center}
+
+Problem set grades will be combined to an unweighted average to determine
+course grade.
+
+\subsubsection*{Schedule of Topics (subject to change)}
+\begin{center}
+\begin{tabular}{ccll}
+\hline 
+Class & Date & ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Topics & Lecture Notes\tabularnewline
+\hline 
+1 & Tue 7/24 & Intro to multinomial choice & Multinomial.pdf\tabularnewline
+ &  & Unobserved heterogeneity & MultinomialDerivations.pdf\tabularnewline
+ &  & Fixed effects/random effects & UnobservedHeterogeneity.pdf\tabularnewline
+2 & Thu 7/26 & Advanced programming tricks & TipsAndTricks.pdf\tabularnewline
+ &  & Constrained optimization & DeltaMethod.pdf\tabularnewline
+ &  & \emph{PS1 due by 11:59 p.m.} & \tabularnewline
+3 & Fri 7/27 & Go over code for Problem Set 1 & \tabularnewline
+4 & Tue 7/31 & Improving computational efficiency & ComputationalEfficiency.pdf\tabularnewline
+ &  & Analytical gradients & LinuxLab.pdf\tabularnewline
+ &  & mex files and compiled languages & \tabularnewline
+5 & Thu 8/2 & Simulation & NumericalIntegration.pdf\tabularnewline
+ &  & Integration & Bootstrap.pdf\tabularnewline
+ &  & Bootstrapping/Inference & \tabularnewline
+ &  & \emph{PS2 due by 11:59 p.m.} & \tabularnewline
+6 & Fri 8/3 & Go over code for Problem Set 2 & \tabularnewline
+7 & Tue 8/7 & Multi-stage estimation algorithms & IterativeAlgorithms.pdf\tabularnewline
+ &  & Intro to Bayesian Inference & IntroBayesianInference.pdf\tabularnewline
+8 & Thu 8/9 & Model fit & ModelFitCfl.pdf\tabularnewline
+ &  & Counterfactual simulation & DurationCount.pdf\tabularnewline
+ &  & Duration Analysis & \tabularnewline
+ &  & Count Data Models & \tabularnewline
+ &  & \emph{PS3 due by 11:59 p.m.} & \tabularnewline
+9 & Fri 8/10 & Go over code for Problem Set 3 & \tabularnewline
+\hline 
+\end{tabular}
+\par\end{center}
+\end{document}

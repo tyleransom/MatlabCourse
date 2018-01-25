@@ -1,0 +1,184 @@
+%% LyX 2.0.0 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[12pt,english]{article}
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+\usepackage{babel}
+\usepackage{amsmath}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 0},backref=false,colorlinks=false]
+ {hyperref}
+\usepackage{breakurl}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+\makeatother
+
+\begin{document}
+
+\title{Problem Set 2}
+
+\maketitle
+Directions: Answer all questions. Clearly label all answers. Show
+all of your code. Turn in m-file(s), a log file (using \texttt{diary}
+or from off the cluster) and a writeup to me via your dropbox in Sakai
+by 11:59 p.m. on Thursday, July 12, 2012. Put the names of all group
+members at the top of your writeup (each student must turn in his/her
+own materials).
+\begin{enumerate}
+\item Practice with Matlab's functional optimizers using \texttt{nlsw88.mat}
+(from PS1)
+
+\begin{enumerate}
+\item Estimate the following model:
+\begin{eqnarray}
+\ln\left(wage_{i}\right) & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}collgrad_{i}+\varepsilon_{i}
+\end{eqnarray}
+under the assumption that $\varepsilon_{i}$ is mean-zero and well-behaved
+(i.e., use OLS). Note that $black_{i}$ corresponds to $race_{i}=2$
+and $other_{i}$ corresponds to $race_{i}=3$. \emph{Be sure to drop
+observations for all variables where any of the variables are missing.
+Also, report the sum of squared residuals at convergence, and the
+estimation sample size.}
+
+\begin{enumerate}
+\item Estimate $\hat{\beta}$ and $s^{2}$ (variance of $\varepsilon_{i}$)
+using \texttt{fminsearch} with default convergence tolerances, and
+starting values of $U\left[0,1\right]$. Set the \texttt{rand} seed
+at 1234 (just like last problem set). For all optimizations in this
+problem set, set the maximum iterations at $10^{6}$ and the maximum
+function evaluations at $10^{12}$
+\item Estimate $\hat{\beta}$ and $s^{2}$ using \texttt{fminunc} with default
+convergence tolerances and $U\left[0,1\right]$ starting values
+\item Estimate $\hat{\beta}$ and $s^{2}$ using \texttt{fmincon} with default
+convergence tolerances and with $\beta_{3}<0$ as the only restriction.
+Use $U\left[0,1\right]$ starting values.
+\item How do your answers differ when using each of the optimizers? How
+different are your answers from the closed-form solution for OLS?
+($\hat{\beta}=\left(X^{\prime}X\right)^{-1}X^{\prime}y$)
+\end{enumerate}
+\item Now estimate the same model from (a), but assuming $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$.
+In this case, the log likelihood function looks like
+\begin{equation}
+\ell\left(X_{i};\beta,\sigma\right)=\sum_{i=1}^{n}\left\{ -\frac{1}{2}\ln\left(2\pi\sigma^{2}\right)-\frac{1}{2\sigma^{2}}\left(\ln\left(wage_{i}\right)-X_{i}\beta\right)^{2}\right\} 
+\end{equation}
+where $X_{i}\beta$ is the right-hand side of equation (1) (except
+$\varepsilon$, of course). \emph{Report the log likelihood value
+at convergence, and sample size. Remember to take the negative of
+the likelihood, since Matlab's optimizers are minimizers and you want
+the maximum likelihood estimator.}
+
+\begin{enumerate}
+\item Estimate $\hat{\beta}$ and $\hat{\sigma}^{2}$ (variance of $\varepsilon_{i}$)
+using \texttt{fminsearch} with default convergence tolerances and
+$U\left[0,1\right]$ starting values
+\item Estimate $\hat{\beta}$ and $\hat{\sigma}^{2}$ using \texttt{fminunc}
+with default convergence tolerances and $U\left[0,1\right]$ starting
+values
+\item Estimate $\hat{\beta}$ and $\hat{\sigma}^{2}$ using \texttt{fmincon}
+with default convergence tolerances and with $\beta_{3}<0$ and $\sigma>0$
+as the only restrictions. Use $U[-.25,.25]$ as the starting values.
+\item How do your answers differ when using each of the optimizers? How
+sensitive is $\hat{\beta}$ to the normal distribution assumption?
+How close are $s^{2}$ and $\hat{\sigma}^{2}$?
+\end{enumerate}
+\item Now estimate the following model:
+\begin{eqnarray}
+\ln\left(wage_{i}\right) & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}collgrad_{i}+\nonumber \\
+ &  & \beta_{6}grade_{i}+\beta_{7}married_{i}+\beta_{8}south_{i}+\beta_{9}c\_city_{i}+\nonumber \\
+ &  & \beta_{10}union_{i}+\beta_{11}ttl\_exp_{i}+\beta_{12}tenure_{i}+\beta_{13}age_{i}^{2}+\\
+ &  & \beta_{14}hours_{i}+\beta_{15}never\_married_{i}+\varepsilon_{i}\nonumber 
+\end{eqnarray}
+\emph{Again, be sure to drop observations for all variables where
+any of the variables are missing. Also, report the sum of squared
+residuals and/or log likelihood at convergence, and the estimation
+sample size.}
+
+\begin{enumerate}
+\item Estimate $\hat{\beta}$ and $s^{2}$ using \texttt{fminsearch} with
+default convergence tolerances, assuming $\varepsilon_{i}$ is mean-zero.
+Use {}``noisy but good'' starting values, i.e. set the starting
+values equal to $\hat{\beta}_{OLS,closed\_form}+U\left[-\alpha\hat{\beta}_{OLS,closed\_form},\alpha\hat{\beta}_{OLS,closed\_form}\right]$
+with $\alpha=.75$.
+\item Estimate $\hat{\beta}$ and $s^{2}$ using \texttt{fminunc} with default
+convergence tolerances, assuming $\varepsilon_{i}$ is mean-zero.
+Use the same starting values as in part (i).
+\item Estimate $\hat{\beta}$ and $\hat{\sigma}^{2}$ using \texttt{fminsearch}
+with default convergence tolerances, assuming $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$.
+Use the same starting values as in part (i).
+\item Estimate $\hat{\beta}$ and $\hat{\sigma}^{2}$ using \texttt{fminunc}
+with default convergence tolerances, assuming $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$.
+Use the same starting values as in part (i).
+\item How does \texttt{fminsearch} compare to \texttt{fminunc} when the
+dimension of the parameter vector increases?
+\item How do the estimators in (i) through (iv) perform when the starting
+values are 0.01 for all parameters?
+\end{enumerate}
+\end{enumerate}
+\item Practice with Matlab's functional optimizers using \texttt{nhanes2d.mat}
+(data from the National Health and Nutritional Examination Survey---NHANES).
+Details on the variables:\\
+\\
+\begin{tabular}{lll}
+\texttt{ID} & : & unique individual identifier\tabularnewline
+\texttt{age} & : & age (in years)\tabularnewline
+\texttt{hct} & : & hematocrit percentage (\% of red blood cells in the blood)\tabularnewline
+\texttt{heartatk} & : & binary variable indicating heart attack history\tabularnewline
+\texttt{height} & : & height (in cm)\tabularnewline
+\texttt{highbp} & : & binary variable indicating history of high blood pressure \tabularnewline
+\texttt{houssiz} & : & size of household\tabularnewline
+\texttt{race} & : & 1 = white, 2 = black, 3 = other\tabularnewline
+\texttt{region} & : & 1=northeast, 2=midwest, 3=south, 4=west\tabularnewline
+\texttt{sex} & : & 1=male, 2=female\tabularnewline
+\texttt{smsa} & : & 1=central city, 2=non central city, 4=rural\tabularnewline
+\texttt{weight} & : & weight (in kg)\tabularnewline
+\end{tabular}
+
+\begin{enumerate}
+\item Estimate the following model:
+\begin{eqnarray}
+hct_{i} & = & \beta_{1}+\beta_{2}age_{i}+\beta_{3}black_{i}+\beta_{4}other_{i}+\beta_{5}heartatk_{i}+\nonumber \\
+ &  & \beta_{6}female_{i}+\beta_{7}highbp_{i}+\beta_{8}northeast_{i}+\beta_{9}midwest_{i}+\nonumber \\
+ &  & \beta_{10}south_{i}+\beta_{11}non\_central\_city_{i}+\beta_{12}rural_{i}+\beta_{13}height_{i}+\\
+ &  & \beta_{14}weight_{i}+\beta_{15}houssiz_{i}+\varepsilon_{i}\nonumber 
+\end{eqnarray}
+\emph{Be sure to drop observations for all variables where any of
+the variables are missing. Also, report the sum of squared residuals
+and/or log likelihood at convergence, number of iterations to convergence,
+and the estimation sample size.}
+
+\begin{enumerate}
+\item Estimate $\hat{\beta}$ and $\hat{\sigma}^{2}$ using \texttt{fminsearch}
+with default convergence tolerances, assuming $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$.
+Use the same starting values as in part (i) of 1(c), but now with
+$\alpha=1.5$.
+\item Estimate $\hat{\beta}$ and $\hat{\sigma}^{2}$ using \texttt{fminsearch}
+with \texttt{TolX} and \texttt{TolFun} each set to $10^{-8}$ (instead
+of the default), assuming $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$.
+Use the same starting values as in part (i) of 2(a).
+\item Estimate $\hat{\beta}$ and $\hat{\sigma}^{2}$ using \texttt{fminunc}
+with default convergence tolerances, assuming $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$.
+Use the same starting values as in part (i) of 2(a).
+\item Estimate $\hat{\beta}$ and $\hat{\sigma}^{2}$ using \texttt{fminunc}
+with \texttt{TolX} and \texttt{TolFun} each set to $10^{-8}$ (instead
+of the default), assuming $\varepsilon_{i}\overset{iid}{\sim}N\left(0,\sigma\right)$.
+Use the same starting values as in part (i) of 2(a).
+\item How do your answers change when the convergence tolerance changes?
+How many more iterations did the optimization require under the stricter
+tolerances? How different are your answers depending on the optimizer?
+\end{enumerate}
+\end{enumerate}
+\item Summarize your findings regarding Matlab's different optimizers. When
+is \texttt{fminsearch} the best optimizer to use? When is \texttt{fminunc}
+the best to use? How important are starting values in finding a solution?
+How important are convergence tolerances? \end{enumerate}
+
+\end{document}

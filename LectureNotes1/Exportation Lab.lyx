@@ -1,0 +1,478 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+In-Class Lab assignment:
+\begin_inset Newline newline
+\end_inset
+
+Learning How to Export Estimation Results
+\end_layout
+
+\begin_layout Standard
+This lab exercise will familiarize students with the different ways to export
+ estimation results from Matlab to Excel or LaTeX.
+\end_layout
+
+\begin_layout Subsection*
+Materials needed:
+\end_layout
+
+\begin_layout Itemize
+Laptop
+\end_layout
+
+\begin_layout Itemize
+Access to Matlab
+\end_layout
+
+\begin_layout Itemize
+Access to Microsoft Excel
+\end_layout
+
+\begin_layout Itemize
+Access to 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+LyX
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Excel plugin 
+\family typewriter
+excel2latex
+\family default
+ (available at 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+url{http://www.ctan.org/tex-archive/support/excel2latex/}
+\end_layout
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+Mathworks user-written file 
+\family typewriter
+matrix2latex
+\family default
+ (available at 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+url{http://www.mathworks.de/matlabcentral/fileexchange/4894-matrix2latex}
+\end_layout
+
+\end_inset
+
+, or see my modified version on the course website)
+\end_layout
+
+\begin_layout Subsection*
+Calculate Model Estimates
+\end_layout
+
+\begin_layout Enumerate
+Open up Matlab and load the dataset 
+\family typewriter
+carbig.mat
+\end_layout
+
+\begin_layout Enumerate
+Create a vector 
+\family typewriter
+y
+\family default
+ that is the variable 
+\family typewriter
+Acceleration
+\family default
+.
+ Create a matrix 
+\family typewriter
+X
+\family default
+ that is an intercept, 
+\family typewriter
+Cylinders
+\family default
+, 
+\family typewriter
+Displacement
+\family default
+, 
+\family typewriter
+Weight
+\family default
+, and a dummy for if the car was made before the year 76.
+\end_layout
+
+\begin_layout Enumerate
+Calculate the OLS coefficients for this model, i.e.
+ 
+\family typewriter
+b = X
+\backslash
+y;
+\end_layout
+
+\begin_layout Enumerate
+Calculate the standard errors of these coefficients assuming homoskedasticity,
+ i.e.
+ 
+\family typewriter
+se=sqrt(diag(((y-X*b)'
+\begin_inset Newline newline
+\end_inset
+
+*(y-X*b))/(size(X,1)-size(X,2))*((X'*X)
+\backslash
+eye(size(X,2)))));
+\end_layout
+
+\begin_layout Enumerate
+Calculate the t-statistics for the (two-sided) hypothesis test 
+\begin_inset Formula $H_{0}:\beta=0$
+\end_inset
+
+, 
+\begin_inset Formula $H_{1}:\beta\neq0$
+\end_inset
+
+; i.e.
+ 
+\family typewriter
+t=b./se;
+\end_layout
+
+\begin_layout Enumerate
+Calculate the p-values for the hypothesis test, i.e.
+ 
+\family typewriter
+p=2*(1-tcdf(abs(t),size(X,1)-size(X,2)));
+\end_layout
+
+\begin_layout Subsection*
+Exportation Method 1(a): By Hand into LyX
+\end_layout
+
+\begin_layout Enumerate
+With the estimation results computed, create a cell array that concatenates
+ them, i.e.
+ 
+\family typewriter
+estimates = num2cell([b se t p]);
+\end_layout
+
+\begin_layout Enumerate
+Now create a cell array with a string column vector of variable names, i.e.
+ 
+\family typewriter
+varnames = cellstr(char('Intercept',
+\begin_inset Newline newline
+\end_inset
+
+'Cylinders','Displacement','Weight','Older Model'));
+\end_layout
+
+\begin_layout Enumerate
+Now create a string row vector of headers, i.e.
+ 
+\family typewriter
+headers = cellstr(char('Variable','Coefficient',
+\begin_inset Newline newline
+\end_inset
+
+'Standard Error','T-stat','p-value'))';
+\end_layout
+
+\begin_layout Enumerate
+Now create a cell array that contains all information required: 
+\family typewriter
+result = cat(1,headers,
+\begin_inset Newline newline
+\end_inset
+
+cat(2,varnames,estimates));
+\end_layout
+
+\begin_layout Enumerate
+Now export this by hand to Excel:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Open 
+\family typewriter
+result
+\family default
+ in the workspace viewer
+\end_layout
+
+\begin_layout Enumerate
+Select all elements of 
+\family typewriter
+result
+\family default
+, and copy
+\end_layout
+
+\begin_layout Enumerate
+Open up Excel and paste into the first cell (A1)
+\end_layout
+
+\begin_layout Enumerate
+Adjust the number of decimal points to 3
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Now export from Excel to LyX:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Open up LyX and create a Table that has the same number of elements as your
+ Excel spreadsheet
+\end_layout
+
+\begin_layout Enumerate
+Copy from Excel
+\end_layout
+
+\begin_layout Enumerate
+Paste into the top-left cell in LyX using Ctrl+Shift+V or Cmd+Shift+V
+\end_layout
+
+\end_deeper
+\begin_layout Subsection*
+Exportation Method 1(b): By Hand into TeX
+\end_layout
+
+\begin_layout Enumerate
+Repeat steps 1-5 of Method 1(a).
+ Now, instead of pasting from Excel to LyX, use the Excel add-on 
+\family typewriter
+excel2latex
+\end_layout
+
+\begin_layout Enumerate
+Select all of the elements of the Excel spreadsheet
+\end_layout
+
+\begin_layout Enumerate
+Find the excel2latex add-on and copy the code to the clipboard
+\end_layout
+
+\begin_layout Enumerate
+Open up LyX and type Ctrl+L or Cmd+L
+\end_layout
+
+\begin_layout Enumerate
+Paste the code from the clipboard into the red box created in step 4
+\end_layout
+
+\begin_layout Subsection*
+Exportation Method 2: Automatically into Excel
+\end_layout
+
+\begin_layout Enumerate
+Repeat steps 1-4 of Method 1(a).
+\end_layout
+
+\begin_layout Enumerate
+Now export directly to Excel using 
+\family typewriter
+xlswrite
+\family default
+; i.e.
+ 
+\family typewriter
+xlswrite('estimation_results.xlsx',result,1)
+\end_layout
+
+\begin_layout Enumerate
+Open the file 
+\family typewriter
+estimation_results.xlsx
+\family default
+ and view your results
+\end_layout
+
+\begin_layout Subsection*
+Exportation Method 3: Automatically into TeX
+\end_layout
+
+\begin_layout Enumerate
+Repeat steps 1-3 of Method 1(a).
+\end_layout
+
+\begin_layout Enumerate
+Instead of 
+\family typewriter
+estimates = num2cell([b se t p]);
+\family default
+ create a simple numerical array 
+\family typewriter
+estimates1 = [b se t p];
+\end_layout
+
+\begin_layout Enumerate
+Now export directly to LaTeX using 
+\family typewriter
+matrix2latex
+\family default
+; i.e.
+ 
+\family typewriter
+matrix2latex(estimates1, 
+\begin_inset Newline newline
+\end_inset
+
+'estimation_results.tex','rowLabels', varnames, 'columnLabels', 
+\begin_inset Newline newline
+\end_inset
+
+headers, 'alignment', 'c','format', '%7.3f');
+\end_layout
+
+\begin_layout Enumerate
+Now input this .tex file into 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+LyX
+\end_layout
+
+\end_inset
+
+ using the 
+\family typewriter
+
+\backslash
+input{}
+\family default
+ command.
+ To do this, click 
+\family sans
+Insert
+\begin_inset Formula $\blacktriangleright$
+\end_inset
+
+File
+\begin_inset Formula $\blacktriangleright$
+\end_inset
+
+Child Document
+\family default
+ and then choose the file path.
+ Under 
+\family sans
+Include Type
+\family default
+ choose 
+\family sans
+Input
+\family default
+.
+\end_layout
+
+\end_body
+\end_document

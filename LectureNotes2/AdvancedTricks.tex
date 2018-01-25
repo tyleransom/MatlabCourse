@@ -1,0 +1,260 @@
+\documentclass[english,xcolor=dvipsnames]{beamer}
+% load package with ``framed'' and ``numbered'' option.
+\usepackage[numbered,framed,autolinebreaks,useliterate]{mcode}
+\usepackage[orientation=landscape,size=custom,width=16,height=9,scale=0.48,debug]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{bookmark}
+\usepackage{graphics,graphicx}
+\usepackage{pstricks,pst-node,pst-tree}
+\usefonttheme{serif}
+\usepackage{palatino}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetikzlibrary{positioning}
+%\usepackage[margin=.5cm]{geometry}
+
+\definecolor{dgreen}{rgb}{0.,0.6,0.}
+\definecolor{forest}{RGB}{34.,139.,34.}
+\definecolor{byublue}{RGB}{0.,30.,76.}
+\definecolor{dukeblue}{RGB}{0.,0.,156.}
+%\usetheme{Ilmenau}
+\usetheme{Warsaw}
+\usecolortheme[named=dukeblue]{structure}
+%\usecolortheme[named=RawSienna]{structure}
+%\usecolortheme[named=byublue]{structure}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamercovered{transparent}
+
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bq}{\begin{quote}}
+\newcommand{\eq}{\end{quote}}
+\newcommand{\bd}{\begin{description}}
+\newcommand{\ed}{\end{description}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+
+\title[]{Advanced Programming Tricks}
+\author{Tyler Ransom}
+\institute{Duke University}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+   \titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Plan}
+
+   \bi 
+   \item Discuss tips on what to do when optimization fails and you know your code doesn't have a mistake
+   \item Discuss how to recover estimates and standard errors when a user has imposed constraints in her objective function
+   \item Introduce some more advanced, helpful commands
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Programming Tricks}
+
+   \bi 
+   \item Optimization is more of an art than a science
+   \item You need to know what to do when your optimizer isn't cooperating
+   \item Example:
+      \item Starting values make a huge difference
+      \item The closer your starting values are to the ``answer'', the better optimizer will perform
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{General Tips}
+
+   \bi 
+   \item Tip 1: Provide as good of starting values as possible
+      \item Use Matlab built-in functions like \texttt{regress}, \texttt{glmfit}, and \texttt{mnrfit} which estimate a wide range of standard econometric models
+      \item Even if your objective function is slightly different (e.g. a slightly modified logit), providing starting values from \texttt{mnrfit} output is likely to be better than random noise
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{General Tips}
+
+   \bi 
+   \item Tip 2: ``Trick'' the optimizer into always giving a ``good'' guess for certain parameters by imposing a constraint
+      \item Example: In normal MLE regression, a guess of $\sigma \leq 0$ results in an undefined likelihood function and Matlab exiting immediately
+      \item Make a transformation of $\sigma$, e.g. $\sigma^{\prime} = \exp(\sigma)$
+      \item This is always positive, so Matlab will never crash because of a nonpositive $\sigma$
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Comment}
+      \bi 
+      \item Could also use \texttt{fmincon} with constraint that $\sigma$ be positive
+      \item I've had limited success with \texttt{fmincon} for this type of use
+      \item At the end of optimization, Matlab spits out, e.g. $\hat{\sigma}^{\prime} $ instead of $\hat{\sigma}$. It also spits out the standard error of $\hat{\sigma}^{\prime} $ instead of the SE of $\hat{\sigma}$
+      \item After you're done with optimization, you need to make a transformation to both the point estimate and the hessian in order to recover the true parameter estimate and standard error
+      \item We'll go through how to do this a bit later
+      \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{General Tips}
+
+   \bi 
+   \item Tip 3: ``Trick'' the objective function into returning a really bad value if it tries to guess a parameter value you know is bad
+      \item Example: In the normal MLE example, if Matlab guesses $\sigma \leq 0$, recode the likelihood function to return $+10^4$ (or some other large number)
+      \item This will indirectly tell Matlab that a guess of nonpositive $\sigma$ is a bad idea
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Comment}
+
+      \bi 
+      \item This is a pretty indirect way of imposing constraints on the parameters
+      \item Because you're creating a discontinuity in the objective function, it may take substantially longer to converge
+      \item I wouldn't recommend this as a first option, but it is an option
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{General Tips}
+
+   \bi 
+   \item Tip 4: Recode bad values as good values, if the bad values will cause the routine to crash
+      \item Example: In a simple probit, the optimizer might give a guess of $\beta$ which would yield probabilities of zero. The likelihood formula includes log(P), so it becomes undefined
+      \item Could recode these zero probabilities to e.g. $10^{-200}$
+      \item Another example: In the normal MLE scenario, recode $\sigma$ as $.01$ if the optimizer tries to guess a nonpositive $\sigma$
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{Comment}
+
+      \bi 
+      \item Similar to Tip 3, I wouldn't recommend this in general
+      \item Like Tip 3, it creates discontinuities in the objective function which may cause the optimizer to converge to the wrong spot or not converge at all
+      \item However, I have had more success with Tip 4 than Tip 3, so it is an option
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{``Tricking'' vs Actual Constraints}
+
+   \bi 
+   \item The tips we've discussed so far are strictly numerical methods, not theoretical [our optimization should work in theory, after all...]
+   \item They work best for situations in which there are ``implicit'' constraints on the likelihood function (like $\sigma>0$ for normal pdf and $P>0$ for probit/logit)
+   \item If your objective function has formal constraints, it may be better to use fmincon, which is set up to do Lagrangian constrained optimization
+   \item Implementing these ``tricks'' in my experience causes optimization to take longer (since Matlab has to re-think the problem each iteration)
+   \item Inference is slightly more tricky in this scenario
+   \item Thus, tricking the optimizer should only be done when you can't get a solution any other way
+   \ei
+\end{frame}
+
+\begin{frame}
+\frametitle{How to do Tip 2 using the Delta Method}
+Recall the Delta Method:
+If
+\begin{equation}
+	\sqrt{n}\left(\hat{\theta}-\theta\right)\overset{d}{\rightarrow}N\left(0,\,\Sigma\right)
+\label{eq:1}
+\end{equation}
+then, for any function $g$ with a continuous derivative,
+\begin{equation}
+	\sqrt{n}\left(g(\hat{\theta})-g(\theta)\right)\overset{d}{\rightarrow}N\left(0,\,[\nabla g^\prime] \Sigma [\nabla g]\right)
+\label{eq:2}
+\end{equation}
+where $\nabla$ is the gradient operator.
+\end{frame}
+
+\begin{frame}
+\frametitle{How to do Tip 2 using the Delta Method}
+When introducing constraints in multivariate functions, it is important to understand what the constraint function $g$ looks like and what its derivative $\nabla g$ looks like. The $k$-dimensional vector of constraint functions $g$ is
+
+	\begin{equation}
+	g = \left[\begin{array}{c}
+g_{1}(\theta_{1},\ldots,\theta_{k}) \\
+g_{2}(\theta_{1},\ldots,\theta_{k}) \\
+\vdots \\
+g_{k}(\theta_{1},\ldots,\theta_{k})
+\end{array}\right].
+	\label{eq:3}
+  \end{equation} 
+\end{frame}
+
+\begin{frame}
+\frametitle{How to do Tip 2 using the Delta Method}
+Following rules of differentiation, the derivative of $g$ is
+	
+	\begin{equation}
+	\nabla g = \left[\begin{array}{cccc}
+\frac{\partial g_1}{\partial \theta_1} & \frac{\partial g_1}{\partial \theta_2} & \cdots & \frac{\partial g_1}{\partial \theta_k} \\
+\frac{\partial g_2}{\partial \theta_1} & \frac{\partial g_2}{\partial \theta_2} & \cdots & \frac{\partial g_2}{\partial \theta_k} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\partial g_k}{\partial \theta_1} & \frac{\partial g_k}{\partial \theta_2} & \cdots & \frac{\partial g_k}{\partial \theta_k}
+\end{array}\right].
+	\label{eq:4}
+  \end{equation}
+Most of the time, parameter constraints will only be a function of themselves (e.g. $g(\theta_1)=\exp(\theta_1)/(1+\exp(\theta_1))$). In these cases, $\nabla g$ will be a diagonal matrix. In the case where there are no parameter constraints, $\nabla g \equiv \mathrm{I}$, the identity matrix because $g_i(\theta)=\theta_i,\,i=1,\ldots,k$. 
+\end{frame}
+
+\begin{frame}
+\frametitle{How to do Tip 2 using the Delta Method}
+When introducing a constraint (like $\sigma^{\prime} = \exp(\sigma)$), here are the steps for recovering the correct parameter and standard error:
+   \be
+   \item At the top of the function being optimized, insert the constraints (e.g. \texttt{theta(end)=} \texttt{exp(theta(end));})
+   \item In the file that calls the optimization, restate the constraints just after the line where optimization is called. This will have Matlab display the correct point estimates
+   \item Now that we have correct point estimates, we can turn to recovering the correct standard errors. Recall that, in Matlab code, the asymptotic variance matrix from (1) is $\Sigma=\mathtt{sqrt(diag(inv(hessian)))}$. If we have a constraint function $g(\theta)$, then the delta method formula from (2) says that our new asymptotic variance is $[\nabla g^\prime] \Sigma [\nabla g]$.
+   \ee
+\end{frame}
+
+\begin{frame}
+\frametitle{How to do Tip 2 using the Delta Method}
+   \be
+   \setcounter{enumi}{3}
+	 \item Create a vector of derivatives. In the example given above where \texttt{theta(end)=exp(theta(end))}, the derivative would be \texttt{theta\_prime(end)=exp(theta(end));} (and 1 everywhere else)
+	 \item	Once you've applied all of the constraints in this way, create the $\nabla g$ matrix by diagonalizing the vector of derivatives, (i.e. \texttt{A=diag(theta\_prime)}, where \texttt{A} is the $\nabla g$ matrix).	
+	 \item Finally, the correct Hessian can be obtained by directly applying the delta method as outlined above: \texttt{std\_err=sqrt(diag(A$^\prime$*inv(hessian)*A));}
+   \ee
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Using loops to create matrices with numbers in the name}
+   \bi
+	 \item Suppose a user wants to create matrices named X1, X2, ..., Xn
+	 \item Matlab has a command named \texttt{eval} which accomplishes this
+	 \item \texttt{eval(s)} causes Matlab to execute a string (s) as Matlab code
+	 \item Example:	
+   \ei
+\begin{lstlisting}
+for n = 1:12
+   eval(['M' num2str(n) ' = magic(n)'])
+end
+\end{lstlisting}
+This creates matrices M1 through M12 which are equal to \texttt{magic(1)} through \texttt{magic(12)}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Advanced flow control: capture errors}
+   \bi
+	 \item Matlab has a construct similar to Stata's ``capture''
+	 \item A \mcode{try - catch} loop is used to capture error messages that would otherwise cause a program to exit
+	 \item The general syntax is
+   \ei
+\begin{lstlisting}
+try
+   [statements]
+catch [exception]
+   [statements]
+end
+\end{lstlisting}
+\end{frame}
+
+\end{document}

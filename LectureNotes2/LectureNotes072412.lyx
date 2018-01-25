@@ -1,0 +1,658 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\date{}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Lecture Notes 7/24/2012
+\end_layout
+
+\begin_layout Section*
+Discrete Choice
+\end_layout
+
+\begin_layout Standard
+We have 
+\begin_inset Formula $J+1$
+\end_inset
+
+ mutually-exclusive choices indexed by 
+\begin_inset Formula $j=0,\ldots J$
+\end_inset
+
+.
+ We only observe the choice that was made, not the utility arising from
+ each choice.
+ Model: 
+\begin_inset Formula 
+\[
+y_{ij}=x_{i}^{\prime}\beta_{j}+\varepsilon_{ij}
+\]
+
+\end_inset
+
+ in vector form: 
+\begin_inset Formula 
+\[
+y_{j}=X\beta_{j}+\varepsilon_{j}
+\]
+
+\end_inset
+
+We want to estimate 
+\begin_inset Formula $\beta$
+\end_inset
+
+ because it has some sort of economic significance: e.g.
+ demand for good 
+\begin_inset Formula $j$
+\end_inset
+
+, utility of working in occupation 
+\begin_inset Formula $j$
+\end_inset
+
+, utility of living in neighborhood 
+\begin_inset Formula $j$
+\end_inset
+
+; etc.
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Estimation procedure for recovering 
+\begin_inset Formula $\beta$
+\end_inset
+
+ depends on what assumptions we make on the 
+\begin_inset Formula $J$
+\end_inset
+
+-dimensional error term, 
+\begin_inset Formula $\varepsilon_{i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Binomial Logit
+\end_layout
+
+\begin_layout Standard
+Let's assume that 
+\begin_inset Formula $\varepsilon_{ij}\overset{iid}{\sim}$
+\end_inset
+
+Type I Extreme Value (also sometimes referred to as the Gumbel distribution).
+ The CDF for this distribution is 
+\begin_inset Formula $F\left(x\right)=e^{-e^{-x}}$
+\end_inset
+
+.
+ It is noteworthy that the difference in two TIEV random variables is distribute
+d logistic; i.e.
+ if 
+\begin_inset Formula $X$
+\end_inset
+
+ and 
+\begin_inset Formula $Y$
+\end_inset
+
+ are both distributed Gumbel, then 
+\begin_inset Formula $X-Y$
+\end_inset
+
+ is distributed Logistic with CDF 
+\begin_inset Formula $F\left(x\right)=\frac{1}{1+e^{-x}}=\frac{e^{x}}{1+e^{x}}$
+\end_inset
+
+.
+ Now let's write out our system of equations:
+\begin_inset Formula 
+\begin{eqnarray*}
+y_{i0} & = & X_{i}\beta_{0}+\varepsilon_{i0}\\
+y_{i1} & = & X_{i}\beta_{1}+\varepsilon_{i1}
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $\varepsilon_{ij}\overset{iid}{\sim}$
+\end_inset
+
+Type I Extreme Value.
+ Now let's take differences between the two equations:
+\begin_inset Formula 
+\begin{eqnarray}
+y_{i1}-y_{i0} & = & X_{i}\left(\beta_{1}-\beta_{0}\right)+\varepsilon_{i1}-\varepsilon_{i0}\\
+\tilde{y}_{i} & = & X_{i}\tilde{\beta}+\tilde{\varepsilon}_{i}\nonumber 
+\end{eqnarray}
+
+\end_inset
+
+where 
+\begin_inset Formula $\tilde{\varepsilon}_{i}$
+\end_inset
+
+ is now distributed iid Logistic.
+ The choice probabilities are now
+\begin_inset Formula 
+\begin{eqnarray*}
+\Pr\left(\tilde{y}_{i}=1\right)=P_{i1} & = & \frac{\exp\left(X_{i}\tilde{\beta}\right)}{1+\exp\left(X_{i}\tilde{\beta}\right)}\\
+ & = & \frac{\exp\left(X_{i}\left(\beta_{1}-\beta_{0}\right)\right)}{1+\exp\left(X_{i}\left(\beta_{1}-\beta_{0}\right)\right)}\\
+\Pr\left(\tilde{y}_{i}=0\right)=P_{i0} & = & \frac{1}{1+\exp\left(X_{i}\tilde{\beta}\right)}\\
+ & = & \frac{1}{1+\exp\left(X_{i}\left(\beta_{1}-\beta_{0}\right)\right)}.
+\end{eqnarray*}
+
+\end_inset
+
+Now let's multiply and divide by 
+\begin_inset Formula $\exp\left(X_{i}\beta_{0}\right)$
+\end_inset
+
+:
+\begin_inset Formula 
+\begin{eqnarray*}
+P_{i1} & = & \frac{\exp\left(X_{i}\left(\beta_{1}-\beta_{0}\right)\right)\exp\left(X_{i}\beta_{0}\right)}{\left[1+\exp\left(X_{i}\left(\beta_{1}-\beta_{0}\right)\right)\right]\exp\left(X_{i}\beta_{0}\right)}\\
+ & = & \frac{\exp\left(X_{i}\beta_{1}-X_{i}\beta_{0}\right)\exp\left(X_{i}\beta_{0}\right)}{\exp\left(X_{i}\beta_{0}\right)+\exp\left(X_{i}\beta_{1}-X_{i}\beta_{0}\right)\exp\left(X_{i}\beta_{0}\right)}.
+\end{eqnarray*}
+
+\end_inset
+
+Now we can rewrite this formula using the property of exponentials that
+ 
+\begin_inset Formula $e^{x-y}=\frac{e^{x}}{e^{y}}$
+\end_inset
+
+:
+\begin_inset Formula 
+\[
+P_{i1}=\frac{\frac{\exp\left(X_{i}\beta_{1}\right)}{\exp\left(X_{i}\beta_{0}\right)}\exp\left(X_{i}\beta_{0}\right)}{\exp\left(X_{i}\beta_{0}\right)+\frac{\exp\left(X_{i}\beta_{1}\right)}{\exp\left(X_{i}\beta_{0}\right)}\exp\left(X_{i}\beta_{0}\right)}
+\]
+
+\end_inset
+
+and simplifying, we get
+\begin_inset Formula 
+\[
+P_{i1}=\frac{\exp\left(X_{i}\beta_{1}\right)}{\exp\left(X_{i}\beta_{0}\right)+\exp\left(X_{i}\beta_{1}\right)}.
+\]
+
+\end_inset
+
+We can do something similar for the formula of 
+\begin_inset Formula $P_{i0}$
+\end_inset
+
+ to get
+\begin_inset Formula 
+\[
+P_{i0}=\frac{\exp\left(X_{i}\beta_{0}\right)}{\exp\left(X_{i}\beta_{0}\right)+\exp\left(X_{i}\beta_{1}\right)}.
+\]
+
+\end_inset
+
+In general, for any multinomial choice model where 
+\begin_inset Formula $\varepsilon_{ij}\overset{iid}{\sim}$
+\end_inset
+
+Type I Extreme Value, the formula for the probability of making choice 
+\begin_inset Formula $j$
+\end_inset
+
+ is
+\begin_inset Formula 
+\begin{equation}
+P_{ij}=\frac{\exp\left(X_{i}\beta_{j}\right)}{\sum_{k}\exp\left(X_{i}\beta_{k}\right)}.
+\end{equation}
+
+\end_inset
+
+For a more rigorous (i.e.
+ an actual) proof of this, see Train pp.
+ 36, 74-75.
+\end_layout
+
+\begin_layout Subsection*
+Normalizations
+\end_layout
+
+\begin_layout Standard
+Recall that, for the classic logit formula, 
+\begin_inset Formula 
+\begin{equation}
+P_{i0}=\frac{1}{1+\exp\left(X_{i}\beta_{1}\right)},
+\end{equation}
+
+\end_inset
+
+not
+\begin_inset Formula 
+\begin{equation}
+P_{i0}=\frac{\exp\left(X_{i}\beta_{0}\right)}{\exp\left(X_{i}\beta_{0}\right)+\exp\left(X_{i}\beta_{1}\right)}.
+\end{equation}
+
+\end_inset
+
+Note that (3) is equivalent to (4) if we set 
+\begin_inset Formula $\beta_{0}=0$
+\end_inset
+
+.
+ Indeed, we can only ever identify 
+\begin_inset Formula $\beta_{1}-\beta_{0}$
+\end_inset
+
+ (see (1) for intuition).
+ Therefore, we need to set the scale of this difference, typically by setting
+ 
+\begin_inset Formula $\beta_{0}=0$
+\end_inset
+
+.
+ We choose this because we still want to be able to interpret the 
+\begin_inset Formula $\beta_{1}$
+\end_inset
+
+ parameters in a meaningful way, and when 
+\begin_inset Formula $\beta_{0}=0$
+\end_inset
+
+ then 
+\begin_inset Formula $\tilde{\beta}=\beta_{1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Scaling our parameters in this way is known as making a 
+\emph on
+location normalization
+\emph default
+ or setting the 
+\emph on
+level
+\emph default
+ of utility.
+ In general, we also need to normalize the 
+\emph on
+scale
+\emph default
+ of the model by setting the variance of one of the 
+\begin_inset Formula $\varepsilon_{ij}$
+\end_inset
+
+ to be 1, for example.
+ However, in the logit model this is not necessary because the standardized
+ Type I Extreme Value distribution already has the variance scaled (where
+ variance is equal to 
+\begin_inset Formula $\pi^{2}/6$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+In the multinomial logit, we need to set one of the 
+\begin_inset Formula $\beta$
+\end_inset
+
+ vectors to be zero (usually this is 
+\begin_inset Formula $\beta_{0}$
+\end_inset
+
+ or 
+\begin_inset Formula $\beta_{J}$
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Why do we need to normalize?
+\end_layout
+
+\begin_layout Standard
+If we tried doing MLE on the logit model without normalizing the location
+ (i.e.
+ setting 
+\begin_inset Formula $\beta_{0}=0$
+\end_inset
+
+), we would find that Matlab would be able to arbitrarily set 
+\begin_inset Formula $\beta_{0}$
+\end_inset
+
+ to any value and 
+\begin_inset Formula $\beta_{1}$
+\end_inset
+
+ to any other value, with the only constraint being that 
+\begin_inset Formula $P_{i0}+P_{i1}=1$
+\end_inset
+
+.
+ We would quickly discover that the MLE would never converge, because any
+ combination of 
+\begin_inset Formula $\beta_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta_{1}$
+\end_inset
+
+ arbitrarily satisfies the model.
+ Hence, if we don't normalize the location, then we can't separately estimate
+ 
+\begin_inset Formula $\beta_{0}$
+\end_inset
+
+ and 
+\begin_inset Formula $\beta_{1}$
+\end_inset
+
+.
+ This is what is meant by 
+\emph on
+identification
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Subsubsection*
+Interpreting in the face of normalizations
+\end_layout
+
+\begin_layout Standard
+Recall that interpretation of coefficients 
+\begin_inset Formula $\beta_{1}$
+\end_inset
+
+ in the classic logit model is always relative to the option that is 
+\begin_inset Formula $y=0$
+\end_inset
+
+.
+ For example, if we have a model where 
+\begin_inset Formula $y$
+\end_inset
+
+ is 1 if the individual chooses to retire and 0 if the individual chooses
+ to stay in the workforce, then 
+\begin_inset Formula $\beta_{1}$
+\end_inset
+
+ is always interpreted relative to 
+\begin_inset Formula $\beta_{0}$
+\end_inset
+
+.
+ In other words, if we estimated a positive coefficient on the variable
+ 
+\begin_inset Formula $male$
+\end_inset
+
+, we would conclude that males are 
+\emph on
+more likely to retire
+\emph default
+ than females.
+ That's the most we can say about our model estimates.
+\end_layout
+
+\begin_layout Subsection*
+Probit
+\end_layout
+
+\begin_layout Standard
+With probit, we assume that 
+\begin_inset Formula $\varepsilon_{i}$
+\end_inset
+
+ is distributed 
+\begin_inset Formula $N\left(0,\Sigma\right)$
+\end_inset
+
+, where 
+\begin_inset Formula $\varepsilon_{i}$
+\end_inset
+
+ is a 
+\begin_inset Formula $J+1$
+\end_inset
+
+-dimensional vector of choice-specific error terms.
+ Analytical derivation of the multinomial probit choice probabilities is
+ impossible because there is no closed form solution for them.
+ The general formula for a multinomial probit choice probability is a 
+\begin_inset Formula $J+1$
+\end_inset
+
+-dimensional integral:
+\begin_inset Formula 
+\begin{equation}
+P_{ij}=\dotsint I\left[X_{i}\beta_{j}+\varepsilon_{ij}>X_{i}\beta_{k}+\varepsilon_{ik}\,\forall\, k\neq j\right]\phi\left(\varepsilon_{i}\right)d\varepsilon_{i}
+\end{equation}
+
+\end_inset
+
+where 
+\begin_inset Formula $I\left[\cdot\right]$
+\end_inset
+
+ is an indicator function, and 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\phi\left(\varepsilon_{i}\right)$
+\end_inset
+
+ is the PDF of the multivariate normal distribution with mean vector 
+\begin_inset Formula $0$
+\end_inset
+
+ and covariance matrix 
+\begin_inset Formula $\Sigma$
+\end_inset
+
+.
+ 
+\begin_inset Formula 
+\[
+\phi\left(\varepsilon_{i}\right)=\frac{1}{\left(2\pi\right)^{\left(J+1\right)/2}\left|\Sigma\right|^{1/2}}\exp\left(-\frac{1}{2}\varepsilon_{i}^{\prime}\Sigma^{-1}\varepsilon_{i}\right).
+\]
+
+\end_inset
+
+Just as with the logit, one of the 
+\begin_inset Formula $\beta_{k}$
+\end_inset
+
+ needs to be set equal to 0, and additionally one of the variances of 
+\begin_inset Formula $\varepsilon_{k}$
+\end_inset
+
+ needs to be set to 1.
+\end_layout
+
+\begin_layout Section*
+Maximum Likelihood
+\end_layout
+
+\begin_layout Standard
+Maximum likelihood for discrete choice models is fairly straightforward.
+ Recall that for the binomial case, we used the PDF of the Bernoulli distributio
+n as our functional form for the likelihood: 
+\begin_inset Formula $f\left(y;p\right)=p^{y}\left(1-p\right)^{1-y}$
+\end_inset
+
+.
+ In a Bernoulli distribution, 
+\begin_inset Formula $y$
+\end_inset
+
+ can only take on values 
+\begin_inset Formula $\left\{ 0,1\right\} $
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In the multinomial case, we use a 
+\begin_inset Quotes eld
+\end_inset
+
+multivariate
+\begin_inset Quotes erd
+\end_inset
+
+ Bernoulli, which is called the Categorical distribution.
+ In this distribution, 
+\begin_inset Formula $y$
+\end_inset
+
+ can take on values 
+\begin_inset Formula $\left\{ 0,1,\ldots J\right\} $
+\end_inset
+
+.
+ The PDF of this distribution is 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $f\left(y;p_{0},\ldots,p_{J}\right)=p_{0}^{I\left[y=0\right]}p_{1}^{I\left[y=1\right]}\cdots p_{J}^{I\left[y=J\right]}$
+\end_inset
+
+, where 
+\begin_inset Formula $I\left[y=J\right]$
+\end_inset
+
+ is an indicator function that is 1 if 
+\begin_inset Formula $y=J$
+\end_inset
+
+ and 0 otherwise.
+\end_layout
+
+\begin_layout Standard
+The likelihood function for a multinomial choice model is then
+\begin_inset Formula 
+\begin{eqnarray*}
+\mathcal{L}\left(y,X;\beta\right) & = & \prod_{i}p_{i0}^{d_{i0}}p_{i1}^{d_{i1}}\cdots p_{iJ}^{d_{iJ}}\\
+ & = & \prod_{i}\prod_{j}p_{ij}^{d_{ij}}\\
+\log\left(\mathcal{L}\left(y,X;\beta\right)\right)=\ell\left(y,X;\beta\right) & = & \sum_{i}\sum_{j}d_{ij}\log\left(p_{ij}\right)
+\end{eqnarray*}
+
+\end_inset
+
+where 
+\begin_inset Formula $d_{ij}=I\left[y_{i}=j\right]$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The formula for 
+\begin_inset Formula $p_{ij}$
+\end_inset
+
+ is then either (2) if Gumbel distribution is assumed, or the ugly integral
+ formula (5) if Normal distribution is assumed.
+\end_layout
+
+\end_body
+\end_document

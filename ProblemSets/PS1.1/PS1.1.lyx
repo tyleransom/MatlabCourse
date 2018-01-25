@@ -1,0 +1,849 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\date{}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman times
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 12
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine natbib_authoryear
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1in
+\topmargin 1in
+\rightmargin 1in
+\bottommargin 1in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Problem Set 1
+\end_layout
+
+\begin_layout Standard
+Directions: Answer all questions.
+ Clearly label all answers.
+ Show all of your code.
+ Turn in m-file(s) and writeup to me via your dropbox in Sakai (in a folder
+ labeled 'MatlabPS1.1') by 11:59 p.m.
+ on Thursday, July 5, 2012.
+ Writeup may be comments in m-file(s).
+ Put the names of all group members at the top of your writeup or m-file.
+\end_layout
+
+\begin_layout Enumerate
+Initializing variables and practice with basic matrix operations
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Create the following four matrices of random numbers, 
+\emph on
+setting the seed to
+\emph default
+ '1234'
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+To set the seed, type the following code: 
+\family typewriter
+rand('seed',1234);
+\family default
+ and 
+\family typewriter
+randn('seed',1234);
+\end_layout
+
+\end_inset
+
+.
+ Name the matrices and set the dimensions as noted
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Formula $A_{10\times7}$
+\end_inset
+
+ - random numbers distributed 
+\begin_inset Formula $U\left[-5,10\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $B_{10\times7}$
+\end_inset
+
+ - random numbers distributed 
+\begin_inset Formula $N\left(-2,15\right)$
+\end_inset
+
+ [st dev is 
+\begin_inset Formula $15$
+\end_inset
+
+]
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $C_{5\times7}$
+\end_inset
+
+ - the first 5 rows and first 5 columns of 
+\begin_inset Formula $A$
+\end_inset
+
+ and the last two columns and first 5 rows of 
+\begin_inset Formula $B$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+\begin_inset Formula $D_{10\times7}$
+\end_inset
+
+ - where 
+\begin_inset Formula $D_{i,j}=A_{i,j}$
+\end_inset
+
+ if 
+\begin_inset Formula $A_{i,j}\leq0$
+\end_inset
+
+, or 
+\begin_inset Formula $0$
+\end_inset
+
+ otherwise
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Use a built-in Matlab function to list the number of elements of 
+\begin_inset Formula $A$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Use a series of built-in Matlab functions to list the number of 
+\emph on
+unique
+\emph default
+ elements of 
+\begin_inset Formula $D$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Using the reshape command, create a new matrix called 
+\begin_inset Formula $E$
+\end_inset
+
+ which is the 'vec' operator
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+See 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+url{http://en.wikipedia.org/wiki/Vectorization_(mathematics)}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ applied to 
+\begin_inset Formula $B$
+\end_inset
+
+.
+ Can you find an easier way to accomplish this?
+\end_layout
+
+\begin_layout Enumerate
+Create a new matrix called 
+\begin_inset Formula $F$
+\end_inset
+
+ which is 3-dimensional and contains 
+\begin_inset Formula $A$
+\end_inset
+
+ in the first column of the third dimension and 
+\begin_inset Formula $B$
+\end_inset
+
+ in the second column of the third dimension
+\end_layout
+
+\begin_layout Enumerate
+Use the 
+\family typewriter
+permute
+\family default
+ function to twist 
+\begin_inset Formula $F$
+\end_inset
+
+ so that it is now 
+\begin_inset Formula $F_{2\times10\times7}$
+\end_inset
+
+ instead of 
+\begin_inset Formula $F_{10\times7\times2}$
+\end_inset
+
+.
+ Save this new matrix as 
+\begin_inset Formula $F$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Create a matrix 
+\begin_inset Formula $G$
+\end_inset
+
+ which is equal to 
+\begin_inset Formula $B\otimes C$
+\end_inset
+
+ (the Kronecker product of 
+\begin_inset Formula $B$
+\end_inset
+
+ and 
+\begin_inset Formula $C$
+\end_inset
+
+).
+ What happens when you try 
+\begin_inset Formula $C\otimes F$
+\end_inset
+
+?
+\end_layout
+
+\begin_layout Enumerate
+Save the matrices 
+\begin_inset Formula $A$
+\end_inset
+
+, 
+\begin_inset Formula $B$
+\end_inset
+
+, 
+\begin_inset Formula $C$
+\end_inset
+
+, 
+\begin_inset Formula $D$
+\end_inset
+
+, 
+\begin_inset Formula $E$
+\end_inset
+
+, 
+\begin_inset Formula $F$
+\end_inset
+
+ and 
+\begin_inset Formula $G$
+\end_inset
+
+ as a .mat file named 
+\family typewriter
+matrixpractice
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Save only the matrices 
+\begin_inset Formula $A$
+\end_inset
+
+, 
+\begin_inset Formula $B$
+\end_inset
+
+, 
+\begin_inset Formula $C$
+\end_inset
+
+, and 
+\begin_inset Formula $D$
+\end_inset
+
+ as a .mat file called 
+\family typewriter
+firstmatrix
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Export 
+\begin_inset Formula $C$
+\end_inset
+
+ as a .csv file called 
+\family typewriter
+Cmatrix
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Export 
+\begin_inset Formula $D$
+\end_inset
+
+ as a tab-delimited .dat file called 
+\family typewriter
+Dmatrix
+\family default
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Practice with loops
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Write a loop that computes the element-by-element product of 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $B$
+\end_inset
+
+.
+ Name the new matrix 
+\begin_inset Formula $AB$
+\end_inset
+
+.
+ Create a matrix called 
+\begin_inset Formula $AB2$
+\end_inset
+
+ that accomplishes this task without a loop.
+\end_layout
+
+\begin_layout Enumerate
+Write a loop that creates a column vector called 
+\family typewriter
+Cprime
+\family default
+ which contains only the elements of C that are between -5 and 5 (inclusive).
+ Create a vector called 
+\family typewriter
+Cprime2
+\family default
+ which does this calculation without a loop.
+\end_layout
+
+\begin_layout Enumerate
+Using loops, create a 3-dimensional matrix called 
+\begin_inset Formula $X$
+\end_inset
+
+ that is of dimension 
+\begin_inset Formula $N\times K\times T$
+\end_inset
+
+ where 
+\begin_inset Formula $N=15,169$
+\end_inset
+
+, 
+\begin_inset Formula $K=6$
+\end_inset
+
+, and 
+\begin_inset Formula $T=5$
+\end_inset
+
+.
+ For all 
+\begin_inset Formula $t$
+\end_inset
+
+, the columns of 
+\begin_inset Formula $X$
+\end_inset
+
+ should be (in order):
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+an intercept (i.e.
+ vector of ones)
+\end_layout
+
+\begin_layout Itemize
+a dummy variable that is 1 with probability .75
+\begin_inset Formula $*\left(6-t\right)/5$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+a continuous variable distributed normal with mean 
+\begin_inset Formula $15+t-1$
+\end_inset
+
+ and standard deviation 
+\begin_inset Formula $5\left(t-1\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+a continuous variable distributed normal with mean 
+\begin_inset Formula $\pi\left(6-t\right)/3$
+\end_inset
+
+ and standard deviation 
+\begin_inset Formula $1/e$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+a discrete variable distribued 
+\begin_inset Quotes eld
+\end_inset
+
+discrete normal
+\begin_inset Quotes erd
+\end_inset
+
+ with mean 12 and standard deviation 2.19
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+A discrete normal random variable is properly called a binomial random variable.
+ The distribution described above can be implemented by choosing binomial
+ parameters 
+\begin_inset Formula $n$
+\end_inset
+
+ and 
+\begin_inset Formula $p$
+\end_inset
+
+ where 
+\begin_inset Formula $n=20$
+\end_inset
+
+ and 
+\begin_inset Formula $p=0.6$
+\end_inset
+
+.
+ Use Matlab's 
+\family typewriter
+binornd
+\family default
+ command to generate this vector of 
+\begin_inset Formula $X$
+\end_inset
+
+.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+a discrete variable distribued binomial with 
+\begin_inset Formula $n=20$
+\end_inset
+
+ and 
+\begin_inset Formula $p=0.5$
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+i.e., let columns 1, 5 and 6 remain stationary over time.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Use loops to create a matrix 
+\begin_inset Formula $\beta$
+\end_inset
+
+ which is 
+\begin_inset Formula $K\times T$
+\end_inset
+
+ and whose elements evolve across time in the following fashion:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\begin_inset Formula $1,1.25,1.5,...$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $\ln\left(t\right)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $-\sqrt{t}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $e^{t}-e^{t+1}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $t$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Formula $t/3$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Use loops to create a matrix 
+\begin_inset Formula $Y$
+\end_inset
+
+ which is 
+\begin_inset Formula $N\times T$
+\end_inset
+
+ defined by 
+\begin_inset Formula $Y_{t}=X_{t}\beta_{t}+\varepsilon_{t}$
+\end_inset
+
+, where 
+\begin_inset Formula $\varepsilon_{t}\overset{iid}{\sim}N\left(0,\sigma=.36\right)$
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Reading in Data and calculating summary statistics
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Clear the workspace and import the file 
+\family typewriter
+nlsw88.csv
+\family default
+ into Matlab.
+ Make sure you appropriately convert missing values and variable names.
+ Save the result as 
+\family typewriter
+nlsw88.mat
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+What percentage of the sample has never been married? What percentage are
+ college graduates?
+\end_layout
+
+\begin_layout Enumerate
+Use the 
+\family typewriter
+tabulate
+\family default
+ command to report what percentage of the sample is in each race category
+\end_layout
+
+\begin_layout Enumerate
+Create a matrix called 
+\family typewriter
+summarystats
+\family default
+ which lists the mean, median, standard deviation, min, max, number of unique
+ elements, and interquartile range (75th percentile minus 25th percentile)
+ of 
+\family typewriter
+grade
+\family default
+ (highest grade completed).
+ What percentage of grades observations are missing?
+\end_layout
+
+\begin_layout Enumerate
+Graphically show the joint distribution of industry and occupation
+\end_layout
+
+\begin_layout Enumerate
+Tabulate the mean wage over industry and occupation categories
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Practice with functions
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Clear the workspace and load 
+\family typewriter
+firstmatrix.mat
+\family default
+.
+\end_layout
+
+\begin_layout Enumerate
+Write a function called 
+\family typewriter
+matrixops
+\family default
+ that takes as inputs the matrices 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $B$
+\end_inset
+
+ from question (a) of problem 1 and has three outputs: 
+\emph on
+(i)
+\emph default
+ the element-by-element product of the inputs, 
+\emph on
+(ii)
+\emph default
+ the product 
+\begin_inset Formula $A^{\prime}B$
+\end_inset
+
+, and 
+\emph on
+(iii)
+\emph default
+ the sum of all the elements of 
+\begin_inset Formula $A+B$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Starting on line 2 of the function, write a comment that explains what 
+\family typewriter
+matrixops
+\family default
+ does.
+\end_layout
+
+\begin_layout Enumerate
+In the command window, type 
+\family typewriter
+help matrixops
+\family default
+.
+ What comes up?
+\end_layout
+
+\begin_layout Enumerate
+Evaluate 
+\family typewriter
+matrixops.m
+\family default
+ using 
+\begin_inset Formula $A$
+\end_inset
+
+ and 
+\begin_inset Formula $B$
+\end_inset
+
+ from question (a) of problem 1
+\end_layout
+
+\begin_layout Enumerate
+Just before the first executable line of 
+\family typewriter
+matrixops.m
+\family default
+ (i.e.
+ right after the first-line comments), write an if statement which gives
+ an error if the two inputs are not the same size.
+ Have the error say 
+\begin_inset Quotes eld
+\end_inset
+
+inputs must have the same size.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Evaluate 
+\family typewriter
+matrixops.m
+\family default
+ using 
+\begin_inset Formula $C$
+\end_inset
+
+ and 
+\begin_inset Formula $D$
+\end_inset
+
+ from question (a) of problem 1.
+ What happens?
+\end_layout
+
+\begin_layout Enumerate
+Now evaluate 
+\family typewriter
+matrixops.m
+\family default
+ using 
+\family typewriter
+ttl_exp
+\family default
+ and 
+\family typewriter
+wage
+\family default
+ from 
+\family typewriter
+nlsw88.mat
+\family default
+.
+\end_layout
+
+\end_deeper
+\end_body
+\end_document
